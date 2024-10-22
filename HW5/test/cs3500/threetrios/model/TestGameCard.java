@@ -30,6 +30,30 @@ public class TestGameCard {
     Assert.assertEquals(cardDbAsList.size(), 3);
     Assert.assertEquals(cardDbAsList.get(0).getName(), "card1");
     Assert.assertEquals(cardDbAsList.get(1).getName(), "dragon");
-    Assert.assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 12);
+    Assert.assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 7);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void testReadingCardDbWhenFileDoesntExist() {
+    CardConfigReader cardReader = new CardConfigReader();
+    cardReader.readCards("src/cs3500/threetrios/model/CardDb2.txt");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testReadingCardWhenFileNameIsNull() {
+    CardConfigReader cardReader = new CardConfigReader();
+    cardReader.readCards(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testReadingCardWhenFileNameIsEmpty() {
+    CardConfigReader cardReader = new CardConfigReader();
+    cardReader.readCards("");
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testReadingCardDbWhenFileIsEmpty() {
+    CardConfigReader cardReader = new CardConfigReader();
+    cardReader.readCards("src/cs3500/threetrios/model/EmptyCardDb.txt");
   }
 }

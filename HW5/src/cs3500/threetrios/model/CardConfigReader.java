@@ -32,27 +32,60 @@ public class CardConfigReader {
       throw new IllegalArgumentException("File name cannot be blank");
     }
     File cardDatabase = new File(fileName);
+    if (cardDatabase.length() == 0) {
+      throw new IllegalStateException("File must have some valid data.");
+    }
     try (BufferedReader cardDbReader = new BufferedReader(new FileReader(cardDatabase))) {
-      String line;
-      while ((line = cardDbReader.readLine()) != null) {
-        String[] cardParts = line.split(" ");
-
-        String cardName = cardParts[0];
-        int northNum = Integer.parseInt(cardParts[1]);
-        int southNum = Integer.parseInt(cardParts[2]);
-        int eastNum = Integer.parseInt(cardParts[3]);
-        int westNum = Integer.parseInt(cardParts[4]);
-
-        cardsFromFile.add(new GameCard(cardName, northNum, southNum, eastNum, westNum));
-      }
+      parseCardDb(cardDbReader, cardsFromFile);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Issue when reading file: " + fileName, e);
     }
     return cardsFromFile;
   }
 
-  public static void main(String[] args) {
-    CardConfigReader reader = new CardConfigReader();
-    System.out.println(reader.readCards("src/cs3500/threetrios/model/CardDb.txt"));
+  /**
+   * Helper method that parses the cardDb.
+   *
+   * @param cardDbReader BufferedReader for handling cardDb file reading.
+   * @param finalCards   Final list of cards created from parsing the file.
+   * @throws IOException throws an IOException if there is some issue when reading the file.
+   */
+  private void parseCardDb(BufferedReader cardDbReader, List<Card> finalCards) throws IOException {
+    String line;
+    while ((line = cardDbReader.readLine()) != null) {
+      String[] cardParts = line.split(" ");
+      if (cardParts.length != 5) {
+        throw new IllegalArgumentException("Invalid card format: " + line);
+      }
+      String cardName = cardParts[0];
+      int northNum = parseAttackValue(cardParts[1]);
+      int southNum = parseAttackValue(cardParts[2]);
+      int eastNum = parseAttackValue(cardParts[3]);
+      int westNum = parseAttackValue(cardParts[4]);
+      finalCards.add(new GameCard(cardName, northNum, southNum, eastNum, westNum));
+    }
+  }
+
+  /**
+   * Helper method to parse each string in the cardDb file as an integer.
+   *
+   * @param value String value from the cardDb to parse.
+   * @return Integer that is parsed from the given value, if value is 'A,' attack value is 10.
+   */
+  private int parseAttackValue(String value) {
+    int parsedValue;
+    if (value.equalsIgnoreCase("A")) {
+      return 10;
+    }
+    try {
+      parsedValue = Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Illegal attack value for card: " + value);
+    }
+
+    if (parsedValue < 1 || parsedValue > 9) {
+      throw new IllegalArgumentException("Attack value must be between 1 and 9");
+    }
+    return parsedValue;
   }
 }
