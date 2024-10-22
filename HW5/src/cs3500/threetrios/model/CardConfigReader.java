@@ -32,10 +32,10 @@ public class CardConfigReader {
       throw new IllegalArgumentException("File name cannot be blank");
     }
     File cardDatabase = new File(fileName);
-    if (cardDatabase.length() == 0) {
-      throw new IllegalStateException("File must have some valid data.");
-    }
     try (BufferedReader cardDbReader = new BufferedReader(new FileReader(cardDatabase))) {
+      if (!cardDbReader.ready()) {
+        throw new IllegalStateException("File must have some valid data.");
+      }
       parseCardDb(cardDbReader, cardsFromFile);
     } catch (IOException e) {
       throw new RuntimeException("Issue when reading file: " + fileName, e);

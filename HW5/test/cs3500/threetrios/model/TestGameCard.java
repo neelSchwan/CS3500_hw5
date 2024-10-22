@@ -26,7 +26,7 @@ public class TestGameCard {
   @Test
   public void testReadingCardDbFileWorks() {
     CardConfigReader cardReader = new CardConfigReader();
-    List<Card> cardDbAsList = cardReader.readCards("src/cs3500/threetrios/model/CardDb.txt");
+    List<Card> cardDbAsList = cardReader.readCards("src/resources/CardDb.txt");
     Assert.assertEquals(cardDbAsList.size(), 3);
     Assert.assertEquals(cardDbAsList.get(0).getName(), "card1");
     Assert.assertEquals(cardDbAsList.get(1).getName(), "dragon");
@@ -36,7 +36,7 @@ public class TestGameCard {
   @Test(expected = RuntimeException.class)
   public void testReadingCardDbWhenFileDoesntExist() {
     CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("src/cs3500/threetrios/model/CardDb2.txt");
+    cardReader.readCards("src/resources/CardDb2.txt");
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -54,6 +54,6 @@ public class TestGameCard {
   @Test(expected = IllegalStateException.class)
   public void testReadingCardDbWhenFileIsEmpty() {
     CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("src/cs3500/threetrios/model/EmptyCardDb.txt");
+    cardReader.readCards("src/resources/EmptyCardDb.txt");
   }
 }
