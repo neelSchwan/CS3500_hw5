@@ -53,6 +53,6 @@ public class CardConfigReader {
 
   public static void main(String[] args) {
     CardConfigReader reader = new CardConfigReader();
-    System.out.println(reader.readCards("/Users/neelsawant/Desktop/CS3500_hw5/HW5/src/cs3500/threetrios/model/CardDb.txt"));
+    System.out.println(reader.readCards("src/cs3500/threetrios/model/CardDb.txt"));
   }
 }
