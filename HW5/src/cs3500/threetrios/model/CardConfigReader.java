@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class CardConfigReader {
 
+  /**
+   * Empty constructor since configuration readers don't need arguments.
+   */
   public CardConfigReader() {
 
   }
@@ -20,25 +23,25 @@ public class CardConfigReader {
    * Method to read cards given a card database.
    * The card database is defined as "CARD_NAME, NORTH, SOUTH, EAST, WEST"
    *
-   * @param fileName specified filename to read.
+   * @param filename specified filename to read.
    * @return list of valid cards that have been read from the file
    */
-  public List<Card> readCards(String fileName) {
+  public List<Card> readCards(String filename) {
     List<Card> cardsFromFile = new ArrayList<>();
-    if (fileName == null || fileName.isEmpty()) {
+    if (filename == null || filename.isEmpty()) {
       throw new IllegalArgumentException("File name cannot be null");
     }
-    if (fileName.isBlank()) {
+    if (filename.isBlank()) {
       throw new IllegalArgumentException("File name cannot be blank");
     }
-    File cardDatabase = new File(fileName);
+    File cardDatabase = new File(filename);
     try (BufferedReader cardDbReader = new BufferedReader(new FileReader(cardDatabase))) {
       if (!cardDbReader.ready()) {
         throw new IllegalStateException("File must have some valid data.");
       }
       parseCardDb(cardDbReader, cardsFromFile);
     } catch (IOException e) {
-      throw new RuntimeException("Issue when reading file: " + fileName, e);
+      throw new RuntimeException("Issue when reading file: " + filename, e);
     }
     return cardsFromFile;
   }

@@ -8,6 +8,7 @@ public class Cell {
 
   private Card card;
   private Player owner;
+  private CellType cellType;
 
   /**
    * Checks if the cell has a card.
@@ -15,8 +16,13 @@ public class Cell {
    * @return true or false depending on if the cell holds a card.
    * We will initialize holes as null values in the grid,
    */
+
+  public Cell(CellType cellType) {
+    this.cellType = cellType;
+  }
+
   public boolean isOccupied() {
-    return card != null;
+    return cellType == CellType.CARD_CELL && card != null;
   }
 
   /**
@@ -26,6 +32,10 @@ public class Cell {
    * @param player player who owns the card being placed.
    */
   public void placeCard(Card card, Player player) {
+    if (cellType == CellType.HOLE_CELL) {
+      throw new IllegalStateException("Cannot place a card in a hole");
+    }
+
     this.card = card;
     this.owner = player;
   }
@@ -33,7 +43,7 @@ public class Cell {
   /**
    * Gets card in the cell.
    *
-   * @return Card object thats currently in the cell.
+   * @return Card object that's currently in the cell.
    */
   public Card getCard() {
     return card;
