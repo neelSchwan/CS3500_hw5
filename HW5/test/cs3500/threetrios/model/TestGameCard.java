@@ -27,10 +27,10 @@ public class TestGameCard {
   public void testReadingCardDbFileWorks() {
     CardConfigReader cardReader = new CardConfigReader();
     List<Card> cardDbAsList = cardReader.readCards("src/resources/CardDb.txt");
-    Assert.assertEquals(cardDbAsList.size(), 3);
-    Assert.assertEquals(cardDbAsList.get(0).getName(), "card1");
-    Assert.assertEquals(cardDbAsList.get(1).getName(), "dragon");
-    Assert.assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 7);
+    Assert.assertEquals(cardDbAsList.size(), 30);
+    Assert.assertEquals(cardDbAsList.get(0).getName(), "ahri");
+    Assert.assertEquals(cardDbAsList.get(1).getName(), "twitch");
+    Assert.assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 6);
   }
 
   @Test(expected = RuntimeException.class)

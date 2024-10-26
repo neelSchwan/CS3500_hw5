@@ -4,6 +4,10 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class is an implementation of the Card interface, for cards that are used during the game.
+ * A card has a name and 4 attack values based on a direction (N,S,W,E)
+ */
 public class GameCard implements Card {
 
   private final String name;
@@ -56,6 +60,7 @@ public class GameCard implements Card {
             attackValues.get(Direction.WEST)
     );
   }
+
   // Override equals method
   @Override
   public boolean equals(Object obj) {

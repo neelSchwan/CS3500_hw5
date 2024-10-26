@@ -1,33 +1,33 @@
 package cs3500.threetrios.view;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.CardConfigReader;
 import cs3500.threetrios.model.Cell;
+import cs3500.threetrios.model.GameCard;
+import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.Grid;
-import cs3500.threetrios.model.GridConfigReader;
-import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
 
+/**
+ * Class for creating a textual representation of the games current state.
+ */
 public class ThreeTriosGameView implements ThreeTriosView {
 
-  private final ThreeTriosModel model;
+  private final GameModel model;
 
-  public ThreeTriosGameView(ThreeTriosModel model) {
+  public ThreeTriosGameView(GameModel model) {
     this.model = model;
   }
 
   /**
-   * Generates a textual / string representation of the current game state
+   * Generates a textual / string representation of the current game state.
    *
    * @param model three-trios model that is used for getting the current game state.
    * @return String representation of the current game state.
    */
   @Override
-  public String render(ThreeTriosModel model) {
+  public String render(GameModel model) {
     StringBuilder sb = new StringBuilder();
 
     sb.append("Player: ").append(model.getCurrentPlayer()).append("\n");
@@ -40,7 +40,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
     return sb.toString();
   }
 
-  private void renderGrid(ThreeTriosModel model, StringBuilder sb) {
+  private void renderGrid(GameModel model, StringBuilder sb) {
     Grid grid = model.getGrid();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
@@ -74,7 +74,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * @param model three-trios model that is used for getting the current game state.
    */
   @Override
-  public void display(ThreeTriosModel model) {
+  public void display(GameModel model) {
   }
 
 }

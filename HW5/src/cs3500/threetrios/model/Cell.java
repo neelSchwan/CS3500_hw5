@@ -1,5 +1,8 @@
 package cs3500.threetrios.model;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
  * Cell representation in the threetrios game.
  * The cell holds information of the card in it, and if it's a hole or not.
@@ -9,6 +12,7 @@ public class Cell {
   private Card card;
   private Player owner;
   private final CellType cellType;
+  private Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
   public Cell(CellType cellType) {
     this.cellType = cellType;
@@ -73,9 +77,18 @@ public class Cell {
 
   /**
    * Sets the owner of current cell to a player.
+   *
    * @param owner Player (RED or BLUE) to set the cell's owner to.
    */
   public void setOwner(Player owner) {
     this.owner = owner;
+  }
+
+  public void setAdjacentCell(Direction direction, Cell cell) {
+    adjacentCells.put(direction, cell);
+  }
+
+  public Map<Direction, Cell> getAdjacentCells() {
+    return adjacentCells;
   }
 }

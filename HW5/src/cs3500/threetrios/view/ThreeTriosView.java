@@ -1,5 +1,6 @@
 package cs3500.threetrios.view;
 
+import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.ThreeTriosModel;
 
 /**
@@ -7,17 +8,17 @@ import cs3500.threetrios.model.ThreeTriosModel;
  */
 public interface ThreeTriosView {
   /**
-   * Generates a textual / string representation of the current game state
+   * Generates a textual / string representation of the current game state.
    *
    * @param model three-trios model that is used for getting the current game state.
    * @return String representation of the current game state.
    */
-  String render(ThreeTriosModel model);
+  String render(GameModel model);
 
   /**
    * Outputs the current game state to the console.
    *
    * @param model three-trios model that is used for getting the current game state.
    */
-  void display(ThreeTriosModel model);
+  void display(GameModel model);
 }

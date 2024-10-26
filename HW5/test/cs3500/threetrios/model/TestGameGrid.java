@@ -12,7 +12,6 @@ public class TestGameGrid {
     GridConfigReader gridConfigReader = new GridConfigReader();
     Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
 
-    System.out.println(grid.toString());
     Assert.assertEquals(grid.getRows(), 5);
     Assert.assertEquals(grid.getCols(), 7);
     Assert.assertEquals(grid.getCols() * grid.getRows(), 35);

@@ -2,6 +2,7 @@ package cs3500.threetrios.model;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class Grid {
   private final Cell[][] grid;
   private final int rows;
   private final int cols;
+  private final Map<Cell, int[]> cellPositions;
 
   /**
    * Constructor for creating a grid with a specified row x col size.
@@ -25,6 +27,7 @@ public class Grid {
     this.rows = row;
     this.cols = cols;
     this.grid = new Cell[row][cols];
+    this.cellPositions = new HashMap<>();
   }
 
   /**
@@ -51,32 +54,24 @@ public class Grid {
    */
   public void setCell(int row, int col, Cell cell) {
     this.grid[row][col] = cell;
+    this.cellPositions.put(cell, new int[]{row, col});
   }
 
   /**
-   * Gets the adjacent cells to a cell at a specified row and column.
    *
-   * @param row specified row to check.
-   * @param col specified col to check.
-   * @return List of cells that are adjacent to the specified cell.
    */
-  public Map<Direction, Cell> getAdjacentCells(int row, int col) {
-    Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
-
-    if (row > 0) {
-      adjacentCells.put(Direction.NORTH, getCell(row - 1, col));
+  public void setupAdjacentCells() {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        Cell cell = grid[row][col];
+        if (cell != null) {
+          if (row > 0) cell.setAdjacentCell(Direction.NORTH, grid[row - 1][col]);
+          if (row < rows - 1) cell.setAdjacentCell(Direction.SOUTH, grid[row + 1][col]);
+          if (col > 0) cell.setAdjacentCell(Direction.WEST, grid[row][col - 1]);
+          if (col < cols - 1) cell.setAdjacentCell(Direction.EAST, grid[row][col + 1]);
+        }
+      }
     }
-    if (row < grid.length - 1) {
-      adjacentCells.put(Direction.SOUTH, getCell(row + 1, col));
-    }
-    if (col > 0) {
-      adjacentCells.put(Direction.WEST, getCell(row, col - 1));
-    }
-    if (col < grid[0].length - 1) {
-      adjacentCells.put(Direction.EAST, getCell(row, col + 1));
-    }
-
-    return adjacentCells;
   }
 
   /**
@@ -120,15 +115,13 @@ public class Grid {
     return count;
   }
 
-
-  public Position findCellPosition(Cell cell) {
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
-        if (grid[row][col] == cell) {
-          return new Position(row, col);
-        }
-      }
-    }
-    return null; // Cell not found
+  /**
+   * Method to find a specified cell in the grid.
+   *
+   * @param cell specified cell to look for.
+   * @return Position object of where the cell is in the grid.
+   */
+  public int[] findCellPosition(Cell cell) {
+    return cellPositions.get(cell);
   }
 }

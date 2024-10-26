@@ -54,7 +54,7 @@ public class GridConfigReader {
 
     int totalCells = row * col;
     if (totalCells % 2 == 0) {
-      throw new IOException("Invalid grid: The total number of cells must be odd, but found " + totalCells);
+      throw new IOException("Invalid grid: The total number of cells must be odd" + totalCells);
     }
 
     Grid gridFromFile = new Grid(row, col);
