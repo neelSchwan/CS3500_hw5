@@ -49,6 +49,15 @@ public class Cell {
   }
 
   /**
+   * Checks if the cell is a hole.
+   *
+   * @return true if the specified cell is a hole.
+   */
+  public boolean isHole() {
+    return cellType == CellType.HOLE_CELL;
+  }
+
+  /**
    * Gets owner of the current cells card.
    *
    * @return player object who owns the cells card.

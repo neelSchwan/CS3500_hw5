@@ -100,19 +100,4 @@ public class Grid {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < this.rows; i++) {
-      for (int j = 0; j < this.cols; j++) {
-        sb.append(this.getCell(i, j).toString());
-        if (j < this.cols - 1) {
-          sb.append(" ");
-        }
-      }
-      sb.append("\n");
-    }
-    return sb.toString();
-  }
-
 }

@@ -10,6 +10,9 @@ public class ThreeTriosModel implements GameModel {
   private Player currentPlayer;
   private final List<Card> deck;
 
+  //TODO: ADD CHECKS FOR DRAWING FROM DECK TO PLAYERS HANDS.
+  //TODO: REMOVE FROM DECK WHEN DRAW, REMOVE FROM HAND WHEN PLACING
+
   /**
    * Constructor to create a ThreeTriosModel object.
    *
