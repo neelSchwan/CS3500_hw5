@@ -8,7 +8,11 @@ public class Cell {
 
   private Card card;
   private Player owner;
-  private CellType cellType;
+  private final CellType cellType;
+
+  public Cell(CellType cellType) {
+    this.cellType = cellType;
+  }
 
   /**
    * Checks if the cell has a card.
@@ -16,11 +20,6 @@ public class Cell {
    * @return true or false depending on if the cell holds a card.
    * We will initialize holes as null values in the grid,
    */
-
-  public Cell(CellType cellType) {
-    this.cellType = cellType;
-  }
-
   public boolean isOccupied() {
     return cellType == CellType.CARD_CELL && card != null;
   }
@@ -58,4 +57,8 @@ public class Cell {
     return owner;
   }
 
+  @Override
+  public String toString() {
+    return cellType.toString().substring(0, 1).toUpperCase();
+  }
 }

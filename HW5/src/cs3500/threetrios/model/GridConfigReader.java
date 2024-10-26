@@ -38,6 +38,9 @@ public class GridConfigReader {
 
     File gridDb = new File(filename);
     try (BufferedReader gridDbReader = new BufferedReader(new FileReader(gridDb))) {
+      if (!gridDbReader.ready()) {
+        throw new IllegalStateException("File must have some valid data.");
+      }
       return parseGridDb(gridDbReader);
     } catch (IOException e) {
       throw new RuntimeException("Issue when reading file: " + filename, e);
@@ -45,8 +48,9 @@ public class GridConfigReader {
   }
 
   private Grid parseGridDb(BufferedReader gridDbReader) throws IOException {
-    int row = parseRowsAndCols(gridDbReader)[0]; // 0 index = row
-    int col = parseRowsAndCols(gridDbReader)[1];// 1 index = col
+    int[] parseRowsAndCols = parseRowsAndCols(gridDbReader);
+    int row = parseRowsAndCols[0]; // 0 index = row
+    int col = parseRowsAndCols[1];// 1 index = col
 
     int totalCells = row * col;
     if (totalCells % 2 == 0) {
