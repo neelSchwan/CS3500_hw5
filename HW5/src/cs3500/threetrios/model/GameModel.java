@@ -58,4 +58,12 @@ public interface GameModel {
    * If current is RED, switch to blue, and vice versa.
    */
   void switchTurn();
+
+  /**
+   * Starts the game by shuffling the deck and dealing cards to the players.
+   *
+   * @param seed The random seed used to shuffle the deck for reproducibility.
+   * @throws IllegalStateException if there are not enough cards in the deck to start the game.
+   */
+  void startGame(long seed);
 }

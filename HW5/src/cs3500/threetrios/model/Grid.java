@@ -1,7 +1,9 @@
 package cs3500.threetrios.model;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to hold the logic for a Grid.
@@ -33,7 +35,11 @@ public class Grid {
    * @return Cell at the current row and column position in the grid.
    */
   public Cell getCell(int row, int col) {
-    return this.grid[row][col];
+    if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+      return this.grid[row][col];
+    } else {
+      throw new IllegalArgumentException("Invalid row or column");
+    }
   }
 
   /**
@@ -54,27 +60,22 @@ public class Grid {
    * @param col specified col to check.
    * @return List of cells that are adjacent to the specified cell.
    */
-  public List<Cell> getAdjacentCells(int row, int col) {
+  public Map<Direction, Cell> getAdjacentCells(int row, int col) {
+    Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
-    List<Cell> adjacentCells = new ArrayList<>();
-    // checks north cells
     if (row > 0) {
-      adjacentCells.add(grid[row - 1][col]);
+      adjacentCells.put(Direction.NORTH, getCell(row - 1, col));
     }
-    //south
-    if (row < this.rows - 1) {
-      adjacentCells.add(grid[row + 1][col]);
+    if (row < grid.length - 1) {
+      adjacentCells.put(Direction.SOUTH, getCell(row + 1, col));
     }
-
-    //west
     if (col > 0) {
-      adjacentCells.add(grid[row][col - 1]);
+      adjacentCells.put(Direction.WEST, getCell(row, col - 1));
+    }
+    if (col < grid[0].length - 1) {
+      adjacentCells.put(Direction.EAST, getCell(row, col + 1));
     }
 
-    //east
-    if (col < this.cols - 1) {
-      adjacentCells.add(grid[row][col + 1]);
-    }
     return adjacentCells;
   }
 
@@ -100,4 +101,34 @@ public class Grid {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
   }
 
+  /**
+   * Calculates the number of card cells in the grid.
+   * Used for checking if there is a valid deck to start the game with.
+   *
+   * @return int of CARD_CELLS.
+   */
+  public int calculateCardCells() {
+    int count = 0;
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        Cell cell = grid[row][col];
+        if (cell != null && !cell.isHole()) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+
+
+  public Position findCellPosition(Cell cell) {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        if (grid[row][col] == cell) {
+          return new Position(row, col);
+        }
+      }
+    }
+    return null; // Cell not found
+  }
 }

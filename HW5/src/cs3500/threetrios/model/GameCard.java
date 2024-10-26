@@ -2,6 +2,7 @@ package cs3500.threetrios.model;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class GameCard implements Card {
 
@@ -55,4 +56,27 @@ public class GameCard implements Card {
             attackValues.get(Direction.WEST)
     );
   }
+  // Override equals method
+  @Override
+  public boolean equals(Object obj) {
+    // Check if the same reference
+    if (this == obj) {
+      return true;
+    }
+    // Check if obj is null or not the same class
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    // Cast obj to GameCard and compare fields
+    GameCard other = (GameCard) obj;
+    return Objects.equals(this.name, other.name)
+            && Objects.equals(this.attackValues, other.attackValues);
+  }
+
+  // Override hashCode method
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, attackValues);
+  }
+
 }

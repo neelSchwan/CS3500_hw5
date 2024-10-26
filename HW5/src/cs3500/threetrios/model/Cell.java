@@ -70,4 +70,12 @@ public class Cell {
   public String toString() {
     return cellType.toString().substring(0, 1).toUpperCase();
   }
+
+  /**
+   * Sets the owner of current cell to a player.
+   * @param owner Player (RED or BLUE) to set the cell's owner to.
+   */
+  public void setOwner(Player owner) {
+    this.owner = owner;
+  }
 }
