@@ -1,6 +1,7 @@
 package cs3500.threetrios.model;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,60 +14,91 @@ import cs3500.threetrios.view.ThreeTriosView;
 
 public class TestThreeTriosModel {
 
-  @Test(expected = IllegalStateException.class)
-  public void testStartGameWithInvalidDeck() {
+  private GameModel model;
+  private List<Card> deck;
+  private Grid grid;
+  private Map<Player, List<Card>> hands;
+
+  @Before
+  public void setUp() {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
-    List<Card> deck = cardConfigReader.readCards("src/resources/EmptyCardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
-    System.out.println(grid.calculateCardCells());
-    Map<Player, List<Card>> hands = new HashMap<>();
+
+    deck = cardConfigReader.readCards("src/resources/CardDb.txt");
+    grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
+
+    hands = new HashMap<>();
     hands.put(Player.RED, new ArrayList<>());
     hands.put(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
-    model.startGame(0);
+
+    model = new ThreeTriosModel(grid, hands, deck);
   }
 
   @Test
   public void testStartGameWithValidDeck() {
-    CardConfigReader cardConfigReader = new CardConfigReader();
-    GridConfigReader gridConfigReader = new GridConfigReader();
-    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt"); // 30 cards
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
-    Map<Player, List<Card>> hands = new HashMap<>();
-
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
     model.startGame(0);
 
     ThreeTriosView view = new ThreeTriosGameView(model);
     System.out.println(view.render(model));
-    Assert.assertEquals(model.getCurrentPlayer(), Player.RED); // start as red
-    Assert.assertEquals(model.getPlayerHand(Player.RED).size(), 8); // 8 because (N+1)/2, N=15
 
-    model.placeCard(0, 0, hands.get(Player.RED).get(0)); // place card as red
+    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
+    Assert.assertEquals(8, model.getPlayerHand(Player.RED).size()); // 8 (N+1)/2, N=15
+
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
     System.out.println(view.render(model));
-    Assert.assertEquals(model.getCurrentPlayer(), Player.BLUE); // player swaps to blue
-    Assert.assertEquals(model.getPlayerHand(Player.RED).size(), 7); // red hand decrease
-    Assert.assertEquals(model.getPlayerHand(Player.BLUE).size(), 8); // blue hand is 8.
+
+    Assert.assertEquals(Player.BLUE, model.getCurrentPlayer()); // player swaps to blue
+    Assert.assertEquals(7, model.getPlayerHand(Player.RED).size()); // red hand decreases
+    Assert.assertEquals(8, model.getPlayerHand(Player.BLUE).size()); // blue hand is still 8
   }
 
   @Test(expected = IllegalStateException.class)
   public void testOperationsWhenGameHasNotStarted() {
-    CardConfigReader cardConfigReader = new CardConfigReader();
-    GridConfigReader gridConfigReader = new GridConfigReader();
-    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt"); // 30 cards
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
-    Map<Player, List<Card>> hands = new HashMap<>();
+    hands.get(Player.RED).add(deck.get(0));
 
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
-
-    hands.get(Player.RED).add(deck.get(0)); // hand needs to have 1 card before placing
     model.placeCard(0, 0, hands.get(Player.RED).get(0));
+
     model.switchTurn();
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void testStartGameWithInvalidDeck() {
+    deck.clear(); // invalid deck.
+
+    model.startGame(0); // throws exception
+  }
+
+  @Test
+  public void testBattlePhase() {
+    model.startGame(0);
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(1)); // 4 on east
+    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
+    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+  }
+
+  @Test
+  public void testSwitchTurns() {
+    model.startGame(0);
+
+    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
+
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
+    Assert.assertEquals(Player.BLUE, model.getCurrentPlayer());
+
+    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0));
+    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
+  }
+
+  @Test
+  public void testGameEndCondition() {
+    model.startGame(0);
+    for (int row = 0; row < grid.getRows(); row++) {
+      for (int col = 0; col < grid.getCols(); col++) {
+        if (!grid.getCell(row, col).isHole()) {
+          model.placeCard(row, col, model.getPlayerHand(model.getCurrentPlayer()).get(0));
+        }
+      }
+    }
+    Assert.assertTrue(model.isGameOver());
+  }
 }

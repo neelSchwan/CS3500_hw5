@@ -138,6 +138,7 @@ public class ThreeTriosModel implements GameModel {
 
       List<Cell> newFlippedCells = battleAdjacentCells(currentCell);
       comboQueue.addAll(newFlippedCells);
+
     }
   }
 
@@ -148,7 +149,7 @@ public class ThreeTriosModel implements GameModel {
     for (Map.Entry<Direction, Cell> entry : adjacentCells.entrySet()) {
       Direction direction = entry.getKey();
       Cell adjacentCell = entry.getValue();
-
+      System.out.println("Checking adj cell at direction: " + direction);
       if (adjacentCell != null && adjacentCell.isOccupied() && adjacentCell.getOwner() != currentPlayer) {
         boolean flipped = battleCells(cell, adjacentCell, direction);
         if (flipped) {
@@ -168,8 +169,10 @@ public class ThreeTriosModel implements GameModel {
     int attackerAttackValue = attackerCard.getAttackValue(direction);
     int defenderAttackValue = defenderCard.getAttackValue(oppositeDirection);
 
+    System.out.println("Attacker: " + attackerAttackValue + " vs Def: " + defenderAttackValue);
     if (attackerAttackValue > defenderAttackValue) {
       defendingCell.setOwner(attackingCell.getOwner());
+
       return true;
     }
     return false;
