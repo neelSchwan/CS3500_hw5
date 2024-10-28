@@ -10,7 +10,7 @@ katarina A 7 6 5
 darius 7 9 8 4
 fiora 6 8 5 9
 leona 5 6 9 A
-teemo 9 5 7 8
+teemo 1 1 1 1
 akali 7 A 9 6
 garen 6 8 5 4
 zoe 7 9 5 6

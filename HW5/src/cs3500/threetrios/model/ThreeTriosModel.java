@@ -173,9 +173,9 @@ public class ThreeTriosModel implements GameModel {
     if (attackerAttackValue > defenderAttackValue) {
       defendingCell.setOwner(attackingCell.getOwner());
 
-      return true;
+      return true; //flipped
     }
-    return false;
+    return false; // not flipped
   }
 
   private Direction getOppositeDirection(Direction direction) {

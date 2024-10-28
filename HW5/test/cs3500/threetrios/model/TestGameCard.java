@@ -56,4 +56,10 @@ public class TestGameCard {
     CardConfigReader cardReader = new CardConfigReader();
     cardReader.readCards("src/resources/EmptyCardDb.txt");
   }
+
+  @Test(expected = IllegalStateException.class)
+  public void testReadingCardDbWhenFileIsNull() {
+    CardConfigReader cardReader = new CardConfigReader();
+    cardReader.readCards("src/resources/DuplicateCard.txt");
+  }
 }

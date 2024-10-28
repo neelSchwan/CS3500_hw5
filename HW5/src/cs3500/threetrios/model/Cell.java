@@ -12,7 +12,7 @@ public class Cell {
   private Card card;
   private Player owner;
   private final CellType cellType;
-  private Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
+  private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
   public Cell(CellType cellType) {
     this.cellType = cellType;

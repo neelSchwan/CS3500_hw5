@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class that handles logic for reading card data from a file.
@@ -55,17 +57,27 @@ public class CardConfigReader {
    */
   private void parseCardDb(BufferedReader cardDbReader, List<Card> finalCards) throws IOException {
     String line;
+    Set<String> nameSet = new HashSet<>();
+    boolean hasDuplicates = false;
     while ((line = cardDbReader.readLine()) != null) {
       String[] cardParts = line.split(" ");
       if (cardParts.length != 5) {
         throw new IllegalArgumentException("Invalid card format: " + line);
       }
+
       String cardName = cardParts[0];
+      if (nameSet.add(cardName)) {  // trim() removes any extra spaces around the name
+        System.out.println("Duplicate name found: " + line);
+        hasDuplicates = true;
+      }
       int northNum = parseAttackValue(cardParts[1]);
       int southNum = parseAttackValue(cardParts[2]);
       int eastNum = parseAttackValue(cardParts[3]);
       int westNum = parseAttackValue(cardParts[4]);
       finalCards.add(new GameCard(cardName, northNum, southNum, eastNum, westNum));
+    }
+    if(hasDuplicates) {
+      throw new IllegalStateException("Duplicate name found, edit config!");
     }
   }
 

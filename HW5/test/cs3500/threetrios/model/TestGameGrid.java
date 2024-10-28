@@ -1,9 +1,7 @@
 package cs3500.threetrios.model;
 
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 public class TestGameGrid {
 
@@ -12,9 +10,9 @@ public class TestGameGrid {
     GridConfigReader gridConfigReader = new GridConfigReader();
     Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
 
-    Assert.assertEquals(grid.getRows(), 5);
-    Assert.assertEquals(grid.getCols(), 7);
-    Assert.assertEquals(grid.getCols() * grid.getRows(), 35);
+    assertEquals(grid.getRows(), 5);
+    assertEquals(grid.getCols(), 7);
+    assertEquals(grid.getCols() * grid.getRows(), 35);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -33,21 +31,5 @@ public class TestGameGrid {
   public void testReadingWithNullFileNameThrowsExceptionWithEmptyGrid() {
     GridConfigReader gridConfigReader = new GridConfigReader();
     gridConfigReader.readGridFromFile(null);
-  }
-
-  @Test
-  public void testGettingAdjacentCellsWith4AdjacentCellsWorks() {
-    GridConfigReader gridConfigReader = new GridConfigReader();
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
-
-    //TODO: CHANGE THIS TEST
-  }
-
-  @Test
-  public void testGettingAdjacentCellsWithLessThan4AdjacentCellsWorks() {
-    GridConfigReader gridConfigReader = new GridConfigReader();
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
-
-    //TODO: CHANGE THIS TEST
   }
 }
