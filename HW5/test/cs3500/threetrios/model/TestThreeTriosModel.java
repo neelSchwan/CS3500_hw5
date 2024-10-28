@@ -101,4 +101,76 @@ public class TestThreeTriosModel {
     }
     Assert.assertTrue(model.isGameOver());
   }
+
+  @Test
+  public void testBattleSwitchesWhoOwnsCardAndCell() {
+    model.startGame(0);
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(1)); // 4 on east
+    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
+    Assert.assertEquals(Player.BLUE, grid.getCell(0, 0).getOwner());
+    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+  }
+
+  @Test
+  public void testTieBetweenCellsMeansNothingHappens() {
+    model.startGame(0);
+
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0)); //  on east
+    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
+
+    Assert.assertEquals(Player.RED, grid.getCell(0, 0).getOwner());
+    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+  }
+
+  @Test
+  public void testGameTyingLogicWorks() {
+    ThreeTriosView view = new ThreeTriosGameView(model);
+    model.startGame(0);
+    for (int row = 0; row < grid.getRows(); row++) {
+      for (int col = 0; col < grid.getCols(); col++) {
+        if (!grid.getCell(row, col).isHole()) {
+          model.placeCard(row, col, model.getPlayerHand(model.getCurrentPlayer()).get(0));
+        }
+      }
+    }
+    System.out.println(view.render(model));
+    Assert.assertTrue(model.isGameOver());
+    Assert.assertNull(model.getWinner()); // since we said that tie = null.
+  }
+
+  private GameModel createModelForEasyTesting() {
+    CardConfigReader cardConfigReader = new CardConfigReader();
+    GridConfigReader gridConfigReader = new GridConfigReader();
+
+    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("src/resources/EasyTestingGridDb.txt");
+
+    Map<Player, List<Card>> hands = new HashMap<>();
+    hands.put(Player.RED, new ArrayList<>());
+    hands.put(Player.BLUE, new ArrayList<>());
+
+    return new ThreeTriosModel(grid, hands, deck);
+  }
+
+  @Test
+  public void testWinningLogicWorks() {
+    GameModel gameModel = createModelForEasyTesting();
+    ThreeTriosView view = new ThreeTriosGameView(gameModel);
+    gameModel.startGame(0);
+    Assert.assertEquals(gameModel.getPlayerHand(Player.BLUE).size(), 13);
+    Assert.assertEquals(gameModel.getPlayerHand(Player.RED).size(), 13);
+    System.out.println(view.render(gameModel));
+    for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
+      for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
+        if (!gameModel.getGrid().getCell(row, col).isHole()) {
+          gameModel.placeCard(row, col, gameModel.getPlayerHand(gameModel.getCurrentPlayer()).get(0));
+          System.out.println("Placed card at (" + row + ", " + col + ")");
+        }
+      }
+    }
+    System.out.println(view.render(gameModel));
+
+    Assert.assertTrue(gameModel.isGameOver());
+    Assert.assertEquals(Player.BLUE, gameModel.getWinner());
+  }
 }

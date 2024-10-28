@@ -66,17 +66,18 @@ public class CardConfigReader {
       }
 
       String cardName = cardParts[0];
-      if (nameSet.add(cardName)) {  // trim() removes any extra spaces around the name
-        System.out.println("Duplicate name found: " + line);
+      if (!(nameSet.add(cardName))) {
+        System.out.println("Duplicate name found: " + cardName);
         hasDuplicates = true;
       }
+
       int northNum = parseAttackValue(cardParts[1]);
       int southNum = parseAttackValue(cardParts[2]);
       int eastNum = parseAttackValue(cardParts[3]);
       int westNum = parseAttackValue(cardParts[4]);
       finalCards.add(new GameCard(cardName, northNum, southNum, eastNum, westNum));
     }
-    if(hasDuplicates) {
+    if (hasDuplicates) {
       throw new IllegalStateException("Duplicate name found, edit config!");
     }
   }

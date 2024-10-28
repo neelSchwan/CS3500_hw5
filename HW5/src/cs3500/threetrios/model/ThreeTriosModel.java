@@ -111,7 +111,8 @@ public class ThreeTriosModel implements GameModel {
       throw new IllegalArgumentException("Player does not have this card.");
     }
 
-    getPlayerHand(currentPlayer).remove(card);
+    hands.get(currentPlayer).remove(card);
+
     cell.placeCard(card, currentPlayer);
 
     battlePhase(cell);
@@ -149,7 +150,6 @@ public class ThreeTriosModel implements GameModel {
     for (Map.Entry<Direction, Cell> entry : adjacentCells.entrySet()) {
       Direction direction = entry.getKey();
       Cell adjacentCell = entry.getValue();
-      System.out.println("Checking adj cell at direction: " + direction);
       if (adjacentCell != null && adjacentCell.isOccupied() && adjacentCell.getOwner() != currentPlayer) {
         boolean flipped = battleCells(cell, adjacentCell, direction);
         if (flipped) {
@@ -169,10 +169,14 @@ public class ThreeTriosModel implements GameModel {
     int attackerAttackValue = attackerCard.getAttackValue(direction);
     int defenderAttackValue = defenderCard.getAttackValue(oppositeDirection);
 
-    System.out.println("Attacker: " + attackerAttackValue + " vs Def: " + defenderAttackValue);
     if (attackerAttackValue > defenderAttackValue) {
-      defendingCell.setOwner(attackingCell.getOwner());
+      Player attacker = attackingCell.getOwner();
+      Player defender = defendingCell.getOwner();
 
+      hands.get(defender).remove(defenderCard);
+      hands.get(attacker).remove(attackerCard);
+
+      defendingCell.setOwner(attackingCell.getOwner());
       return true; //flipped
     }
     return false; // not flipped
@@ -204,7 +208,7 @@ public class ThreeTriosModel implements GameModel {
   }
 
   /**
-   * Checks if the game is over.
+   * Checks if the game is over. (The game is over when all the card cells are filled).
    *
    * @return true or false if the game is over or not.
    */
@@ -215,6 +219,7 @@ public class ThreeTriosModel implements GameModel {
         Cell cell = grid.getCell(i, j);
         if (cell != null && !cell.isHole()) {
           if (!cell.isOccupied()) {
+            System.out.println(" i returned false, game isnt over");
             return false;
           }
         }
@@ -224,7 +229,7 @@ public class ThreeTriosModel implements GameModel {
   }
 
   /**
-   * Determines the winner of the game (who owns more of the card-cells in the grid).
+   * Determines the winner of the game (which player has more cards total, in hand and on board).
    *
    * @return the player with the most card-cells.
    */
@@ -232,28 +237,30 @@ public class ThreeTriosModel implements GameModel {
   public Player getWinner() {
     int redCount = 0;
     int blueCount = 0;
+
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
         Cell currentCell = grid.getCell(i, j);
         if (currentCell.isOccupied()) {
           Player cardOwner = currentCell.getOwner();
-
-          if (cardOwner == Player.BLUE) {
-            blueCount++;
-          } else if (cardOwner == Player.RED) {
+          if (cardOwner == Player.RED) {
             redCount++;
-
+          } else if (cardOwner == Player.BLUE) {
+            blueCount++;
           }
         }
       }
     }
+
+    redCount += hands.get(Player.RED).size();
+    blueCount += hands.get(Player.BLUE).size();
 
     if (redCount > blueCount) {
       return Player.RED;
     } else if (blueCount > redCount) {
       return Player.BLUE;
     } else {
-      return null;
+      return null; // Tie
     }
   }
 
