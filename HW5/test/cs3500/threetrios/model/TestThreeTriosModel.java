@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,33 +40,33 @@ public class TestThreeTriosModel {
     GameModel model = new ThreeTriosModel(grid, hands, deck);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullGrid() {
     GameModel model = new ThreeTriosModel(null, hands, deck);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullHands() {
     GameModel model = new ThreeTriosModel(grid, null, deck);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullDeck() {
     GameModel model = new ThreeTriosModel(grid, hands, null);
   }
 
   @Test
-  public void testStartGameWithValidDeck() {
+  public void testStartGameWithValidDeck() throws IOException {
     model.startGame(0);
 
-    ThreeTriosView view = new ThreeTriosGameView(model);
-    System.out.println(view.render(model));
+    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
+    view.display();
 
     Assert.assertEquals(Player.RED, model.getCurrentPlayer());
     Assert.assertEquals(8, model.getPlayerHand(Player.RED).size()); // 8 (N+1)/2, N=15
 
     model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
-    System.out.println(view.render(model));
+    view.display();
 
     Assert.assertEquals(Player.BLUE, model.getCurrentPlayer()); // player swaps to blue
     Assert.assertEquals(7, model.getPlayerHand(Player.RED).size()); // red hand decreases
@@ -143,8 +144,8 @@ public class TestThreeTriosModel {
   }
 
   @Test
-  public void testGameTyingLogicWorks() {
-    ThreeTriosView view = new ThreeTriosGameView(model);
+  public void testGameTyingLogicWorks() throws IOException {
+    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
     model.startGame(0);
     for (int row = 0; row < grid.getRows(); row++) {
       for (int col = 0; col < grid.getCols(); col++) {
@@ -153,7 +154,7 @@ public class TestThreeTriosModel {
         }
       }
     }
-    System.out.println(view.render(model));
+    view.display();
     Assert.assertTrue(model.isGameOver());
     Assert.assertNull(model.getWinner()); // since we said that tie = null.
   }
@@ -173,13 +174,13 @@ public class TestThreeTriosModel {
   }
 
   @Test
-  public void testWinningLogicWorks() {
+  public void testWinningLogicWorks() throws IOException {
     GameModel gameModel = createModelForEasyTesting();
-    ThreeTriosView view = new ThreeTriosGameView(gameModel);
+    ThreeTriosView view = new ThreeTriosGameView(gameModel, System.out);
     gameModel.startGame(0);
     Assert.assertEquals(gameModel.getPlayerHand(Player.BLUE).size(), 13);
     Assert.assertEquals(gameModel.getPlayerHand(Player.RED).size(), 13);
-    System.out.println(view.render(gameModel));
+    view.display();
     for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
@@ -188,7 +189,7 @@ public class TestThreeTriosModel {
         }
       }
     }
-    System.out.println(view.render(gameModel));
+    view.display();
 
     Assert.assertTrue(gameModel.isGameOver());
     Assert.assertEquals(Player.BLUE, gameModel.getWinner());

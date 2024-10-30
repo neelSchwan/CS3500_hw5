@@ -31,15 +31,14 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * Generates a textual / string representation of the current game state and appends it
    * to the Appendable.
    *
-   * @param model the three-trios model used for getting the current game state.
    */
   //why do we need Gamemodel as parameter
   @Override
-  public void render(GameModel model) throws IOException {
+  public void render() throws IOException {
     StringBuilder sb = new StringBuilder();
 
     sb.append("Player: ").append(model.getCurrentPlayer()).append("\n");
-    renderGrid(model, sb);
+    renderGrid(sb);
 
     sb.append("Hand: ").append("\n");
     List<Card> hand = model.getPlayerHand(model.getCurrentPlayer());
@@ -51,7 +50,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
   /**
    * Renders the grid to the StringBuilder.
    */
-  private void renderGrid(GameModel model, StringBuilder sb) {
+  private void renderGrid(StringBuilder sb) {
     Grid grid = model.getGrid();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
@@ -86,8 +85,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * Outputs the current game state to the appendable.
    */
   @Override
-  public void display(GameModel model) throws IOException {
-    render(model);
+  public void display() throws IOException {
+    render();
   }
-
 }

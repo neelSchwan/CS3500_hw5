@@ -76,20 +76,22 @@ public class TestGameCell {
     assertEquals(cardCell.getOwner(), Player.BLUE);
   }
 
-//  @Test
-//  public void testToString() {
-//    assertEquals(cardCell.toString(), card.toString());
-//  }
-
-//  @Test
-//  public void testSetAdjacentCell() {
-//    Cell adjacentCell = new Cell(CellType.CARD_CELL);
-//    cardCell.setAdjacentCell(Direction.EAST, adjacentCell);
-//    assertEquals(adjacentCell, cardCell.getAdjacentCells().get("East"));
-//  }
+  @Test
+  public void testToString() {
+    assertEquals(cardCell.toString(), "C");
+  }
 
   @Test
-  public void testGetAdjacentCards() {}
+  public void testSetAdjacentCell() {
+    Cell adjacentCell = new Cell(CellType.CARD_CELL);
+    cardCell.setAdjacentCell(Direction.EAST, adjacentCell);
+    assertEquals(adjacentCell, cardCell.getAdjacentCells().get(Direction.EAST));
+  }
+
+  @Test
+  public void testGetAdjacentCards() {
+
+  }
 
 
 

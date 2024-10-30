@@ -3,6 +3,7 @@ package cs3500.threetrios.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +37,13 @@ public class TestThreeTriosGameView {
   }
 
   @Test
-  public void testRender() {
+  public void testRender() throws IOException {
     model.startGame(0);
-    ThreeTriosView view = new ThreeTriosGameView(model);
-    assertEquals(view.render(model), "Player: RED\n" +
+    StringBuilder output = new StringBuilder();
+    ThreeTriosView view = new ThreeTriosGameView(model, output);
+    view.render();
+
+    String expectedOutput = "Player: RED\n" +
             "_ _         _\n" +
             "_   _       _\n" +
             "_     _     _\n" +
@@ -53,7 +57,8 @@ public class TestThreeTriosGameView {
             "warwick [N: 9, S: 7, E: 6, W: 5]\n" +
             "malphite [N: 9, S: 5, E: 8, W: 7]\n" +
             "jinx [N: 6, S: 5, E: 9, W: 7]\n" +
-            "garen [N: 6, S: 8, E: 5, W: 4]\n");
-  }
+            "garen [N: 6, S: 8, E: 5, W: 4]\n";
 
+    assertEquals(expectedOutput, output.toString());
+  }
 }
