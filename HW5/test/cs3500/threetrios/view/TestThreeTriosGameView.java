@@ -30,6 +30,10 @@ public class TestThreeTriosGameView {
   //private Grid grid;
   //private Map<Player, List<Card>> hands;
 
+  /**
+   * Initializes the test setup with a game reader, game model, deck, grid, and hands.
+   * This method runs before each test to ensure consistency between view tests.
+   */
   @Before
   public void setUp() {
     CardConfigReader cardConfigReader = new CardConfigReader();
