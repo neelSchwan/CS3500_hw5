@@ -21,7 +21,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for the ThreeTriosGameView class.
- * This class sets up a test environment for verifying the functionality of the ThreeTrios game view.
+ * This class sets up a test environment for verifying the
+ * functionality of the ThreeTrios game view.
  */
 public class TestThreeTriosGameView {
 
