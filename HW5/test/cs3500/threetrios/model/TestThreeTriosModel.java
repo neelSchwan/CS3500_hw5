@@ -35,6 +35,26 @@ public class TestThreeTriosModel {
   }
 
   @Test
+  public void testValidConstructor() {
+    GameModel model = new ThreeTriosModel(grid, hands, deck);
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testInvalidConstructorNullGrid() {
+    GameModel model = new ThreeTriosModel(null, hands, deck);
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testInvalidConstructorNullHands() {
+    GameModel model = new ThreeTriosModel(grid, null, deck);
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testInvalidConstructorNullDeck() {
+    GameModel model = new ThreeTriosModel(grid, hands, null);
+  }
+
+  @Test
   public void testStartGameWithValidDeck() {
     model.startGame(0);
 

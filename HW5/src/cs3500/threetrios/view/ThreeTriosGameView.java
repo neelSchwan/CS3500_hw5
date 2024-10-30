@@ -4,10 +4,8 @@ import java.util.List;
 
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
-import cs3500.threetrios.model.GameCard;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.Grid;
-import cs3500.threetrios.model.ThreeTriosModel;
 
 /**
  * Class for creating a textual representation of the games current state.
@@ -26,6 +24,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * @param model three-trios model that is used for getting the current game state.
    * @return String representation of the current game state.
    */
+  //why do we need Gamemodel as parameter
   @Override
   public String render(GameModel model) {
     StringBuilder sb = new StringBuilder();

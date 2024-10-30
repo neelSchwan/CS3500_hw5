@@ -20,6 +20,7 @@ public class Grid {
    * @param row  number of rows to initialize the row with.
    * @param cols number of cols to initialize the col with.
    */
+  //add invariants
   public Grid(int row, int cols) {
     this.rows = row;
     this.cols = cols;
@@ -34,6 +35,7 @@ public class Grid {
    * @param col specified column of a Cell.
    * @return Cell at the current row and column position in the grid.
    */
+  //usage of isValidPosition
   public Cell getCell(int row, int col) {
     if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
       return this.grid[row][col];
@@ -49,6 +51,8 @@ public class Grid {
    * @param col  specified col to set as a cell.
    * @param cell Cell object to assign to the specified row and columns.
    */
+  //add invariant
+  //occupied cell
   public void setCell(int row, int col, Cell cell) {
     this.grid[row][col] = cell;
     this.cellPositions.put(cell, new int[]{row, col});

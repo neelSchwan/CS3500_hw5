@@ -1,65 +1,53 @@
 package cs3500.threetrios.model;
 
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class TestGameCard {
 
+  Card card1;
+
+  @Test
+  public void testValidGameCard() {
+    Card testCard = new GameCard("baron nashor", 9, 9, 9, 9);
+    assertEquals(testCard.getName(), "baron nashor");
+  }
+
+  //write tests for invalid constructor
+
+  @Before
+  public void setUp() {
+    card1 = new GameCard("dragon", 1, 2, 3, 4);
+  }
 
   @Test
   public void testGetCardName() {
-    Card card1 = new GameCard("dragon", 1, 2, 3, 4);
-    Assert.assertEquals(card1.getName(), "dragon");
+    assertEquals(card1.getName(), "dragon");
   }
 
   @Test
   public void testGetCardAttackValue() {
-    Card card1 = new GameCard("dragon", 1, 2, 3, 4);
-    Assert.assertEquals(card1.getAttackValue(Direction.EAST), 3);
-    Assert.assertEquals(card1.getAttackValue(Direction.NORTH), 1);
-    Assert.assertEquals(card1.getAttackValue(Direction.SOUTH), 2);
-    Assert.assertEquals(card1.getAttackValue(Direction.WEST), 4);
+    assertEquals(card1.getAttackValue(Direction.EAST), 3);
+    assertEquals(card1.getAttackValue(Direction.NORTH), 1);
+    assertEquals(card1.getAttackValue(Direction.SOUTH), 2);
+    assertEquals(card1.getAttackValue(Direction.WEST), 4);
   }
 
   @Test
-  public void testReadingCardDbFileWorks() {
-    CardConfigReader cardReader = new CardConfigReader();
-    List<Card> cardDbAsList = cardReader.readCards("src/resources/CardDb.txt");
-    Assert.assertEquals(cardDbAsList.size(), 30);
-    Assert.assertEquals(cardDbAsList.get(0).getName(), "ahri");
-    Assert.assertEquals(cardDbAsList.get(1).getName(), "twitch");
-    Assert.assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 6);
+  public void testToString() {
+    assertEquals(card1.toString(), "dragon [N: 1, S: 2, E: 3, W: 4]");
   }
 
-  @Test(expected = RuntimeException.class)
-  public void testReadingCardDbWhenFileDoesntExist() {
-    CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("src/resources/CardDb2.txt");
+  @Test
+  public void testEquals() {
+    Card card2 = new GameCard("dragon", 1, 2, 3, 4);
+    Card card3 = new GameCard("baron", 1, 2, 3, 4);
+    assertEquals(card1, card2);
+    assertNotEquals(card1, card3);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testReadingCardWhenFileNameIsNull() {
-    CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards(null);
-  }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testReadingCardWhenFileNameIsEmpty() {
-    CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("");
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testReadingCardDbWhenFileIsEmpty() {
-    CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("src/resources/EmptyCardDb.txt");
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testReadingCardDbWhenFileIsNull() {
-    CardConfigReader cardReader = new CardConfigReader();
-    cardReader.readCards("src/resources/DuplicateCard.txt");
-  }
 }

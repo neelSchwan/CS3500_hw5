@@ -14,6 +14,7 @@ public class Cell {
   private final CellType cellType;
   private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
+  //invariant for cellType
   public Cell(CellType cellType) {
     this.cellType = cellType;
   }
@@ -51,6 +52,8 @@ public class Cell {
   public Card getCard() {
     return card;
   }
+
+  public CellType getCellType() {return cellType; };
 
   /**
    * Checks if the cell is a hole.
@@ -91,4 +94,6 @@ public class Cell {
   public Map<Direction, Cell> getAdjacentCells() {
     return adjacentCells;
   }
+
+
 }

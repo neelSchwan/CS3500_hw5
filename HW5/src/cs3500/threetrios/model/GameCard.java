@@ -20,6 +20,7 @@ public class GameCard implements Card {
    * @param name name to correspond to the new GameCard object being created.
    */
   public GameCard(String name, int northValue, int southValue, int eastValue, int westValue) {
+    //needs invariants
     this.name = name;
     this.attackValues = new EnumMap<>(Direction.class);
     attackValues.put(Direction.NORTH, northValue);
