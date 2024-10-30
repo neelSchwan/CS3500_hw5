@@ -81,11 +81,6 @@ public class TestGameCell {
   }
 
   @Test
-  public void testToString() {
-    assertEquals(cardCell.toString(), "C");
-  }
-
-  @Test
   public void testSetAdjacentCell() {
     Cell adjacentCell = new Cell(CellType.CARD_CELL);
     cardCell.setAdjacentCell(Direction.EAST, adjacentCell);

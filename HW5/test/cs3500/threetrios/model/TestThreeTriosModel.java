@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cs3500.threetrios.view.ThreeTriosGameView;
-import cs3500.threetrios.view.ThreeTriosView;
 
 public class TestThreeTriosModel {
 
@@ -59,14 +57,10 @@ public class TestThreeTriosModel {
   public void testStartGameWithValidDeck() throws IOException {
     model.startGame(0);
 
-    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
-    view.display();
-
     Assert.assertEquals(Player.RED, model.getCurrentPlayer());
     Assert.assertEquals(8, model.getPlayerHand(Player.RED).size()); // 8 (N+1)/2, N=15
 
     model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
-    view.display();
 
     Assert.assertEquals(Player.BLUE, model.getCurrentPlayer()); // player swaps to blue
     Assert.assertEquals(7, model.getPlayerHand(Player.RED).size()); // red hand decreases
@@ -178,7 +172,6 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGameTyingLogicWorks() throws IOException {
-    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
     model.startGame(0);
     for (int row = 0; row < grid.getRows(); row++) {
       for (int col = 0; col < grid.getCols(); col++) {
@@ -187,7 +180,6 @@ public class TestThreeTriosModel {
         }
       }
     }
-    view.display();
     Assert.assertTrue(model.isGameOver());
     Assert.assertNull(model.getWinner()); // since we said that tie = null.
   }
@@ -209,11 +201,9 @@ public class TestThreeTriosModel {
   @Test
   public void testWinningLogicWorks() throws IOException {
     GameModel gameModel = createModelForEasyTesting();
-    ThreeTriosView view = new ThreeTriosGameView(gameModel, System.out);
     gameModel.startGame(0);
     Assert.assertEquals(gameModel.getPlayerHand(Player.BLUE).size(), 13);
     Assert.assertEquals(gameModel.getPlayerHand(Player.RED).size(), 13);
-    view.display();
     for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
@@ -221,7 +211,6 @@ public class TestThreeTriosModel {
         }
       }
     }
-    view.display();
 
     Assert.assertTrue(gameModel.isGameOver());
     Assert.assertEquals(Player.BLUE, gameModel.getWinner());
