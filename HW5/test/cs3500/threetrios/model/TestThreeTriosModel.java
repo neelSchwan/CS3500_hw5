@@ -218,7 +218,6 @@ public class TestThreeTriosModel {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
           gameModel.placeCard(row, col, gameModel.getPlayerHand(gameModel.getCurrentPlayer()).get(0));
-          System.out.println("Placed card at (" + row + ", " + col + ")");
         }
       }
     }
@@ -238,14 +237,5 @@ public class TestThreeTriosModel {
     model.placeCard(0, 0, card2);
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void testEmptyHandsAfterStart() {
-    model.startGame(0);
 
-    // Clear a player's hand manually
-    model.getPlayerHand(Player.RED).clear();
-
-    // Try placing a card with an empty hand (should throw an exception)
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
-  }
 }

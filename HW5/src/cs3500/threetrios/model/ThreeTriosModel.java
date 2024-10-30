@@ -107,7 +107,7 @@ public class ThreeTriosModel implements GameModel {
     if (cell == null || cell.isHole() || cell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-    if (hands.get(currentPlayer).contains(card)) {
+    if (!(hands.get(currentPlayer).contains(card))) {
       throw new IllegalArgumentException("Player does not have this card.");
     }
     if (hands.get(currentPlayer).isEmpty()) {
@@ -280,11 +280,11 @@ public class ThreeTriosModel implements GameModel {
    * Gets the specified player's hand.
    *
    * @param player player (RED OR BLUE).
-   * @return List of cards in the specified player's hand.
+   * @return COPY OF LIST OF CARDS in the specified player's hand.
    */
   @Override
   public List<Card> getPlayerHand(Player player) {
-    return hands.get(player);
+    return new ArrayList<>(hands.get(player));
   }
 
   /**
