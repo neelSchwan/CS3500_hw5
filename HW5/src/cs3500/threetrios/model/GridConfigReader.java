@@ -50,7 +50,7 @@ public class GridConfigReader {
   private Grid parseGridDb(BufferedReader gridDbReader) throws IOException {
     int[] parseRowsAndCols = parseRowsAndCols(gridDbReader);
     int row = parseRowsAndCols[0]; // 0 index = row
-    int col = parseRowsAndCols[1];// 1 index = col
+    int col = parseRowsAndCols[1]; // 1 index = col
 
     int totalCells = row * col;
     if (totalCells % 2 == 0) {

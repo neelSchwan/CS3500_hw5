@@ -56,25 +56,32 @@ public class Grid {
     if (row < 0 || col < 0 || row > this.rows || col > this.cols) {
       throw new IllegalArgumentException("Invalid row or column");
     }
-    if (cell.isOccupied()) {
-      throw new IllegalArgumentException("Cell is already occupied");
-    }
     this.grid[row][col] = cell;
     this.cellPositions.put(cell, new int[]{row, col});
   }
 
   /**
-   *
+   * Sets up adjacent cells for each cell in the grid, creates connections based on
+   * direction, (NORTH, SOUTH, EAST, WEST) between neighboring cells.
+   * This sets up each cells adjacency for efficient access during gameplay.
    */
   public void setupAdjacentCells() {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         Cell cell = grid[row][col];
         if (cell != null) {
-          if (row > 0) cell.setAdjacentCell(Direction.NORTH, grid[row - 1][col]);
-          if (row < rows - 1) cell.setAdjacentCell(Direction.SOUTH, grid[row + 1][col]);
-          if (col > 0) cell.setAdjacentCell(Direction.WEST, grid[row][col - 1]);
-          if (col < cols - 1) cell.setAdjacentCell(Direction.EAST, grid[row][col + 1]);
+          if (row > 0) {
+            cell.setAdjacentCell(Direction.NORTH, grid[row - 1][col]);
+          }
+          if (row < rows - 1) {
+            cell.setAdjacentCell(Direction.SOUTH, grid[row + 1][col]);
+          }
+          if (col > 0) {
+            cell.setAdjacentCell(Direction.WEST, grid[row][col - 1]);
+          }
+          if (col < cols - 1) {
+            cell.setAdjacentCell(Direction.EAST, grid[row][col + 1]);
+          }
         }
       }
     }

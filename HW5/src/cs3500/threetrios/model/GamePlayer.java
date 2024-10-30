@@ -1,5 +1,12 @@
 package cs3500.threetrios.model;
 
+import java.util.List;
+
+/**
+ * Interface that represents a Player in the TreeTrios game.
+ * This interface will be used in future extensions of the game so that human and AI players can
+ * be implemented.
+ */
 public interface GamePlayer {
   /**
    * Gets the next card the player wants to play.
@@ -14,13 +21,6 @@ public interface GamePlayer {
    * @return an array containing row and column, representing the position on the grid.
    */
   int[] choosePosition();
-
-  /**
-   * Updates the player's hand after they have placed a card.
-   *
-   * @param card the card that was placed.
-   */
-  void updateHand(Card card);
 
   /**
    * Gets the player's color.

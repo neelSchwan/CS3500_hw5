@@ -1,0 +1,19 @@
+We have defined a GamePlayer interface that we will use in the next assignment to implement a
+human or even an AI player. For our current design, we used an ENUM to represent the player, either
+(Player.RED, or Player.BLUE).
+
+For our player interface, we have defined 4 methods,
+* Card chooseCard();
+* int[] choosePosition();
+* Player getColor();
+
+For chooseCard(), for a human player, they can choose a card from their hand that they want to play.
+For an AI player, they can choose a card at random.
+
+For choosePosition(), for a human player, they can choose a position on the grid to play to.
+For an AI player, they would choose this position at random, (or with some other logic).
+
+For getColor(), it would just return the color of the specified player. So for a human player, one
+human would choose red, and one would choose blue.
+For an AI player, the human player would choose one color, and the AI would be the remaining color.
+

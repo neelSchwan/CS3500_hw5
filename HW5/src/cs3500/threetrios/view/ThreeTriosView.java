@@ -2,7 +2,6 @@ package cs3500.threetrios.view;
 
 import java.io.IOException;
 
-import cs3500.threetrios.model.GameModel;
 
 /**
  * Interface for the view of three-trios game.

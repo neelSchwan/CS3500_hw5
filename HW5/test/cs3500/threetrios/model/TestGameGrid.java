@@ -60,7 +60,6 @@ public class TestGameGrid {
     assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
 
-  // how to compare cell?
   @Test
   public void testSetCell() {
     Cell cell01 = new Cell(CellType.CARD_CELL);
@@ -84,16 +83,6 @@ public class TestGameGrid {
             () -> grid.setCell(0, 10, cell01));
     assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
-
-  //Only if card is in cell
-  //and then we can use isOccupiedd()
-//  @Test
-//  public void testSetCellIsOccupied() {
-//    Cell cell01 = new Cell(CellType.CARD_CELL);
-//    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-//            () -> grid.setCell(0, 0, cell01));
-//    assertTrue(exception1.getMessage().contains("Cell is already occupied"));
-//  }
 
   @Test
   public void testSetUpAdjacentCell() {

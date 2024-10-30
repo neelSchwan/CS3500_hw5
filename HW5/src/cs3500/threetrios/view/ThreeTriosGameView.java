@@ -2,7 +2,6 @@ package cs3500.threetrios.view;
 
 import java.io.IOException;
 import java.util.List;
-
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.GameModel;

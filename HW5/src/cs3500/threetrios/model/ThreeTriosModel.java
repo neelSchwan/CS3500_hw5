@@ -152,7 +152,8 @@ public class ThreeTriosModel implements GameModel {
     for (Map.Entry<Direction, Cell> entry : adjacentCells.entrySet()) {
       Direction direction = entry.getKey();
       Cell adjacentCell = entry.getValue();
-      if (adjacentCell != null && adjacentCell.isOccupied() && adjacentCell.getOwner() != currentPlayer) {
+      if (adjacentCell != null && adjacentCell.isOccupied()
+              && adjacentCell.getOwner() != currentPlayer) {
         boolean flipped = battleCells(cell, adjacentCell, direction);
         if (flipped) {
           flippedCells.add(adjacentCell);

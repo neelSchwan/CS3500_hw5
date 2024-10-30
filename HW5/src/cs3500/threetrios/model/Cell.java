@@ -4,8 +4,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Cell representation in the threetrios game.
- * The cell holds information of the card in it, and if it's a hole or not.
+ * Represents a cell on the Three Trios game grid.
+ * A cell can either hold a card or be a hole where no card can be placed.
  */
 public class Cell {
 
@@ -14,8 +14,13 @@ public class Cell {
   private final CellType cellType;
   private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
+  /**
+   * Constructs a Cell with the specified cell type.
+   *
+   * @param cellType the type of this cell, either CARD_CELL or HOLE_CELL
+   * @throws IllegalArgumentException if cellType is null
+   */
   public Cell(CellType cellType) {
-    //INVARIANT: cell type cannot be null
     if (cellType == null) {
       throw new IllegalArgumentException("cellType cannot be null");
     }
@@ -23,81 +28,90 @@ public class Cell {
   }
 
   /**
-   * Checks if the cell has a card.
+   * Checks if this cell holds a card.
    *
-   * @return true or false depending on if the cell holds a card.
-   * We will initialize holes as null values in the grid,
+   * @return true if the cell is occupied by a card, false otherwise
    */
   public boolean isOccupied() {
     return cellType == CellType.CARD_CELL && card != null;
   }
 
   /**
-   * Place a card in the specified cell.
+   * Places a card in this cell with the specified owner.
    *
-   * @param card   specified card to place.
-   * @param player player who owns the card being placed.
+   * @param card   the card to place in this cell
+   * @param player the owner of the card being placed
+   * @throws IllegalStateException if the cell is a hole
    */
   public void placeCard(Card card, Player player) {
-    //INVARIANT: cannot play card on hole cell
     if (cellType == CellType.HOLE_CELL) {
       throw new IllegalStateException("Cannot place a card in a hole");
     }
-
     this.card = card;
     this.owner = player;
   }
 
   /**
-   * Gets card in the cell.
+   * Returns the card in this cell.
    *
-   * @return Card object that's currently in the cell.
+   * @return the card in this cell, or null if the cell is empty
    */
   public Card getCard() {
     return card;
   }
 
-  public CellType getCellType() {return cellType; };
+  /**
+   * Returns the type of this cell.
+   *
+   * @return the type of this cell as a CellType
+   */
+  public CellType getCellType() {
+    return cellType;
+  }
 
   /**
-   * Checks if the cell is a hole.
+   * Checks if this cell is a hole.
    *
-   * @return true if the specified cell is a hole.
+   * @return true if the cell is a hole, false if it isn't.
    */
   public boolean isHole() {
     return cellType == CellType.HOLE_CELL;
   }
 
   /**
-   * Gets owner of the current cells card.
+   * Returns the owner of the card in this cell.
    *
-   * @return player object who owns the cells card.
+   * @return the player who owns the card in this cell.
    */
   public Player getOwner() {
     return owner;
   }
 
-  @Override
-  public String toString() {
-    return cellType.toString().substring(0, 1).toUpperCase();
-  }
-
   /**
-   * Sets the owner of current cell to a player.
+   * Sets the owner of this cell's card.
    *
-   * @param owner Player (RED or BLUE) to set the cell's owner to.
+   * @param owner the player to set as the specified cell's owner.
    */
   public void setOwner(Player owner) {
     this.owner = owner;
   }
 
+  /**
+   * Sets the adjacent cell in the specified direction.
+   *
+   * @param direction the direction of the adjacent cell.
+   * @param cell      the cell adjacent to this one.
+   */
   public void setAdjacentCell(Direction direction, Cell cell) {
     adjacentCells.put(direction, cell);
   }
 
+  /**
+   * Returns a map of this cell's adjacent cells.
+   *
+   * @return a map of adjacent cells by direction.
+   */
   public Map<Direction, Cell> getAdjacentCells() {
     return adjacentCells;
   }
-
-
 }

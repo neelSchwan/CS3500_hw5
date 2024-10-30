@@ -3,6 +3,7 @@ package cs3500.threetrios.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -10,6 +11,14 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class TestCardConfigReader {
+  private final String cardDb = "src" + File.separator
+          + "resources" + File.separator + "CardDb.txt";
+  private final String cardDb2 = "src" + File.separator
+          + "resources" + File.separator + "CardDb2.txt";
+  private final String emptyCardDb = "src" + File.separator
+          + "resources" + File.separator + "EmptyCardDb.txt";
+  private final String duplicateCardDb = "src" + File.separator
+          + "resources" + File.separator + "DuplicateCard.txt";
   private CardConfigReader cardReader;
 
   @Before
@@ -19,7 +28,7 @@ public class TestCardConfigReader {
 
   @Test
   public void testReadingCardDbFileWorks() {
-    List<Card> cardDbAsList = cardReader.readCards("src/resources/CardDb.txt");
+    List<Card> cardDbAsList = cardReader.readCards(cardDb);
     assertEquals(cardDbAsList.size(), 30);
     assertEquals(cardDbAsList.get(0).getName(), "ahri");
     assertEquals(cardDbAsList.get(1).getName(), "twitch");
@@ -29,7 +38,7 @@ public class TestCardConfigReader {
   @Test
   public void testReadingCardDbWhenFileDoesntExist() {
     RuntimeException exception = assertThrows(RuntimeException.class,
-            () -> cardReader.readCards("src/resources/CardDb2.txt"));
+            () -> cardReader.readCards(cardDb2));
     assertTrue(exception.getMessage().contains("Issue when reading file: "));
   }
 
@@ -57,14 +66,14 @@ public class TestCardConfigReader {
   @Test
   public void testReadingCardDbWhenFileIsEmpty() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-            () -> cardReader.readCards("src/resources/EmptyCardDb.txt"));
+            () -> cardReader.readCards(emptyCardDb));
     assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
 
   @Test
   public void testReadingCardDbWhenCardIsDuplicate() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-            () -> cardReader.readCards("src/resources/DuplicateCard.txt"));
+            () -> cardReader.readCards(duplicateCardDb));
     assertTrue(exception.getMessage().contains("Duplicate name found, edit config!"));
   }
 }
