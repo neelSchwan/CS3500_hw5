@@ -107,10 +107,12 @@ public class ThreeTriosModel implements GameModel {
     if (cell == null || cell.isHole() || cell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-    if (!getPlayerHand(currentPlayer).contains(card)) {
+    if (hands.get(currentPlayer).contains(card)) {
       throw new IllegalArgumentException("Player does not have this card.");
     }
-
+    if (hands.get(currentPlayer).isEmpty()) {
+      throw new IllegalArgumentException("Player has no cards to place.");
+    }
     hands.get(currentPlayer).remove(card);
 
     cell.placeCard(card, currentPlayer);

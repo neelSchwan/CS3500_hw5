@@ -56,8 +56,4 @@ public class TestCardConfigReader {
   public void testReadingCardDbWhenCardIsDuplicate() {
     cardReader.readCards("src/resources/DuplicateCard.txt");
   }
-
-
-
-
 }

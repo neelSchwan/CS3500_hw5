@@ -1,4 +1,4 @@
-package cs3500.threetrios.model;
+package cs3500.threetrios.view;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cs3500.threetrios.view.ThreeTriosGameView;
-import cs3500.threetrios.view.ThreeTriosView;
+import cs3500.threetrios.model.Card;
+import cs3500.threetrios.model.CardConfigReader;
+import cs3500.threetrios.model.GameModel;
+import cs3500.threetrios.model.Grid;
+import cs3500.threetrios.model.GridConfigReader;
+import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.model.Player;
+import cs3500.threetrios.model.ThreeTriosModel;
 
 import static org.junit.Assert.assertEquals;
 

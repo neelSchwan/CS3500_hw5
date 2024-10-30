@@ -90,6 +90,38 @@ public class TestThreeTriosModel {
   }
 
   @Test
+  public void testStartingGameWithTooFewCards() {
+    List<Card> deck = new CardConfigReader()
+            .readCards("src/resources/TooFewCardDb.txt"); // 15 cards
+    Grid grid = new GridConfigReader()
+            .readGridFromFile("src/resources/GridWithCellConnections.txt"); // 19 card cell
+    Map<Player, List<Card>> hands = new HashMap<>();
+    hands.put(Player.RED, new ArrayList<>());
+    hands.put(Player.BLUE, new ArrayList<>());
+    GameModel model = new ThreeTriosModel(grid, hands, deck);
+    IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
+      model.startGame(0);
+    });
+    Assert.assertTrue(exception.toString().contains("Not enough cards to start the game."));
+  }
+
+  @Test
+  public void testStartingGameWithEvenNumberOfCardCells() {
+    List<Card> deck = new CardConfigReader()
+            .readCards("src/resources/CardDb.txt");
+    Grid grid = new GridConfigReader()
+            .readGridFromFile("src/resources/GridWithEvenCellNum.txt");
+    Map<Player, List<Card>> hands = new HashMap<>();
+    hands.put(Player.RED, new ArrayList<>());
+    hands.put(Player.BLUE, new ArrayList<>());
+    GameModel model = new ThreeTriosModel(grid, hands, deck);
+    IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
+      model.startGame(0);
+    });
+    Assert.assertTrue(exception.toString().contains("Grid must have an odd number of card cells."));
+  }
+
+  @Test
   public void testBattlePhase() {
     model.startGame(0);
     model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(1)); // 4 on east
@@ -136,7 +168,7 @@ public class TestThreeTriosModel {
   public void testTieBetweenCellsMeansNothingHappens() {
     model.startGame(0);
 
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0)); //  on east
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0)); // 8 on east
     model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
 
     Assert.assertEquals(Player.RED, grid.getCell(0, 0).getOwner());
@@ -193,5 +225,26 @@ public class TestThreeTriosModel {
 
     Assert.assertTrue(gameModel.isGameOver());
     Assert.assertEquals(Player.BLUE, gameModel.getWinner());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testPlaceCardInOccupiedCell() {
+    model.startGame(0);
+    Card card1 = model.getPlayerHand(Player.RED).get(0);
+    Card card2 = model.getPlayerHand(Player.RED).get(1);
+
+    model.placeCard(0, 0, card1);
+    model.placeCard(0, 0, card2);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testEmptyHandsAfterStart() {
+    model.startGame(0);
+
+    // Clear a player's hand manually
+    model.getPlayerHand(Player.RED).clear();
+
+    // Try placing a card with an empty hand (should throw an exception)
+    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
   }
 }

@@ -48,6 +48,4 @@ public class TestGameCard {
     assertEquals(card1, card2);
     assertNotEquals(card1, card3);
   }
-
-
 }

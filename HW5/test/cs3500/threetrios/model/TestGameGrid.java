@@ -1,15 +1,21 @@
 package cs3500.threetrios.model;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class TestGameGrid {
   Grid grid;
 
   @Test
   public void testValidGameGrid() {
-    Grid testGrid = new Grid(3,3);
+    Grid testGrid = new Grid(3, 3);
     assertEquals(testGrid.getRows(), 3);
   }
 
@@ -17,39 +23,78 @@ public class TestGameGrid {
 
   @Before
   public void setUp() {
-    grid = new Grid(5,5);
+    grid = new Grid(5, 5);
     Cell cell00 = new Cell(CellType.CARD_CELL);
     Cell hole11 = new Cell(CellType.HOLE_CELL);
-    grid.setCell(0,0, cell00);
-    grid.setCell(1,1, hole11);
+    grid.setCell(0, 0, cell00);
+    grid.setCell(1, 1, hole11);
   }
 
-  // should think about overriding equal for cell
   @Test
   public void testGetValidCell() {
     Cell cell1 = new Cell(CellType.CARD_CELL);
-    assertEquals(grid.getCell(0,0).getCellType(), cell1.getCellType());
+    assertEquals(grid.getCell(0, 0).getCellType(), cell1.getCellType());
   }
 
-  @Test (expected = IllegalArgumentException.class)
-  public void testGetCellForOutOfBounds()  {
-    grid.getCell(6,6);
+  @Test
+  public void testGetCellForOutOfBounds() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> grid.getCell(-1, 0));
+    assertTrue(exception1.getMessage().contains("Invalid row or column"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> grid.getCell(0, -1));
+    assertTrue(exception2.getMessage().contains("Invalid row or column"));
+    IllegalArgumentException exception3 = assertThrows(IllegalArgumentException.class,
+            () -> grid.getCell(10, 0));
+    assertTrue(exception3.getMessage().contains("Invalid row or column"));
+    IllegalArgumentException exception4 = assertThrows(IllegalArgumentException.class,
+            () -> grid.getCell(0, 10));
+    assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
 
   @Test
   public void testSetCell() {
     Cell cell01 = new Cell(CellType.CARD_CELL);
-    grid.setCell(0,1, cell01);
-    assertEquals(grid.getCell(0,1).getCellType(), cell01.getCellType());
+    grid.setCell(0, 1, cell01);
+    assertEquals(grid.getCell(0, 1).getCellType(), cell01.getCellType());
   }
 
-  //testSetCellForOutOfBounds
-
-  //how should I test this?
   @Test
   public void testSetUpAdjacentCell() {
-    Cell cell10 = new Cell(CellType.CARD_CELL);
+    Grid grid = new Grid(2, 2);
+    Cell cell00 = new Cell(CellType.CARD_CELL);
+    Cell cell01 = new Cell(CellType.CARD_CELL);
+    Cell cell10 = new Cell(CellType.HOLE_CELL);
+    Cell cell11 = new Cell(CellType.CARD_CELL);
+
+    // C C
+    // X C
+    grid.setCell(0, 0, cell00);
+    grid.setCell(0, 1, cell01);
+    grid.setCell(1, 0, cell10);
+    grid.setCell(1, 1, cell11);
     grid.setupAdjacentCells();
+
+    assertEquals(cell01, cell00.getAdjacentCells().get(Direction.EAST));
+    assertEquals(cell10, cell00.getAdjacentCells().get(Direction.SOUTH));
+    assertEquals(cell00.getAdjacentCells().get(Direction.SOUTH).getCellType(), CellType.HOLE_CELL);
+    assertNull(cell00.getAdjacentCells().get(Direction.NORTH));
+    assertNull(cell00.getAdjacentCells().get(Direction.WEST));
+
+    assertEquals(cell00, cell01.getAdjacentCells().get(Direction.WEST));
+    assertEquals(cell11, cell01.getAdjacentCells().get(Direction.SOUTH));
+    assertNull(cell01.getAdjacentCells().get(Direction.NORTH));
+    assertNull(cell01.getAdjacentCells().get(Direction.EAST));
+
+    assertEquals(cell11, cell10.getAdjacentCells().get(Direction.EAST));
+    assertEquals(cell00, cell10.getAdjacentCells().get(Direction.NORTH));
+    assertNull(cell10.getAdjacentCells().get(Direction.SOUTH));
+    assertNull(cell10.getAdjacentCells().get(Direction.WEST));
+
+    assertEquals(cell10, cell11.getAdjacentCells().get(Direction.WEST));
+    assertEquals(cell01, cell11.getAdjacentCells().get(Direction.NORTH));
+    assertNull(cell11.getAdjacentCells().get(Direction.SOUTH));
+    assertNull(cell11.getAdjacentCells().get(Direction.EAST));
   }
 
   @Test
@@ -67,7 +112,6 @@ public class TestGameGrid {
     assertEquals(grid.calculateCardCells(), 1);
   }
 
-  // find a way
   @Test
   public void testFindCellPosition() {
     Cell findCell = new Cell(CellType.CARD_CELL);

@@ -27,7 +27,6 @@ public class TestGameCell {
     holeCell = new Cell(CellType.HOLE_CELL);
     card = new GameCard("dragon", 1, 2, 3, 4);
     cardCell.placeCard(card, Player.RED);
-
   }
 
   @Test
@@ -38,13 +37,13 @@ public class TestGameCell {
   @Test
   public void testPlaceCard() {
     Cell testCell = new Cell(CellType.CARD_CELL);
-    Card testCard = new GameCard("baron nashor", 9,9,9,9);
+    Card testCard = new GameCard("baron nashor", 9, 9, 9, 9);
     testCell.placeCard(testCard, Player.RED);
     assertEquals(testCard, testCell.getCard());
   }
 
   //player?
-  @Test (expected = IllegalStateException.class)
+  @Test(expected = IllegalStateException.class)
   public void testPlaceCardWithHoleCard() {
     holeCell.placeCard(card, Player.RED);
   }
@@ -90,10 +89,5 @@ public class TestGameCell {
 
   @Test
   public void testGetAdjacentCards() {
-
   }
-
-
-
-
 }
