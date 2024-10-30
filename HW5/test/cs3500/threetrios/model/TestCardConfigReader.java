@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class TestCardConfigReader {
   private CardConfigReader cardReader;
@@ -24,36 +26,45 @@ public class TestCardConfigReader {
     assertEquals(cardDbAsList.get(2).getAttackValue(Direction.NORTH), 6);
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void testReadingCardDbWhenFileDoesntExist() {
-    cardReader.readCards("src/resources/CardDb2.txt");
-//    RuntimeException exception = assertThrows(RuntimeException.class,
-//            () -> cardReader.readCards("src/resources/CardDb2.txt"));
-//    assertTrue(exception.getMessage().contains("Issue when reading file: "));
+    RuntimeException exception = assertThrows(RuntimeException.class,
+            () -> cardReader.readCards("src/resources/CardDb2.txt"));
+    assertTrue(exception.getMessage().contains("Issue when reading file: "));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testReadingCardWhenFileNameIsNull() {
-    cardReader.readCards(null);
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> cardReader.readCards(null));
+    assertTrue(exception.getMessage().contains("File name cannot be null or empty."));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testReadingCardWhenFileNameIsEmpty() {
-    cardReader.readCards("");
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> cardReader.readCards(""));
+    assertTrue(exception.getMessage().contains("File name cannot be null or empty."));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testReadingCardWhenFileNameIsBlank() {
-    cardReader.readCards("  ");
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> cardReader.readCards("  "));
+    assertTrue(exception.getMessage().contains("File name cannot be blank"));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testReadingCardDbWhenFileIsEmpty() {
-    cardReader.readCards("src/resources/EmptyCardDb.txt");
+    IllegalStateException exception = assertThrows(IllegalStateException.class,
+            () -> cardReader.readCards("src/resources/EmptyCardDb.txt"));
+    assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testReadingCardDbWhenCardIsDuplicate() {
-    cardReader.readCards("src/resources/DuplicateCard.txt");
+    IllegalStateException exception = assertThrows(IllegalStateException.class,
+            () -> cardReader.readCards("src/resources/DuplicateCard.txt"));
+    assertTrue(exception.getMessage().contains("Duplicate name found, edit config!"));
   }
 }

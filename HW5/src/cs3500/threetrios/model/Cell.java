@@ -14,8 +14,11 @@ public class Cell {
   private final CellType cellType;
   private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
-  //invariant for cellType
   public Cell(CellType cellType) {
+    //INVARIANT: cell type cannot be null
+    if (cellType == null) {
+      throw new IllegalArgumentException("cellType cannot be null");
+    }
     this.cellType = cellType;
   }
 
@@ -36,6 +39,7 @@ public class Cell {
    * @param player player who owns the card being placed.
    */
   public void placeCard(Card card, Player player) {
+    //INVARIANT: cannot play card on hole cell
     if (cellType == CellType.HOLE_CELL) {
       throw new IllegalStateException("Cannot place a card in a hole");
     }

@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class TestGameCard {
 
@@ -16,7 +18,58 @@ public class TestGameCard {
     assertEquals(testCard.getName(), "baron nashor");
   }
 
-  //write tests for invalid constructor
+  @Test
+  public void testInvalidNameForGameCard() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard(null, 9, 9, 9, 9));
+    assertTrue(exception1.getMessage().contains("Name cannot be null or empty"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("", 9, 9, 9, 9));
+    assertTrue(exception2.getMessage().contains("Name cannot be null or empty"));
+    IllegalArgumentException exception3 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("  ", 9, 9, 9, 9));
+    assertTrue(exception3.getMessage().contains("Name cannot be blank."));
+  }
+
+  @Test
+  public void testInvalidNorthValueForGameCard() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", -1, 9, 9, 9));
+    assertTrue(exception1.getMessage().contains("North value should be between 1 and 10"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 20, 9, 9, 9));
+    assertTrue(exception2.getMessage().contains("North value should be between 1 and 10"));
+  }
+
+  @Test
+  public void testInvalidSouthValueForGameCard() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, -1, 9, 9));
+    assertTrue(exception1.getMessage().contains("South value should be between 1 and 10"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, 30, 9, 9));
+    assertTrue(exception2.getMessage().contains("South value should be between 1 and 10"));
+  }
+
+  @Test
+  public void testInvalidEastValueForGameCard() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, 9, -1, 9));
+    assertTrue(exception1.getMessage().contains("East value should be between 1 and 10"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, 9, 20, 9));
+    assertTrue(exception2.getMessage().contains("East value should be between 1 and 10"));
+  }
+
+  @Test
+  public void testInvalidWestValueForGameCard() {
+    IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, 9, 9, -1));
+    assertTrue(exception1.getMessage().contains("West value should be between 1 and 10"));
+    IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
+            () -> new GameCard("baron", 9, 9, 9, 20));
+    assertTrue(exception2.getMessage().contains("West value should be between 1 and 10"));
+  }
 
   @Before
   public void setUp() {

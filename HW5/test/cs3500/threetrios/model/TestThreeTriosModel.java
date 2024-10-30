@@ -73,6 +73,7 @@ public class TestThreeTriosModel {
     Assert.assertEquals(8, model.getPlayerHand(Player.BLUE).size()); // blue hand is still 8
   }
 
+
   @Test(expected = IllegalStateException.class)
   public void testOperationsWhenGameHasNotStarted() {
     hands.get(Player.RED).add(deck.get(0));

@@ -30,14 +30,15 @@ public class CardConfigReader {
    */
   public List<Card> readCards(String filename) {
     List<Card> cardsFromFile = new ArrayList<>();
+    //INVARIANT: File name cannot be null or empty.
     if (filename == null || filename.isEmpty()) {
       throw new IllegalArgumentException("File name cannot be null or empty.");
     }
+    //INVARIANT: File name cannot be blank
     if (filename.isBlank()) {
       throw new IllegalArgumentException("File name cannot be blank");
     }
     File cardDatabase = new File(filename);
-    //null case for cardDatabase?
     try (BufferedReader cardDbReader = new BufferedReader(new FileReader(cardDatabase))) {
       if (!cardDbReader.ready()) {
         throw new IllegalStateException("File must have some valid data.");
@@ -62,13 +63,13 @@ public class CardConfigReader {
     boolean hasDuplicates = false;
     while ((line = cardDbReader.readLine()) != null) {
       String[] cardParts = line.split(" ");
+      //INVARIANT: card should only have 5 components
       if (cardParts.length != 5) {
         throw new IllegalArgumentException("Invalid card format: " + line);
       }
 
       String cardName = cardParts[0];
       if (!(nameSet.add(cardName))) {
-        System.out.println("Duplicate name found: " + cardName); //sysout?
         hasDuplicates = true;
       }
 

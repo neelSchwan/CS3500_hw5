@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class TestGameCell {
@@ -18,8 +19,12 @@ public class TestGameCell {
     assertEquals(cell1.getCellType(), CellType.CARD_CELL);
   }
 
-  //test invalid constructor
-
+  @Test
+  public void testInvalidCellConstructor() {
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> new Cell(null));
+    assertTrue(exception.getMessage().contains("cellType cannot be null"));
+  }
 
   @Before
   public void SetUp() {

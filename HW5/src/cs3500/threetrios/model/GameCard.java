@@ -20,7 +20,30 @@ public class GameCard implements Card {
    * @param name name to correspond to the new GameCard object being created.
    */
   public GameCard(String name, int northValue, int southValue, int eastValue, int westValue) {
-    //needs invariants
+    //INVARIANT: name cannot be null or empty
+    if (name == null || name.isEmpty()) {
+      throw new IllegalArgumentException("Name cannot be null or empty.");
+    }
+    //INVARIANT: name cannot be blank
+    if (name.isBlank()) {
+      throw new IllegalArgumentException("Name cannot be blank.");
+    }
+    //INVARIANT: North value should be between 1 and 10
+    if (northValue < 1 || northValue > 10) {
+      throw new IllegalArgumentException("North value should be between 1 and 10");
+    }
+    //INVARIANT: South value should be between 1 and 10
+    if (southValue < 1 || southValue > 10) {
+      throw new IllegalArgumentException("South value should be between 1 and 10");
+    }
+    //INVARIANT: East value should be between 1 and 10
+    if (eastValue < 1 || eastValue > 10) {
+      throw new IllegalArgumentException("East value should be between 1 and 10");
+    }
+    //INVARIANT: West value should be between 1 and 10
+    if (westValue < 1 || westValue > 10) {
+      throw new IllegalArgumentException("West value should be between 1 and 10");
+    }
     this.name = name;
     this.attackValues = new EnumMap<>(Direction.class);
     attackValues.put(Direction.NORTH, northValue);
