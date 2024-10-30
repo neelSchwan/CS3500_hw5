@@ -10,6 +10,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests for the Card Config Reader.
+ */
 public class TestCardConfigReader {
   private final String cardDb = "src" + File.separator
           + "resources" + File.separator + "CardDb.txt";
@@ -21,6 +24,9 @@ public class TestCardConfigReader {
           + "resources" + File.separator + "DuplicateCard.txt";
   private CardConfigReader cardReader;
 
+  /**
+   * Sets up a reader object before each test to test on.
+   */
   @Before
   public void setUp() {
     cardReader = new CardConfigReader();

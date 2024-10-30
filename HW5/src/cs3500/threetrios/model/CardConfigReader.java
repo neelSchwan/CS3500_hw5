@@ -15,13 +15,6 @@ import java.util.Set;
 public class CardConfigReader {
 
   /**
-   * Empty constructor since configuration readers don't need arguments.
-   */
-  public CardConfigReader() {
-
-  }
-
-  /**
    * Method to read cards given a card database.
    * The card database is defined as "CARD_NAME, NORTH, SOUTH, EAST, WEST"
    *

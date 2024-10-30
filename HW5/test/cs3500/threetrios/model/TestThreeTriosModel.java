@@ -4,13 +4,18 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Test class for the ThreeTriosModel class.
+ * This class sets up a test environment for verifying the functionality of the ThreeTrios
+ * game model.
+ */
 public class TestThreeTriosModel {
 
   private GameModel model;
@@ -18,13 +23,19 @@ public class TestThreeTriosModel {
   private Grid grid;
   private Map<Player, List<Card>> hands;
 
+  /**
+   * Initializes the test setup with a game model, deck of cards, grid, and player hands.
+   * This method runs before each test to ensure consistency between model tests.
+   */
   @Before
   public void setUp() {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    deck = cardConfigReader.readCards("src/resources/CardDb.txt");
-    grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
+    deck = cardConfigReader.readCards("src" + File.separator
+            + "resources" + File.separator + "CardDb.txt");
+    grid = gridConfigReader.readGridFromFile("src" + File.separator
+            + "resources" + File.separator + "GridDb.txt");
 
     hands = new HashMap<>();
     hands.put(Player.RED, new ArrayList<>());
@@ -36,6 +47,7 @@ public class TestThreeTriosModel {
   @Test
   public void testValidConstructor() {
     GameModel model = new ThreeTriosModel(grid, hands, deck);
+    Assert.assertNotNull("Model should not be null", model);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -87,9 +99,11 @@ public class TestThreeTriosModel {
   @Test
   public void testStartingGameWithTooFewCards() {
     List<Card> deck = new CardConfigReader()
-            .readCards("src/resources/TooFewCardDb.txt"); // 15 cards
+            .readCards("src" + File.separator + "resources"
+                    + File.separator + "TooFewCardDb.txt"); // 15 cards
     Grid grid = new GridConfigReader()
-            .readGridFromFile("src/resources/GridWithCellConnections.txt"); // 19 card cell
+            .readGridFromFile("src" + File.separator + "resources"
+                    + File.separator + "GridWithCellConnections.txt"); // 19 card cell
     Map<Player, List<Card>> hands = new HashMap<>();
     hands.put(Player.RED, new ArrayList<>());
     hands.put(Player.BLUE, new ArrayList<>());
@@ -103,9 +117,11 @@ public class TestThreeTriosModel {
   @Test
   public void testStartingGameWithEvenNumberOfCardCells() {
     List<Card> deck = new CardConfigReader()
-            .readCards("src/resources/CardDb.txt");
+            .readCards("src" + File.separator + "resources"
+                    + File.separator + "CardDb.txt");
     Grid grid = new GridConfigReader()
-            .readGridFromFile("src/resources/GridWithEvenCellNum.txt");
+            .readGridFromFile("src" + File.separator + "resources"
+                    + File.separator + "GridWithEvenCellNum.txt");
     Map<Player, List<Card>> hands = new HashMap<>();
     hands.put(Player.RED, new ArrayList<>());
     hands.put(Player.BLUE, new ArrayList<>());
@@ -188,8 +204,10 @@ public class TestThreeTriosModel {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/EasyTestingGridDb.txt");
+    List<Card> deck = cardConfigReader.readCards("src" + File.separator + "resources"
+            + File.separator + "CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("src" + File.separator + "resources"
+            + File.separator + "EasyTestingGridDb.txt");
 
     Map<Player, List<Card>> hands = new HashMap<>();
     hands.put(Player.RED, new ArrayList<>());
@@ -207,7 +225,8 @@ public class TestThreeTriosModel {
     for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
-          gameModel.placeCard(row, col, gameModel.getPlayerHand(gameModel.getCurrentPlayer()).get(0));
+          gameModel.placeCard(row, col,
+                  gameModel.getPlayerHand(gameModel.getCurrentPlayer()).get(0));
         }
       }
     }
@@ -225,6 +244,4 @@ public class TestThreeTriosModel {
     model.placeCard(0, 0, card1);
     model.placeCard(0, 0, card2);
   }
-
-
 }

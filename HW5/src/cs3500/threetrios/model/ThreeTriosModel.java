@@ -52,7 +52,8 @@ public class ThreeTriosModel implements GameModel {
   @Override
   public void startGame(long seed) {
     int cardCells = grid.calculateCardCells(); // N
-
+    //INVARIANT: the number of card cells is always odd. This cannot change because one the game
+    //           is started the number of card cells cannot change.
     if (cardCells % 2 == 0) {
       throw new IllegalStateException("Grid must have an odd number of card cells.");
     }

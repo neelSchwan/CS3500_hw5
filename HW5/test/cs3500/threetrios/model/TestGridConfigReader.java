@@ -6,9 +6,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
+/**
+ * Test class for the GridConfigReader class.
+ * This class verifies the functionality of reading grid configurations from a file.
+ */
 public class TestGridConfigReader {
   private GridConfigReader gridConfigReader;
 
@@ -20,7 +23,7 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridFromFileWorks() {
     Grid grid = gridConfigReader.readGridFromFile("src" + File.separator
-            +"resources" + File.separator +"GridDb.txt");
+            + "resources" + File.separator + "GridDb.txt");
 
     assertEquals(grid.getRows(), 5);
     assertEquals(grid.getCols(), 7);
@@ -30,7 +33,7 @@ public class TestGridConfigReader {
   @Test
   public void testReadingCardDbWhenFileDoesntExist() {
     RuntimeException exception = assertThrows(RuntimeException.class,
-            () -> gridConfigReader.readGridFromFile("src" + File.separator
+        () -> gridConfigReader.readGridFromFile("src" + File.separator
                     + "resources" + File.separator + "GridDb2.txt"));
     assertTrue(exception.getMessage().contains("Issue when reading file: "));
   }
@@ -38,7 +41,7 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridWhenFileIsEmpty() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-            () -> gridConfigReader.readGridFromFile("src" + File.separator + "resources"
+        () -> gridConfigReader.readGridFromFile("src" + File.separator + "resources"
                     + File.separator + "EmptyGridDb.txt"));
     assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
@@ -46,21 +49,21 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridWhenFilenameIsEmpty() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> gridConfigReader.readGridFromFile(""));
+        () -> gridConfigReader.readGridFromFile(""));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty"));
   }
 
   @Test
   public void testReadingGridFromFileWhenFilenameIsNull() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> gridConfigReader.readGridFromFile(null));
+        () -> gridConfigReader.readGridFromFile(null));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty"));
   }
 
   @Test
   public void testReadingGridWhenFilenameIsBlank() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> gridConfigReader.readGridFromFile("  "));
+        () -> gridConfigReader.readGridFromFile("  "));
     assertTrue(exception.getMessage().contains("File name cannot be blank"));
   }
 

@@ -7,6 +7,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Class that holds the tests for the Cell object.
+ */
 public class TestGameCell {
 
   Cell cardCell;
@@ -26,8 +29,14 @@ public class TestGameCell {
     assertTrue(exception.getMessage().contains("cellType cannot be null"));
   }
 
+  /**
+   * Sets up some cells for testing.
+   * Sets up a card Cell to test operations on.
+   * Sets up a hole Cell to test other operations on.
+   * Creates a card called 'dragon' and places it in the card cell.
+   */
   @Before
-  public void SetUp() {
+  public void setUp() {
     cardCell = new Cell(CellType.CARD_CELL);
     holeCell = new Cell(CellType.HOLE_CELL);
     card = new GameCard("dragon", 1, 2, 3, 4);

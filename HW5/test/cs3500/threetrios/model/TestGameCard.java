@@ -8,6 +8,9 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Test for the GameCard object.
+ */
 public class TestGameCard {
 
   Card card1;
@@ -71,6 +74,9 @@ public class TestGameCard {
     assertTrue(exception2.getMessage().contains("West value should be between 1 and 10"));
   }
 
+  /**
+   * sets up a card object that's used for testing.
+   */
   @Before
   public void setUp() {
     card1 = new GameCard("dragon", 1, 2, 3, 4);

@@ -1,7 +1,5 @@
 package cs3500.threetrios.model;
 
-import java.util.List;
-
 /**
  * Interface that represents a Player in the TreeTrios game.
  * This interface will be used in future extensions of the game so that human and AI players can

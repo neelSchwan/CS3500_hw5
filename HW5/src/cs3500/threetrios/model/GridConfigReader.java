@@ -11,13 +11,6 @@ import java.io.IOException;
 public class GridConfigReader {
 
   /**
-   * Empty constructor for a grid reader since passing in args isn't necessary.
-   */
-  public GridConfigReader() {
-
-  }
-
-  /**
    * Method to read a Grid from a config / database file.
    * The Grid config in the database is defined as:
    * ROWS COLS
