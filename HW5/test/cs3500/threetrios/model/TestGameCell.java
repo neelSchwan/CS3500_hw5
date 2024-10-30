@@ -96,7 +96,4 @@ public class TestGameCell {
     assertEquals(adjacentCell, cardCell.getAdjacentCells().get(Direction.EAST));
   }
 
-  @Test
-  public void testGetAdjacentCards() {
-  }
 }

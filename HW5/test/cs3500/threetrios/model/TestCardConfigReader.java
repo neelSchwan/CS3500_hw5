@@ -44,42 +44,42 @@ public class TestCardConfigReader {
   @Test
   public void testReadingCardDbWhenFileDoesntExist() {
     RuntimeException exception = assertThrows(RuntimeException.class,
-            () -> cardReader.readCards(cardDb2));
+        () -> cardReader.readCards(cardDb2));
     assertTrue(exception.getMessage().contains("Issue when reading file: "));
   }
 
   @Test
   public void testReadingCardWhenFileNameIsNull() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> cardReader.readCards(null));
+        () -> cardReader.readCards(null));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty."));
   }
 
   @Test
   public void testReadingCardWhenFileNameIsEmpty() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> cardReader.readCards(""));
+        () -> cardReader.readCards(""));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty."));
   }
 
   @Test
   public void testReadingCardWhenFileNameIsBlank() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> cardReader.readCards("  "));
+        () -> cardReader.readCards("  "));
     assertTrue(exception.getMessage().contains("File name cannot be blank"));
   }
 
   @Test
   public void testReadingCardDbWhenFileIsEmpty() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-            () -> cardReader.readCards(emptyCardDb));
+        () -> cardReader.readCards(emptyCardDb));
     assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
 
   @Test
   public void testReadingCardDbWhenCardIsDuplicate() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-            () -> cardReader.readCards(duplicateCardDb));
+        () -> cardReader.readCards(duplicateCardDb));
     assertTrue(exception.getMessage().contains("Duplicate name found, edit config!"));
   }
 }
