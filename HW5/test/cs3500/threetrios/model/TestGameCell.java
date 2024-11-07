@@ -25,7 +25,7 @@ public class TestGameCell {
   @Test
   public void testInvalidCellConstructor() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-            () -> new Cell(null));
+        () -> new Cell(null));
     assertTrue(exception.getMessage().contains("cellType cannot be null"));
   }
 

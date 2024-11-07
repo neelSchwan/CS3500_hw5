@@ -24,7 +24,7 @@ public class TestGameCard {
   @Test
   public void testInvalidNameForGameCard() {
     IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-            () -> new GameCard(null, 9, 9, 9, 9));
+        () -> new GameCard(null, 9, 9, 9, 9));
     assertTrue(exception1.getMessage().contains("Name cannot be null or empty"));
     IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
         () -> new GameCard("", 9, 9, 9, 9));

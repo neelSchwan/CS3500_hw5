@@ -25,10 +25,10 @@ public class TestGameGrid {
   @Test
   public void testInvalidGameGrid() {
     IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-            () -> new Grid(-1, 3));
+        () -> new Grid(-1, 3));
     assertTrue(exception1.getMessage().contains("row or cols must be greater than 0"));
     IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
-            () -> new Grid(3, 0));
+        () -> new Grid(3, 0));
     assertTrue(exception2.getMessage().contains("row or cols must be greater than 0"));
   }
 
@@ -55,16 +55,16 @@ public class TestGameGrid {
   @Test
   public void testGetCellForOutOfBounds() {
     IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-            () -> grid.getCell(-1, 0));
+        () -> grid.getCell(-1, 0));
     assertTrue(exception1.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
-            () -> grid.getCell(0, -1));
+        () -> grid.getCell(0, -1));
     assertTrue(exception2.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception3 = assertThrows(IllegalArgumentException.class,
-            () -> grid.getCell(10, 0));
+        () -> grid.getCell(10, 0));
     assertTrue(exception3.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception4 = assertThrows(IllegalArgumentException.class,
-            () -> grid.getCell(0, 10));
+        () -> grid.getCell(0, 10));
     assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
 
@@ -79,16 +79,16 @@ public class TestGameGrid {
   public void testSetCellForOutOfBounds() {
     Cell cell01 = new Cell(CellType.CARD_CELL);
     IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-            () -> grid.setCell(-1, 0, cell01));
+        () -> grid.setCell(-1, 0, cell01));
     assertTrue(exception1.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
-            () -> grid.setCell(0, -1, cell01));
+        () -> grid.setCell(0, -1, cell01));
     assertTrue(exception2.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception3 = assertThrows(IllegalArgumentException.class,
-            () -> grid.setCell(10, 0, cell01));
+        () -> grid.setCell(10, 0, cell01));
     assertTrue(exception3.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception4 = assertThrows(IllegalArgumentException.class,
-            () -> grid.setCell(0, 10, cell01));
+        () -> grid.setCell(0, 10, cell01));
     assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
 

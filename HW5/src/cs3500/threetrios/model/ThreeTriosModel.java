@@ -17,10 +17,12 @@ import java.util.Set;
 public class ThreeTriosModel implements GameModel {
 
   private final Grid grid;
-  private final Map<Player, List<Card>> hands;
-  private Player currentPlayer;
+  private final Map<GamePlayer, List<Card>> hands;
+  private GamePlayer currentPlayer;
   private final List<Card> deck;
   private boolean isGameStarted;
+  private GamePlayer redPlayer;
+  private GamePlayer bluePlayer;
 
   /**
    * Constructor to create a ThreeTriosModel object.
@@ -30,7 +32,7 @@ public class ThreeTriosModel implements GameModel {
    *              ,and the value is a list of cards in that players hand.
    * @param deck  List of cards that is populated with cards from a config file.
    */
-  public ThreeTriosModel(Grid grid, Map<Player, List<Card>> hands, List<Card> deck) {
+  public ThreeTriosModel(Grid grid, Map<GamePlayer, List<Card>> hands, List<Card> deck) {
     if (grid == null || hands == null || deck == null) {
       throw new IllegalArgumentException("Arguments cannot be null");
     }
@@ -41,7 +43,6 @@ public class ThreeTriosModel implements GameModel {
     this.isGameStarted = false;
     this.grid.setupAdjacentCells();
   }
-
 
   /**
    * Starts the game by shuffling the deck and dealing cards to the players.
@@ -65,11 +66,22 @@ public class ThreeTriosModel implements GameModel {
     Collections.shuffle(deck, new Random(seed));
 
     int cardsPerPlayer = ((cardCells + 1) / 2); // N+1/2 CARDS PER PLAYER.
-
     dealCards(cardsPerPlayer);
 
-    this.currentPlayer = Player.RED;
+    this.currentPlayer = redPlayer;
     this.isGameStarted = true;
+  }
+
+  /**
+   * Initializes the game grid and player hands based on a configuration file.
+   *
+   * @param gridFile the file containing the grid configuration.
+   * @param cardFile the file containing the card configuration.
+   * @throws IllegalArgumentException if the configuration files are invalid or do not match expected formats.
+   */
+  @Override
+  public void initializeGame(String gridFile, String cardFile) {
+
   }
 
   /**
@@ -80,15 +92,13 @@ public class ThreeTriosModel implements GameModel {
   private void dealCards(int cardsPerPlayer) {
     List<Card> redPlayerHand = new ArrayList<>();
     List<Card> bluePlayerHand = new ArrayList<>();
-
     for (int i = 0; i < cardsPerPlayer; i++) {
       redPlayerHand.add(deck.remove(0));
       bluePlayerHand.add(deck.remove(0));
     }
 
-    hands.put(Player.RED, redPlayerHand);
-    hands.put(Player.BLUE, bluePlayerHand);
-
+    hands.put(redPlayer, redPlayerHand);
+    hands.put(bluePlayer, bluePlayerHand);
   }
 
   /**
@@ -142,7 +152,6 @@ public class ThreeTriosModel implements GameModel {
 
       List<Cell> newFlippedCells = battleAdjacentCells(currentCell);
       comboQueue.addAll(newFlippedCells);
-
     }
   }
 
@@ -174,8 +183,8 @@ public class ThreeTriosModel implements GameModel {
     int defenderAttackValue = defenderCard.getAttackValue(oppositeDirection);
 
     if (attackerAttackValue > defenderAttackValue) {
-      Player attacker = attackingCell.getOwner();
-      Player defender = defendingCell.getOwner();
+      GamePlayer attacker = attackingCell.getOwner();
+      GamePlayer defender = defendingCell.getOwner();
 
       hands.get(defender).remove(defenderCard);
       hands.get(attacker).remove(attackerCard);
@@ -208,7 +217,7 @@ public class ThreeTriosModel implements GameModel {
    */
   @Override
   public Player getCurrentPlayer() {
-    return currentPlayer;
+    return currentPlayer.getColor();
   }
 
   /**
@@ -223,7 +232,7 @@ public class ThreeTriosModel implements GameModel {
         Cell cell = grid.getCell(i, j);
         if (cell != null && !cell.isHole()) {
           if (!cell.isOccupied()) {
-            System.out.println(" i returned false, game isnt over");
+            System.out.println(" i returned false, game isn't over");
             return false;
           }
         }
@@ -246,10 +255,10 @@ public class ThreeTriosModel implements GameModel {
       for (int j = 0; j < grid.getCols(); j++) {
         Cell currentCell = grid.getCell(i, j);
         if (currentCell.isOccupied()) {
-          Player cardOwner = currentCell.getOwner();
-          if (cardOwner == Player.RED) {
+          GamePlayer cardOwner = currentCell.getOwner();
+          if (cardOwner.getColor() == Player.RED) {
             redCount++;
-          } else if (cardOwner == Player.BLUE) {
+          } else if (cardOwner.getColor() == Player.BLUE) {
             blueCount++;
           }
         }
@@ -269,13 +278,45 @@ public class ThreeTriosModel implements GameModel {
   }
 
   /**
-   * Gets the state of the grid at the current moment.
+   * Creates a copy of the current game grid.
    *
-   * @return returns the current game grid.
+   * @return a Grid object representing a copy of the current game grid.
    */
   @Override
-  public Grid getGrid() {
-    return grid;
+  public Grid getGrid() { //TODO: TEST THIS
+    Grid gridCopy = new Grid(grid.getRows(), grid.getCols());
+    for (int i = 0; i < grid.getRows(); i++) {
+      for (int j = 0; j < grid.getCols(); j++) {
+        Cell cell = grid.getCell(i, j);
+        gridCopy.setCell(i, j, cell);
+      }
+    }
+    return gridCopy;
+  }
+
+  /**
+   * Gets the size of the game grid.
+   *
+   * @return the size of the grid.
+   */
+  @Override
+  public int gridSize() {
+    return grid.getRows() + grid.getCols(); //TODO: MIGHT CHANGE (IDK WHT THIS DOES)
+  }
+
+  /**
+   * Retrieves the content of a specific cell in the grid.
+   *
+   * @param row the row index of the cell (0-indexed).
+   * @param col the column index of the cell (0-indexed).
+   * @return the Card in the specified cell, or null if the cell is empty.
+   */
+  @Override
+  public Card cellContents(int row, int col) {
+    if (!grid.getCell(row, col).isOccupied()) {
+      throw new IllegalArgumentException("Cannot check content of unoccupied cell.");
+    }
+    return grid.getCell(row, col).getCard();
   }
 
   /**
@@ -287,6 +328,99 @@ public class ThreeTriosModel implements GameModel {
   @Override
   public List<Card> getPlayerHand(Player player) {
     return new ArrayList<>(hands.get(player));
+  }
+
+  /**
+   * Gets the owner of a specific cell in the grid.
+   *
+   * @param row the row index of the cell (0-indexed).
+   * @param col the column index of the cell (0-indexed).
+   * @return the {@link Player} who owns the specified cell, or {@code null} if the cell has no owner.
+   */
+  @Override
+  public GamePlayer getCellOwner(int row, int col) {
+    return grid.getCell(row, col).getOwner();
+  }
+
+  /**
+   * Checks if a move to a specific cell is valid for the current player.
+   *
+   * @param row the row index of the cell (0-indexed).
+   * @param col the column index of the cell (0-indexed).
+   * @return true if the move to the specified cell is valid, false otherwise.
+   */
+  @Override
+  public boolean isValidMove(int row, int col) {
+    if (row < 0 || row >= grid.getRows() || col < 0 || col >= grid.getCols()) {
+      return !grid.getCell(row, col).isOccupied();
+    }
+    return true;
+  }
+
+  /**
+   * Calculates the max number cards a player can flip by placing a card at the specified location.
+   *
+   * @param card the Card to be placed.
+   * @param row  the row index for placement (0-indexed).
+   * @param col  the column index for placement (0-indexed).
+   * @return max number cards a player can flip by placing the specified card at the given location.
+   */
+  @Override
+  public int maxCombo(Card card, int row, int col) {
+    return simulateFlips(card, row, col);
+  }
+
+  private int simulateFlips(Card card, int row, int col) {
+    if (!isGameStarted) {
+      throw new IllegalStateException("Game has not started yet.");
+    }
+
+    Cell cell = grid.getCell(row, col);
+    if (cell == null || cell.isHole() || cell.isOccupied()) {
+      throw new IllegalArgumentException("Invalid cell for placing a card.");
+    }
+    if (!(hands.get(currentPlayer).contains(card))) {
+      throw new IllegalArgumentException("Player does not have this card.");
+    }
+
+    Set<Cell> visitedCells = new HashSet<>();
+    List<Cell> flippedCells = battleAdjacentCells(cell);
+    Queue<Cell> comboQueue = new LinkedList<>(flippedCells);
+
+    int flipCount = flippedCells.size();
+    while (!comboQueue.isEmpty()) {
+      Cell currentCell = comboQueue.poll();
+      if (visitedCells.contains(currentCell)) {
+        continue;
+      }
+      visitedCells.add(currentCell);
+
+      List<Cell> newFlippedCells = battleAdjacentCells(currentCell);
+      comboQueue.addAll(newFlippedCells);
+      flipCount += newFlippedCells.size(); // Add to the flip count
+    }
+
+    return flipCount;
+  }
+
+  /**
+   * Gets the score of the specified player. (Num cells they own + num cards in hand).
+   *
+   * @param player the Player whose score is being retrieved.
+   * @return the score of the specified player.
+   */
+  @Override
+  public int getPlayerScore(GamePlayer player) {
+    int playerScore = 0;
+    for (int i = 0; i < grid.getRows(); i++) {
+      for (int j = 0; j < grid.getCols(); j++) {
+        Cell cell = grid.getCell(i, j);
+        if (cell.getOwner() == player) {
+          playerScore++;
+        }
+      }
+    }
+    return playerScore + player.getPlayerHand().size();
   }
 
   /**
@@ -303,6 +437,10 @@ public class ThreeTriosModel implements GameModel {
       throw new IllegalArgumentException("Current player cannot be null");
     }
 
-    currentPlayer = (currentPlayer == Player.RED) ? Player.BLUE : Player.RED;
+    if (currentPlayer.getColor() == Player.RED) {
+      currentPlayer.setColor(Player.BLUE);
+    } else if (currentPlayer.getColor() == Player.BLUE) {
+      currentPlayer.setColor(Player.RED);
+    }
   }
 }

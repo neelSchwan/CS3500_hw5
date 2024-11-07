@@ -1,69 +1,41 @@
 package cs3500.threetrios.model;
 
-import java.util.List;
+import cs3500.threetrios.view.ReadonlyThreeTriosModel;
 
 /**
- * Interface defining a game model for the three-trios game.
- * Is an interface in case new models need to be implemented.
+ * Interface defining a mutable game model for the ThreeTrios game.
+ * Provides methods to modify the game state, such as placing cards, switching turns, and starting the game.
  */
-public interface GameModel {
+public interface GameModel extends ReadonlyThreeTriosModel {
 
   /**
-   * Given a row, column, and a card, place it in the grid, if the cell is a card-cell.
+   * Places a card in the grid at the specified row and column if the cell is a card-cell.
    *
-   * @param row  specified row of a cell.
-   * @param col  specified column of a cell.
-   * @param card specified card object to put in the grid.
+   * @param row  the row index of the cell (0-indexed).
+   * @param col  the column index of the cell (0-indexed).
+   * @param card the {@link Card} object to place in the grid.
    */
   void placeCard(int row, int col, Card card);
 
   /**
-   * Get the current player's turn.
-   *
-   * @return player whose turn it is.
-   */
-  Player getCurrentPlayer();
-
-  /**
-   * Checks if the game is over.
-   *
-   * @return true or false if the game is over or not.
-   */
-  boolean isGameOver();
-
-  /**
-   * Determines the winner of the game (who owns more of the card-cells in the grid).
-   *
-   * @return the player with the most card-cells.
-   */
-  Player getWinner();
-
-  /**
-   * Gets the state of the grid at the current moment.
-   *
-   * @return returns the current game grid.
-   */
-  Grid getGrid();
-
-  /**
-   * Gets the specified player's hand.
-   *
-   * @param player player (RED OR BLUE).
-   * @return List of cards in the specified player's hand.
-   */
-  List<Card> getPlayerHand(Player player);
-
-  /**
-   * Method to switch to the next players turn
-   * If current is RED, switch to blue, and vice versa.
+   * Switches to the next player's turn. If the current player is RED, switches to BLUE, and vice versa.
    */
   void switchTurn();
 
   /**
    * Starts the game by shuffling the deck and dealing cards to the players.
    *
-   * @param seed The random seed used to shuffle the deck for reproducibility.
+   * @param seed the random seed used to shuffle the deck for reproducibility.
    * @throws IllegalStateException if there are not enough cards in the deck to start the game.
    */
   void startGame(long seed);
+
+  /**
+   * Initializes the game grid and player hands based on a configuration file.
+   *
+   * @param gridFile the file containing the grid configuration.
+   * @param cardFile the file containing the card configuration.
+   * @throws IllegalArgumentException if the configuration files are invalid or do not match expected formats.
+   */
+  void initializeGame(String gridFile, String cardFile);
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 public class Cell {
 
   private Card card;
-  private Player owner;
+  private GamePlayer owner;
   private final CellType cellType;
   private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
 
@@ -43,7 +43,7 @@ public class Cell {
    * @param player the owner of the card being placed
    * @throws IllegalStateException if the cell is a hole
    */
-  public void placeCard(Card card, Player player) {
+  public void placeCard(Card card, GamePlayer player) {
     if (cellType == CellType.HOLE_CELL) {
       throw new IllegalStateException("Cannot place a card in a hole");
     }
@@ -83,7 +83,7 @@ public class Cell {
    *
    * @return the player who owns the card in this cell.
    */
-  public Player getOwner() {
+  public GamePlayer getOwner() {
     return owner;
   }
 
@@ -92,7 +92,7 @@ public class Cell {
    *
    * @param owner the player to set as the specified cell's owner.
    */
-  public void setOwner(Player owner) {
+  public void setOwner(GamePlayer owner) {
     this.owner = owner;
   }
 
