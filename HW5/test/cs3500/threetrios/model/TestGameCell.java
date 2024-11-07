@@ -3,6 +3,9 @@ package cs3500.threetrios.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
@@ -15,6 +18,7 @@ public class TestGameCell {
   Cell cardCell;
   Cell holeCell;
   Card card;
+  GamePlayer redPlayer;
 
   @Test
   public void testValidCellConstructor() {
@@ -25,7 +29,7 @@ public class TestGameCell {
   @Test
   public void testInvalidCellConstructor() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-        () -> new Cell(null));
+            () -> new Cell(null));
     assertTrue(exception.getMessage().contains("cellType cannot be null"));
   }
 
@@ -40,7 +44,10 @@ public class TestGameCell {
     cardCell = new Cell(CellType.CARD_CELL);
     holeCell = new Cell(CellType.HOLE_CELL);
     card = new GameCard("dragon", 1, 2, 3, 4);
-    cardCell.placeCard(card, Player.RED);
+    List<Card> playerHand = new ArrayList<>();
+    playerHand.add(card);
+    redPlayer = new HumanPlayer(Player.RED, playerHand);
+    cardCell.placeCard(card, redPlayer);
   }
 
   @Test
@@ -52,14 +59,16 @@ public class TestGameCell {
   public void testPlaceCard() {
     Cell testCell = new Cell(CellType.CARD_CELL);
     Card testCard = new GameCard("baron nashor", 9, 9, 9, 9);
-    testCell.placeCard(testCard, Player.RED);
+    List<Card> playerHand = new ArrayList<>();
+    playerHand.add(testCard);
+    testCell.placeCard(testCard, new HumanPlayer(Player.RED, playerHand));
     assertEquals(testCard, testCell.getCard());
   }
 
   //player?
   @Test(expected = IllegalStateException.class)
   public void testPlaceCardWithHoleCard() {
-    holeCell.placeCard(card, Player.RED);
+    holeCell.placeCard(card, new HumanPlayer(Player.RED, List.of()));
   }
 
   @Test
@@ -80,13 +89,14 @@ public class TestGameCell {
   //should we throw exception if null?
   @Test
   public void testGetOwner() {
-    assertEquals(cardCell.getOwner(), Player.RED);
+    assertEquals(cardCell.getOwner(), redPlayer);
   }
 
   @Test
   public void testSetOwner() {
-    cardCell.setOwner(Player.BLUE);
-    assertEquals(cardCell.getOwner(), Player.BLUE);
+    GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, List.of());
+    cardCell.setOwner(bluePlayer);
+    assertEquals(cardCell.getOwner(), bluePlayer);
   }
 
   @Test
