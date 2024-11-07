@@ -1,5 +1,6 @@
 package cs3500.threetrios.controller;
 
+import cs3500.threetrios.model.GameCard;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.ThreeTriosModel;
 import cs3500.threetrios.model.Card;
@@ -28,6 +29,7 @@ public class ThreeTriosGUIController implements ThreeTriosController {
 
   @Override
   public void handleCellClick(int row, int col) {
+    Card card = new GameCard("wasd",2,2,2,2);
     model.placeCard(row, col, card);
     view.refresh();
   }
@@ -38,8 +40,4 @@ public class ThreeTriosGUIController implements ThreeTriosController {
 
   }
 
-  @Override
-  public void handleCellClick(int row, int col) {
-
-  }
 }

@@ -44,5 +44,10 @@ public interface GamePlayer {
    * @return
    */
   void setColor(Player color);
+
+  void addCardToHand(Card card);
+
+  void removeCardFromHand(Card card);
+
 }
 

@@ -6,10 +6,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Test class for the ThreeTriosModel class.
@@ -21,7 +19,7 @@ public class TestThreeTriosModel {
   private GameModel model;
   private List<Card> deck;
   private Grid grid;
-  private Map<Player, List<Card>> hands;
+  private PlayerFactory playerFactory;
 
   /**
    * Initializes the test setup with a game model, deck of cards, grid, and player hands.
@@ -37,22 +35,20 @@ public class TestThreeTriosModel {
     grid = gridConfigReader.readGridFromFile("src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
-    hands = new HashMap<>();
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
+    playerFactory = new HumanPlayerFactory();
 
-    model = new ThreeTriosModel(grid, hands, deck);
+    model = new ThreeTriosModel(grid, playerFactory, deck);
   }
 
   @Test
   public void testValidConstructor() {
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
+    GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
     Assert.assertNotNull("Model should not be null", model);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullGrid() {
-    GameModel model = new ThreeTriosModel(null, hands, deck);
+    GameModel model = new ThreeTriosModel(null, playerFactory, deck);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -61,30 +57,35 @@ public class TestThreeTriosModel {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testInvalidConstructorNullDeck() {
-    GameModel model = new ThreeTriosModel(grid, hands, null);
+  public void testInvalidConstructorNullFactory() {
+    GameModel model = new ThreeTriosModel(grid, playerFactory, null);
   }
 
   @Test
   public void testStartGameWithValidDeck() throws IOException {
     model.startGame(0);
 
-    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
-    Assert.assertEquals(8, model.getPlayerHand(Player.RED).size()); // 8 (N+1)/2, N=15
+    GamePlayer redPlayer = model.getPlayers().get(0); // Get RED player
+    GamePlayer bluePlayer = model.getPlayers().get(1); // Get BLUE player
 
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
+    Assert.assertEquals(Player.RED, redPlayer.getColor());
+    Assert.assertEquals(8, redPlayer.getPlayerHand().size()); // 8 cards for RED
+    Assert.assertEquals(8, bluePlayer.getPlayerHand().size()); // 8 cards for BLUE
 
-    Assert.assertEquals(Player.BLUE, model.getCurrentPlayer()); // player swaps to blue
-    Assert.assertEquals(7, model.getPlayerHand(Player.RED).size()); // red hand decreases
-    Assert.assertEquals(8, model.getPlayerHand(Player.BLUE).size()); // blue hand is still 8
+    // Place a card for RED and check hand size decreases
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
+
+    Assert.assertEquals(Player.BLUE, model.getCurrentPlayer().getColor()); // Switched to BLUE
+    Assert.assertEquals(7, redPlayer.getPlayerHand().size()); // RED hand decreases
+    Assert.assertEquals(8, bluePlayer.getPlayerHand().size()); // BLUE hand is still 8
   }
 
 
   @Test(expected = IllegalStateException.class)
   public void testOperationsWhenGameHasNotStarted() {
-    hands.get(Player.RED).add(deck.get(0));
-
-    model.placeCard(0, 0, hands.get(Player.RED).get(0));
+    GamePlayer redPlayer = model.getPlayers().get(0);
+    redPlayer.addCardToHand(deck.get(0));
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
 
     model.switchTurn();
   }
@@ -104,10 +105,8 @@ public class TestThreeTriosModel {
     Grid grid = new GridConfigReader()
             .readGridFromFile("src" + File.separator + "resources"
                     + File.separator + "GridWithCellConnections.txt"); // 19 card cell
-    Map<Player, List<Card>> hands = new HashMap<>();
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
+    PlayerFactory playerFactory = new HumanPlayerFactory();
+    GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
@@ -122,10 +121,8 @@ public class TestThreeTriosModel {
     Grid grid = new GridConfigReader()
             .readGridFromFile("src" + File.separator + "resources"
                     + File.separator + "GridWithEvenCellNum.txt");
-    Map<Player, List<Card>> hands = new HashMap<>();
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, hands, deck);
+    PlayerFactory playerFactory = new HumanPlayerFactory();
+    GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
@@ -134,32 +131,39 @@ public class TestThreeTriosModel {
 
   @Test
   public void testBattlePhase() {
+    GamePlayer redPlayer = model.getPlayers().get(0);
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+
     model.startGame(0);
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(1)); // 4 on east
-    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
-    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(1)); // 4 on east
+    model.placeCard(0, 1, bluePlayer.getPlayerHand().get(0)); // 8 on west
+    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner().getColor());
   }
 
   @Test
   public void testSwitchTurns() {
+    GamePlayer redPlayer = model.getPlayers().get(0);
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+
     model.startGame(0);
 
-    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
+    Assert.assertEquals(Player.RED, model.getCurrentPlayer().getColor());
 
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0));
-    Assert.assertEquals(Player.BLUE, model.getCurrentPlayer());
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
+    Assert.assertEquals(bluePlayer, model.getCurrentPlayer());
 
-    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0));
-    Assert.assertEquals(Player.RED, model.getCurrentPlayer());
+    model.placeCard(0, 1, bluePlayer.getPlayerHand().get(1));
+    Assert.assertEquals(Player.RED, model.getCurrentPlayer().getColor());
   }
 
   @Test
   public void testGameEndCondition() {
+
     model.startGame(0);
     for (int row = 0; row < grid.getRows(); row++) {
       for (int col = 0; col < grid.getCols(); col++) {
         if (!grid.getCell(row, col).isHole()) {
-          model.placeCard(row, col, model.getPlayerHand(model.getCurrentPlayer()).get(0));
+          model.placeCard(row, col, model.getCurrentPlayer().getPlayerHand().get(0));
         }
       }
     }
@@ -168,22 +172,27 @@ public class TestThreeTriosModel {
 
   @Test
   public void testBattleSwitchesWhoOwnsCardAndCell() {
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+    GamePlayer redPlayer = model.getPlayers().get(0);
     model.startGame(0);
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(1)); // 4 on east
-    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
-    Assert.assertEquals(Player.BLUE, grid.getCell(0, 0).getOwner());
-    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(1)); // 4 on east
+    model.placeCard(0, 1, bluePlayer.getPlayerHand().get(0)); // 8 on west
+    Assert.assertEquals(bluePlayer, grid.getCell(0, 0).getOwner());
+    Assert.assertEquals(bluePlayer, grid.getCell(0, 1).getOwner());
   }
 
   @Test
   public void testTieBetweenCellsMeansNothingHappens() {
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+    GamePlayer redPlayer = model.getPlayers().get(0);
+
     model.startGame(0);
 
-    model.placeCard(0, 0, model.getPlayerHand(Player.RED).get(0)); // 8 on east
-    model.placeCard(0, 1, model.getPlayerHand(Player.BLUE).get(0)); // 8 on west
+    model.placeCard(0, 0, redPlayer.getPlayerHand().get(0)); // 8 on east
+    model.placeCard(0, 1, bluePlayer.getPlayerHand().get(0)); // 8 on west
 
-    Assert.assertEquals(Player.RED, grid.getCell(0, 0).getOwner());
-    Assert.assertEquals(Player.BLUE, grid.getCell(0, 1).getOwner());
+    Assert.assertEquals(redPlayer, grid.getCell(0, 0).getOwner());
+    Assert.assertEquals(bluePlayer, grid.getCell(0, 1).getOwner());
   }
 
   @Test
@@ -192,7 +201,7 @@ public class TestThreeTriosModel {
     for (int row = 0; row < grid.getRows(); row++) {
       for (int col = 0; col < grid.getCols(); col++) {
         if (!grid.getCell(row, col).isHole()) {
-          model.placeCard(row, col, model.getPlayerHand(model.getCurrentPlayer()).get(0));
+          model.placeCard(row, col, model.getCurrentPlayer().getPlayerHand().get(0));
         }
       }
     }
@@ -209,37 +218,40 @@ public class TestThreeTriosModel {
     Grid grid = gridConfigReader.readGridFromFile("src" + File.separator + "resources"
             + File.separator + "EasyTestingGridDb.txt");
 
-    Map<Player, List<Card>> hands = new HashMap<>();
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
-
-    return new ThreeTriosModel(grid, hands, deck);
+    PlayerFactory playerFactory = new HumanPlayerFactory();
+    return new ThreeTriosModel(grid, playerFactory, deck);
   }
 
   @Test
-  public void testWinningLogicWorks() throws IOException {
+  public void testWinningLogicWorks() {
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+    GamePlayer redPlayer = model.getPlayers().get(0);
+
     GameModel gameModel = createModelForEasyTesting();
     gameModel.startGame(0);
-    Assert.assertEquals(gameModel.getPlayerHand(Player.BLUE).size(), 13);
-    Assert.assertEquals(gameModel.getPlayerHand(Player.RED).size(), 13);
+    Assert.assertEquals(bluePlayer.getPlayerHand().size(), 13);
+    Assert.assertEquals(redPlayer.getPlayerHand().size(), 13);
     for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
           gameModel.placeCard(row, col,
-                  gameModel.getPlayerHand(gameModel.getCurrentPlayer()).get(0));
+                  gameModel.getCurrentPlayer().getPlayerHand().get(0));
         }
       }
     }
 
     Assert.assertTrue(gameModel.isGameOver());
-    Assert.assertEquals(Player.BLUE, gameModel.getWinner());
+    Assert.assertEquals(bluePlayer, gameModel.getWinner());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPlaceCardInOccupiedCell() {
+    GamePlayer bluePlayer = model.getPlayers().get(1);
+    GamePlayer redPlayer = model.getPlayers().get(0);
+
     model.startGame(0);
-    Card card1 = model.getPlayerHand(Player.RED).get(0);
-    Card card2 = model.getPlayerHand(Player.RED).get(1);
+    Card card1 = redPlayer.getPlayerHand().get(0);
+    Card card2 = bluePlayer.getPlayerHand().get(1);
 
     model.placeCard(0, 0, card1);
     model.placeCard(0, 0, card2);

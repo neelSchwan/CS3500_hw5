@@ -17,6 +17,7 @@ public interface GameModel extends ReadonlyThreeTriosModel {
    */
   void placeCard(int row, int col, Card card);
 
+
   /**
    * Switches to the next player's turn. If the current player is RED, switches to BLUE, and vice versa.
    */

@@ -30,14 +30,6 @@ public interface ReadonlyThreeTriosModel {
   Card cellContents(int row, int col);
 
   /**
-   * Gets the specified player's hand of cards.
-   *
-   * @param player the {@link Player} whose hand is being retrieved.
-   * @return a list of {@link Card} objects representing the player's hand.
-   */
-  List<Card> getPlayerHand(Player player);
-
-  /**
    * Gets the owner of a specific cell in the grid.
    *
    * @param row the row index of the cell (0-indexed).
@@ -92,12 +84,14 @@ public interface ReadonlyThreeTriosModel {
    *
    * @return the {@link Player} whose turn it is.
    */
-  Player getCurrentPlayer();
+  GamePlayer getCurrentPlayer();
 
   /**
    * Determines the winner of the game based on who owns more card-cells on the grid and in their hand.
    *
    * @return the {@link Player} who has the most card-cells; null if there is no winner yet.
    */
-  Player getWinner();
+  GamePlayer getWinner();
+
+  List<GamePlayer> getPlayers();
 }

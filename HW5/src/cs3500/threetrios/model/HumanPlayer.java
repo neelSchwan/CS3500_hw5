@@ -2,11 +2,11 @@ package cs3500.threetrios.model;
 
 import java.util.List;
 
-public class GamePlayerImpl implements GamePlayer {
+public class HumanPlayer implements GamePlayer {
   private Player color;
   private List<Card> hand;
 
-  GamePlayerImpl(Player color, List<Card> hand) {
+  HumanPlayer(Player color, List<Card> hand) {
     this.color = color;
     this.hand = hand;
   }
@@ -59,5 +59,15 @@ public class GamePlayerImpl implements GamePlayer {
   @Override
   public void setColor(Player color) {
     this.color = color;
+  }
+
+  @Override
+  public void addCardToHand(Card card) {
+    hand.add(card);
+  }
+
+  @Override
+  public void removeCardFromHand(Card card) {
+    hand.remove(card);
   }
 }

@@ -2,6 +2,8 @@ package cs3500.threetrios.view;
 
 import java.io.IOException;
 
+import cs3500.threetrios.controller.ThreeTriosGUIController;
+
 
 /**
  * Interface for the view of three-trios game.
@@ -16,6 +18,5 @@ public interface ThreeTriosView {
    * Outputs the current game state to the console.
    */
   void display() throws IOException;
-
 
 }

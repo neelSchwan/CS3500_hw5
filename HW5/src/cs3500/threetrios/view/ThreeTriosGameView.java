@@ -2,6 +2,7 @@ package cs3500.threetrios.view;
 
 import java.io.IOException;
 import java.util.List;
+
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.GameModel;
@@ -29,7 +30,6 @@ public class ThreeTriosGameView implements ThreeTriosView {
   /**
    * Generates a textual / string representation of the current game state and appends it
    * to the Appendable.
-   *
    */
   //why do we need Gamemodel as parameter
   @Override
@@ -40,7 +40,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
     renderGrid(sb);
 
     sb.append("Hand: ").append("\n");
-    List<Card> hand = model.getPlayerHand(model.getCurrentPlayer());
+    List<Card> hand = model.getCurrentPlayer().getPlayerHand();
     sb.append(renderPlayerHand(hand));
 
     out.append(sb.toString());

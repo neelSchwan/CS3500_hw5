@@ -17,31 +17,30 @@ import java.util.Set;
 public class ThreeTriosModel implements GameModel {
 
   private final Grid grid;
-  private final Map<GamePlayer, List<Card>> hands;
+  private final List<GamePlayer> players;
   private GamePlayer currentPlayer;
   private final List<Card> deck;
   private boolean isGameStarted;
-  private GamePlayer redPlayer;
-  private GamePlayer bluePlayer;
+
 
   /**
-   * Constructor to create a ThreeTriosModel object.
-   *
-   * @param grid  takes in a grid that is used in the game.
-   * @param hands takes in the hand of each player as a map, where the key is the player
-   *              ,and the value is a list of cards in that players hand.
-   * @param deck  List of cards that is populated with cards from a config file.
+   * @param grid
+   * @param playerFactory
+   * @param deck
    */
-  public ThreeTriosModel(Grid grid, Map<GamePlayer, List<Card>> hands, List<Card> deck) {
-    if (grid == null || hands == null || deck == null) {
+  public ThreeTriosModel(Grid grid, PlayerFactory playerFactory, List<Card> deck) {
+    if (grid == null || playerFactory == null || deck == null) {
       throw new IllegalArgumentException("Arguments cannot be null");
     }
 
     this.grid = grid;
-    this.hands = hands;
     this.deck = deck;
+    this.players = new ArrayList<>();
     this.isGameStarted = false;
     this.grid.setupAdjacentCells();
+
+    players.add(playerFactory.createPlayer(Player.RED, new ArrayList<>())); // 0 RED
+    players.add(playerFactory.createPlayer(Player.BLUE, new ArrayList<>())); // 1 BLUE
   }
 
   /**
@@ -68,7 +67,7 @@ public class ThreeTriosModel implements GameModel {
     int cardsPerPlayer = ((cardCells + 1) / 2); // N+1/2 CARDS PER PLAYER.
     dealCards(cardsPerPlayer);
 
-    this.currentPlayer = redPlayer;
+    this.currentPlayer = players.get(0);
     this.isGameStarted = true;
   }
 
@@ -90,15 +89,10 @@ public class ThreeTriosModel implements GameModel {
    * @param cardsPerPlayer The number of cards to deal to each player.
    */
   private void dealCards(int cardsPerPlayer) {
-    List<Card> redPlayerHand = new ArrayList<>();
-    List<Card> bluePlayerHand = new ArrayList<>();
     for (int i = 0; i < cardsPerPlayer; i++) {
-      redPlayerHand.add(deck.remove(0));
-      bluePlayerHand.add(deck.remove(0));
+      players.get(0).addCardToHand(deck.remove(0));
+      players.get(1).addCardToHand(deck.remove(0));
     }
-
-    hands.put(redPlayer, redPlayerHand);
-    hands.put(bluePlayer, bluePlayerHand);
   }
 
   /**
@@ -118,13 +112,14 @@ public class ThreeTriosModel implements GameModel {
     if (cell == null || cell.isHole() || cell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-    if (!(hands.get(currentPlayer).contains(card))) {
+    if (!currentPlayer.getPlayerHand().contains(card)) {
       throw new IllegalArgumentException("Player does not have this card.");
     }
-    if (hands.get(currentPlayer).isEmpty()) {
+    if (currentPlayer.getPlayerHand().isEmpty()) {
       throw new IllegalArgumentException("Player has no cards to place.");
     }
-    hands.get(currentPlayer).remove(card);
+
+    currentPlayer.removeCardFromHand(card);
 
     cell.placeCard(card, currentPlayer);
 
@@ -186,8 +181,8 @@ public class ThreeTriosModel implements GameModel {
       GamePlayer attacker = attackingCell.getOwner();
       GamePlayer defender = defendingCell.getOwner();
 
-      hands.get(defender).remove(defenderCard);
-      hands.get(attacker).remove(attackerCard);
+      defender.removeCardFromHand(defenderCard);
+      attacker.removeCardFromHand(attackerCard);
 
       defendingCell.setOwner(attackingCell.getOwner());
       return true; //flipped
@@ -216,8 +211,8 @@ public class ThreeTriosModel implements GameModel {
    * @return player whose turn it is.
    */
   @Override
-  public Player getCurrentPlayer() {
-    return currentPlayer.getColor();
+  public GamePlayer getCurrentPlayer() {
+    return currentPlayer;
   }
 
   /**
@@ -247,7 +242,7 @@ public class ThreeTriosModel implements GameModel {
    * @return the player with the most card-cells.
    */
   @Override
-  public Player getWinner() {
+  public GamePlayer getWinner() {
     int redCount = 0;
     int blueCount = 0;
 
@@ -265,16 +260,21 @@ public class ThreeTriosModel implements GameModel {
       }
     }
 
-    redCount += hands.get(Player.RED).size();
-    blueCount += hands.get(Player.BLUE).size();
+    redCount += players.get(0).getPlayerHand().size(); //0 = red
+    blueCount += players.get(1).getPlayerHand().size(); //1 = blue
 
     if (redCount > blueCount) {
-      return Player.RED;
+      return players.get(0);
     } else if (blueCount > redCount) {
-      return Player.BLUE;
+      return players.get(1);
     } else {
       return null; // Tie
     }
+  }
+
+  @Override
+  public List<GamePlayer> getPlayers() {
+    return new ArrayList<>(players);
   }
 
   /**
@@ -317,17 +317,6 @@ public class ThreeTriosModel implements GameModel {
       throw new IllegalArgumentException("Cannot check content of unoccupied cell.");
     }
     return grid.getCell(row, col).getCard();
-  }
-
-  /**
-   * Gets the specified player's hand.
-   *
-   * @param player player (RED OR BLUE).
-   * @return COPY OF LIST OF CARDS in the specified player's hand.
-   */
-  @Override
-  public List<Card> getPlayerHand(Player player) {
-    return new ArrayList<>(hands.get(player));
   }
 
   /**
@@ -379,7 +368,7 @@ public class ThreeTriosModel implements GameModel {
     if (cell == null || cell.isHole() || cell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-    if (!(hands.get(currentPlayer).contains(card))) {
+    if (!currentPlayer.getPlayerHand().contains(card)) {
       throw new IllegalArgumentException("Player does not have this card.");
     }
 
@@ -397,7 +386,7 @@ public class ThreeTriosModel implements GameModel {
 
       List<Cell> newFlippedCells = battleAdjacentCells(currentCell);
       comboQueue.addAll(newFlippedCells);
-      flipCount += newFlippedCells.size(); // Add to the flip count
+      flipCount += newFlippedCells.size();
     }
 
     return flipCount;
@@ -436,11 +425,10 @@ public class ThreeTriosModel implements GameModel {
     if (currentPlayer == null) {
       throw new IllegalArgumentException("Current player cannot be null");
     }
-
-    if (currentPlayer.getColor() == Player.RED) {
-      currentPlayer.setColor(Player.BLUE);
-    } else if (currentPlayer.getColor() == Player.BLUE) {
-      currentPlayer.setColor(Player.RED);
+    if (currentPlayer == players.get(0)) {
+      currentPlayer = players.get(1);
+    } else {
+      currentPlayer = players.get(0);
     }
   }
 }
