@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.CellType;
+import cs3500.threetrios.model.Direction;
 
 import java.awt.Graphics;
 import java.awt.Dimension;
@@ -112,8 +113,29 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
 
       g.setColor(Color.BLACK);
       g.drawRect(xStart, yPos, cardWidth, cardHeight);
-      g.drawString(hand.get(i).getName(), xStart + 5, yPos + cardHeight / 2);
+
+      Card card = hand.get(i);
+      int northAttack = card.getAttackValue(Direction.NORTH);
+      int eastAttack = card.getAttackValue(Direction.EAST);
+      int westAttack = card.getAttackValue(Direction.WEST);
+      int southAttack = card.getAttackValue(Direction.SOUTH);
+
+      g.drawString(formatAttackValue(northAttack), xStart + cardWidth / 2, yPos + 15);
+      g.drawString(formatAttackValue(eastAttack), xStart + cardWidth - 15, yPos + cardHeight / 2);
+      g.drawString(formatAttackValue(westAttack), xStart + 5, yPos + cardHeight / 2);
+      g.drawString(formatAttackValue(southAttack), xStart + cardWidth / 2,
+              yPos + cardHeight - 5);
     }
+  }
+
+  /**
+   * Formats the attack value.
+   *
+   * @param attackValue the attack value to display
+   * @return the formatted attack value as a string
+   */
+  private String formatAttackValue(int attackValue) {
+    return attackValue == 10 ? "A" : String.valueOf(attackValue);
   }
 
   /**
