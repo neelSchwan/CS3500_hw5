@@ -274,7 +274,7 @@ public class ThreeTriosModel implements GameModel {
 
   @Override
   public List<GamePlayer> getPlayers() {
-    return new ArrayList<>(players);
+    return players;
   }
 
   /**

@@ -1,5 +1,9 @@
 package cs3500.threetrios.view;
 
+import java.awt.*;
+
+import javax.swing.*;
+
 /**
  * Interface for the three-trios-panel.
  * This will handle drawing all GUI components like the cards and grid.
@@ -8,8 +12,10 @@ public interface ThreeTriosPanel {
 
   /**
    * Draws the Three-Trios Grid based on the current game state.
+   *
+   * @param g The Graphics object for drawing.
    */
-  void drawGrid();
+  void drawGrid(Graphics g);
 
   /**
    * Updates the grid given a specific row and col.

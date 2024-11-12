@@ -31,7 +31,6 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * Generates a textual / string representation of the current game state and appends it
    * to the Appendable.
    */
-  //why do we need Gamemodel as parameter
   @Override
   public void render() throws IOException {
     StringBuilder sb = new StringBuilder();

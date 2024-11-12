@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JFrame;
 
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CardConfigReader;
@@ -74,5 +74,26 @@ public class TestThreeTriosGameView {
             + "garen [N: 6, S: 8, E: 5, W: 4]\n";
 
     assertEquals(expectedOutput, output.toString());
+  }
+
+  public static void main(String[] args) {
+    CardConfigReader cardConfigReader = new CardConfigReader();
+    GridConfigReader gridConfigReader = new GridConfigReader();
+
+    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
+
+    PlayerFactory playerFactory = new HumanPlayerFactory();
+
+    JFrame frame = new JFrame("Three-Trios Game");
+
+    GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
+    model.startGame(0);
+    ThreeTriosGamePanel gridPanel = new ThreeTriosGamePanel(model);
+    frame.add(gridPanel);
+
+    frame.pack();
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
   }
 }

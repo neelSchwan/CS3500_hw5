@@ -68,10 +68,11 @@ public class TestThreeTriosModel {
     GamePlayer redPlayer = model.getPlayers().get(0); // Get RED player
     GamePlayer bluePlayer = model.getPlayers().get(1); // Get BLUE player
 
+    System.out.println(redPlayer.getPlayerHand());
+
     Assert.assertEquals(Player.RED, redPlayer.getColor());
     Assert.assertEquals(8, redPlayer.getPlayerHand().size()); // 8 cards for RED
     Assert.assertEquals(8, bluePlayer.getPlayerHand().size()); // 8 cards for BLUE
-
     // Place a card for RED and check hand size decreases
     model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
 
