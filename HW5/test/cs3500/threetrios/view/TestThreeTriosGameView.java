@@ -14,7 +14,9 @@ import cs3500.threetrios.model.CardConfigReader;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.GridConfigReader;
+import cs3500.threetrios.model.HumanPlayerFactory;
 import cs3500.threetrios.model.Player;
+import cs3500.threetrios.model.PlayerFactory;
 import cs3500.threetrios.model.ThreeTriosModel;
 
 import static org.junit.Assert.assertEquals;
@@ -27,9 +29,9 @@ import static org.junit.Assert.assertEquals;
 public class TestThreeTriosGameView {
 
   private GameModel model;
-  //private List<Card> deck;
-  //private Grid grid;
-  //private Map<Player, List<Card>> hands;
+  private List<Card> deck;
+  private Grid grid;
+  private Map<Player, List<Card>> hands;
 
   /**
    * Initializes the test setup with a game reader, game model, deck, grid, and hands.
@@ -43,11 +45,9 @@ public class TestThreeTriosGameView {
     List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
     Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
 
-    Map<Player, List<Card>> hands = new HashMap<>();
-    hands.put(Player.RED, new ArrayList<>());
-    hands.put(Player.BLUE, new ArrayList<>());
+    PlayerFactory playerFactory = new HumanPlayerFactory();
 
-    model = new ThreeTriosModel(grid, hands, deck);
+    model = new ThreeTriosModel(grid, playerFactory, deck);
   }
 
   @Test

@@ -3,6 +3,7 @@ package cs3500.threetrios.controller;
 import java.util.Scanner;
 
 import cs3500.threetrios.model.GameModel;
+import cs3500.threetrios.model.ThreeTriosModel;
 
 public class ThreeTriosConsoleController implements ThreeTriosController {
 
@@ -10,11 +11,11 @@ public class ThreeTriosConsoleController implements ThreeTriosController {
   private final Scanner scan;
 
   /**
-   * Constructs a {@code TicTacToeConsoleController} with the provided input and output.
+   * Constructs a TicTacToeConsoleController with the provided input and output.
    *
-   * @param in  the {@link Readable} source of input (e.g., user commands)
-   * @param out the {@link Appendable} destination for output (e.g., game state and prompts)
-   * @throws IllegalArgumentException if either {@code in} or {@code out} is {@code null}
+   * @param in  the Readable source of input.
+   * @param out the Appendable destination for output.
+   * @throws IllegalArgumentException if either input or output is null.
    */
   public ThreeTriosConsoleController(Readable in, Appendable out) {
     if (in == null || out == null) {

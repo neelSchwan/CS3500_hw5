@@ -36,7 +36,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
   public void render() throws IOException {
     StringBuilder sb = new StringBuilder();
 
-    sb.append("Player: ").append(model.getCurrentPlayer()).append("\n");
+    sb.append("Player: ").append(model.getCurrentPlayer().getColor()).append("\n");
     renderGrid(sb);
 
     sb.append("Hand: ").append("\n");

@@ -224,10 +224,9 @@ public class TestThreeTriosModel {
 
   @Test
   public void testWinningLogicWorks() {
-    GamePlayer bluePlayer = model.getPlayers().get(1);
-    GamePlayer redPlayer = model.getPlayers().get(0);
-
     GameModel gameModel = createModelForEasyTesting();
+    GamePlayer bluePlayer = gameModel.getPlayers().get(1);
+    GamePlayer redPlayer = gameModel.getPlayers().get(0);
     gameModel.startGame(0);
     Assert.assertEquals(bluePlayer.getPlayerHand().size(), 13);
     Assert.assertEquals(redPlayer.getPlayerHand().size(), 13);
