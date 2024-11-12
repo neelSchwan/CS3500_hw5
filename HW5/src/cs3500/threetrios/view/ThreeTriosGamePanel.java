@@ -16,13 +16,12 @@ import java.util.List;
  */
 public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   private final ReadonlyThreeTriosModel model;
-  private static final int HAND_WIDTH = 50;
-  private static final int CARD_WIDTH = 30;
-  private static final int CARD_HEIGHT = 60;
+  private static final int HAND_GAP = 5;
+  private static final double HAND_WIDTH_PROPORTION = 1.5;
 
   public ThreeTriosGamePanel(ReadonlyThreeTriosModel model) {
     this.model = model;
-    setPreferredSize(new Dimension(400, 400));
+    setPreferredSize(new Dimension(600, 400));
   }
 
   @Override
@@ -33,20 +32,26 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   }
 
   /**
-   * Draws the game grid based on the model's state.
+   * Draws the game grid, centered with a 10px gap between the grid and each player's hand.
    */
   public void drawGrid(Graphics g) {
     int totalRows = model.getGrid().getRows();
     int totalCols = model.getGrid().getCols();
-    int cellWidth = getWidth() / totalCols;
+
     int cellHeight = getHeight() / totalRows;
+    int cardWidth = (int) (cellHeight / HAND_WIDTH_PROPORTION);
+
+    int availableWidth = getWidth() - 2 * cardWidth;
+    int cellWidth = availableWidth / totalCols;
+
+    int gridStartX = cardWidth + 5;
 
     for (int row = 0; row < totalRows; row++) {
       for (int col = 0; col < totalCols; col++) {
         Cell cell = model.getGrid().getCell(row, col);
         setCellColor(g, cell.getCellType());
 
-        int xPos = col * cellWidth;
+        int xPos = gridStartX + col * cellWidth;
         int yPos = row * cellHeight;
 
         g.fillRect(xPos, yPos, cellWidth, cellHeight);
@@ -73,39 +78,46 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   }
 
   /**
-   * Draws both players' hands on either side of the game panel.
+   * Draws both players' hands on either side of the game panel with a fixed 10px gap from the grid.
    */
   private void drawPlayersHands(Graphics g) {
-    drawHand(g, model.getPlayers().get(0).getPlayerHand(), 10, Color.RED);
-    drawHand(g, model.getPlayers().get(1).getPlayerHand(), getWidth() - HAND_WIDTH - 10, Color.BLUE);
+    int totalRows = model.getGrid().getRows();
+    int cellHeight = getHeight() / totalRows;
+    int cardWidth = (int) (cellHeight / HAND_WIDTH_PROPORTION);
+
+    drawHand(g, model.getPlayers().get(0).getPlayerHand(), 0, cellHeight, cardWidth,
+            new Color(194, 95, 95, 255));
+
+    int blueXPos = getWidth() - cardWidth;
+    drawHand(g, model.getPlayers().get(1).getPlayerHand(), blueXPos, cellHeight, cardWidth,
+            new Color(115, 148, 234));
   }
 
   /**
-   * Draws a player's hand.
+   * Draws a player's hand aligned with cell heights, at a fixed x-position.
    *
-   * @param g      Graphics object for drawing.
-   * @param hand   List of cards in the player's hand.
-   * @param xStart Starting x-position for the hand.
-   * @param color  Color for the hand's background.
+   * @param g          Graphics object for drawing.
+   * @param hand       List of cards in the player's hand.
+   * @param xStart     Fixed x-position for the hand.
+   * @param cardHeight Height of each card (matching cell height).
+   * @param cardWidth  Width of each card.
+   * @param color      Color for the hand's background.
    */
-  private void drawHand(Graphics g, List<Card> hand, int xStart, Color color) {
+  private void drawHand(Graphics g, List<Card> hand, int xStart, int cardHeight, int cardWidth, Color color) {
     for (int i = 0; i < hand.size(); i++) {
-      int yPos = i * (CARD_HEIGHT + 10);
+      int yPos = i * cardHeight; // Align cards with grid cell rows
 
       g.setColor(color);
-      g.fillRect(xStart, yPos, CARD_WIDTH, CARD_HEIGHT);
+      g.fillRect(xStart, yPos, cardWidth, cardHeight);
 
       g.setColor(Color.BLACK);
-      g.drawRect(xStart, yPos, CARD_WIDTH, CARD_HEIGHT);
-      g.drawString(hand.get(i).getName(), xStart + 5, yPos + CARD_HEIGHT / 2);
+      g.drawRect(xStart, yPos, cardWidth, cardHeight);
+      g.drawString(hand.get(i).getName(), xStart + 5, yPos + cardHeight / 2);
     }
   }
 
   /**
    * Updates the grid and repaints the panel when a move is made.
-   *
-   * @param row Row to update.
-   * @param col Column to update.
    */
   @Override
   public void updateMove(int row, int col) {
