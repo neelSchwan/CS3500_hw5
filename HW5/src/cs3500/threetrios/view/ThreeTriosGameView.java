@@ -3,6 +3,7 @@ package cs3500.threetrios.view;
 import java.io.IOException;
 import java.util.List;
 
+import cs3500.threetrios.controller.ThreeTriosController;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.GameModel;
@@ -27,10 +28,6 @@ public class ThreeTriosGameView implements ThreeTriosView {
     this.out = out;
   }
 
-  /**
-   * Generates a textual / string representation of the current game state and appends it
-   * to the Appendable.
-   */
   @Override
   public void render() throws IOException {
     StringBuilder sb = new StringBuilder();
@@ -79,11 +76,23 @@ public class ThreeTriosGameView implements ThreeTriosView {
     return sb.toString();
   }
 
-  /**
-   * Outputs the current game state to the appendable.
-   */
   @Override
   public void display() throws IOException {
     render();
+  }
+
+  @Override
+  public void addClickListener(ThreeTriosController listener) {
+
+  }
+
+  @Override
+  public void refresh() {
+
+  }
+
+  @Override
+  public void makeVisible() {
+
   }
 }

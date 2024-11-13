@@ -9,10 +9,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Tests the for the grid object in the game.
- * These tests validate the operations in the grid object.
- */
 public class TestGameGrid {
   Grid grid;
 
@@ -32,11 +28,6 @@ public class TestGameGrid {
     assertTrue(exception2.getMessage().contains("row or cols must be greater than 0"));
   }
 
-  /**
-   * First, this method sets up a grid object with 5 rows and 5 cols.
-   * This method creates a grid with a card_cell at position 0,0.
-   * This method creates a grid with a hole cell at position 1,1.
-   */
   @Before
   public void setUp() {
     grid = new Grid(5, 5);
@@ -140,6 +131,7 @@ public class TestGameGrid {
     assertEquals(grid.getCols(), 5);
   }
 
+  //calculate cards, not cardCells
   @Test
   public void testCalculateCardCells() {
     assertEquals(grid.calculateCardCells(), 1);

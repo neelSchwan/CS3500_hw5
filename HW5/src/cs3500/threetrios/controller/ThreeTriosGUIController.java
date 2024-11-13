@@ -1,15 +1,17 @@
 package cs3500.threetrios.controller;
 
+import cs3500.threetrios.model.GameCard;
 import cs3500.threetrios.model.GameModel;
+import cs3500.threetrios.model.ThreeTriosModel;
 import cs3500.threetrios.model.Card;
-import cs3500.threetrios.view.ThreeTriosGUIView;
+import cs3500.threetrios.view.ThreeTriosView;
 
 public class ThreeTriosGUIController implements ThreeTriosController {
-  private final ThreeTriosGUIView view;
+  private final ThreeTriosView view;
   private GameModel model;
 
-  public ThreeTriosGUIController(ThreeTriosGUIView view) {
-    if (view == null) {
+  public ThreeTriosGUIController(ThreeTriosView view) {
+    if (view == null)  {
       throw new IllegalArgumentException("view cannot be null");
     }
     this.view = view;
@@ -17,22 +19,20 @@ public class ThreeTriosGUIController implements ThreeTriosController {
   }
 
   @Override
-  public void playGame(GameModel model) { //could add seed to this.
+  public void playGame(GameModel model) {
     if (model == null) {
       throw new IllegalArgumentException("model cannot be null");
     }
     this.model = model;
-    model.startGame(0);
-    view.refresh();
+    //model.startGame(0); //seed can be changed
+    view.makeVisible();
   }
 
   @Override
   public void handleCellClick(int row, int col) {
-    if (!model.isValidMove(row, col)) {
-      throw new IllegalArgumentException("cant place card in specified cell.");
-    }
-    Card card = model.getCurrentPlayer().getPlayerHand().get(0);
+    Card card = new GameCard("wasd",2,2,2,2);
     model.placeCard(row, col, card);
     view.refresh();
   }
+
 }

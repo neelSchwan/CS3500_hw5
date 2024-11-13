@@ -2,6 +2,7 @@ package cs3500.threetrios.view;
 
 import javax.swing.JPanel;
 
+import cs3500.threetrios.controller.ThreeTriosController;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.CellType;
@@ -10,19 +11,26 @@ import cs3500.threetrios.model.Direction;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 /**
  * GUI panel for the Three-Trios game, handling the grid and player hands.
  */
 public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
+  ThreeTriosController features;
   private final ReadonlyThreeTriosModel model;
   private static final int HAND_GAP = 5;
   private static final double HAND_WIDTH_PROPORTION = 1.5;
 
   public ThreeTriosGamePanel(ReadonlyThreeTriosModel model) {
     this.model = model;
-    setPreferredSize(new Dimension(600, 400));
+  }
+
+  public void addClickListener(ThreeTriosController features) {
+    this.features = features;
+    this.addMouseListener(new TTGClickListener());
   }
 
   @Override
@@ -163,5 +171,33 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   @Override
   public void highlightSelectedCard(int x, int y) {
     // Implement highlighting logic if needed
+  }
+
+  private class TTGClickListener implements MouseListener {
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
   }
 }
