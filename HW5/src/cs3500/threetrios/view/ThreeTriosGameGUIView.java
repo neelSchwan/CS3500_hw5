@@ -11,7 +11,7 @@ public class ThreeTriosGameGUIView extends JFrame implements ThreeTriosView {
   //private final ThreeTriosPanel panel;
 
   /**
-   * Constructs a {@code TicTacToeView} by initializing a window with a panel for the game board.
+   * Constructs a TicTacToeView by initializing a window with a panel for the game board.
    * The window size is set to 600x600 pixels, and it is centered on the screen.
    */
   public ThreeTriosGameGUIView() {

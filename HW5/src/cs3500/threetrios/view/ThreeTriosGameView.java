@@ -55,7 +55,7 @@ public class ThreeTriosGameView implements ThreeTriosView {
         } else if (!cell.isOccupied()) {
           sb.append('_');
         } else {
-          sb.append(cell.getOwner().toString().substring(0, 1).toUpperCase());
+          sb.append(cell.getOwner().getColor().toString().substring(0, 1).toUpperCase());
         }
         if (j < grid.getCols() - 1) {
           sb.append(" ");
