@@ -8,18 +8,18 @@ import cs3500.threetrios.controller.ThreeTriosController;
 
 public class ThreeTriosGameGUIView extends JFrame implements ThreeTriosView {
 
-  //private final ThreeTriosPanel panel;
+  private final ThreeTriosGamePanel panel;
 
   /**
    * Constructs a {@code TicTacToeView} by initializing a window with a panel for the game board.
    * The window size is set to 600x600 pixels, and it is centered on the screen.
    */
-  public ThreeTriosGameGUIView() {
-//    this.panel = new ThreeTriosGamePanel();
+  public ThreeTriosGameGUIView(ReadonlyThreeTriosModel model) {
+    this.panel = new ThreeTriosGamePanel(model);
     this.setSize(600, 400);
-//    this.setLocationRelativeTo(null);
+    this.setLocationRelativeTo(null);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//    this.add(this.panel);
+    this.add(this.panel); // should I cast it as component because of ThreeTriosPanel (no jpanel) field
   }
 
   /**
@@ -29,7 +29,7 @@ public class ThreeTriosGameGUIView extends JFrame implements ThreeTriosView {
    */
   @Override
   public void addClickListener(ThreeTriosController listener) {
-
+    this.panel.addClickListener(listener);
   }
 
   /**
@@ -37,7 +37,7 @@ public class ThreeTriosGameGUIView extends JFrame implements ThreeTriosView {
    */
   @Override
   public void refresh() {
-
+    this.repaint();
   }
 
   /**

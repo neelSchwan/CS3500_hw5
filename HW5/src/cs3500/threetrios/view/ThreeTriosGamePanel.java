@@ -11,6 +11,9 @@ import cs3500.threetrios.model.Direction;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -29,15 +32,45 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
     this.addMouseListener(new TTGClickListener());
   }
 
+//  private Dimension getLogicalSize() {
+//    return new Dimension(30, 30);
+//  }
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    drawGrid(g);
-    drawPlayersHands(g);
+    Graphics2D g2d = (Graphics2D) g.create();
+    //g2d.transform(getLogicalToPhysical());
+    drawGrid(g2d);
+    drawPlayersHands(g2d);
+    System.err.println(getWidth() + " " + getHeight());
   }
 
+  private Dimension getLogicalSize() {
+    return new Dimension(30, 30);
+  }
 
-  public void drawGrid(Graphics g) {
+  private AffineTransform getModelToLogical() {
+    AffineTransform xform = new AffineTransform();
+    Dimension logicalDims = getLogicalSize();
+    xform.scale(logicalDims.getWidth() / 3, logicalDims.getHeight() / 3);
+    return xform;
+  }
+
+  private AffineTransform getLogicalToPhysical() {
+    AffineTransform xform = new AffineTransform();
+    Dimension logicalDims = getLogicalSize();
+    xform.scale(this.getWidth() / logicalDims.getWidth(),
+            this.getHeight() / logicalDims.getHeight());
+    return xform;
+  }
+
+  /**
+   * Draws the Three-Trios Grid based on the current game state.
+   *
+   * @param g2d The Graphics object for drawing.
+   */
+  private void drawGrid(Graphics2D g2d) {
     int totalRows = model.getGrid().getRows();
     int totalCols = model.getGrid().getCols();
 
@@ -51,14 +84,14 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
     for (int row = 0; row < totalRows; row++) {
       for (int col = 0; col < totalCols; col++) {
         Cell cell = model.getGrid().getCell(row, col);
-        setCellColor(g, cell.getCellType());
+        setCellColor(g2d, cell.getCellType());
 
         int xPos = gridStartX + col * cellWidth;
         int yPos = row * cellHeight;
 
-        g.fillRect(xPos, yPos, cellWidth, cellHeight);
-        g.setColor(Color.BLACK);
-        g.drawRect(xPos, yPos, cellWidth, cellHeight);
+        g2d.fillRect(xPos, yPos, cellWidth, cellHeight);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(xPos, yPos, cellWidth, cellHeight);
       }
     }
   }
@@ -82,16 +115,16 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   /**
    * Draws both players' hands on either side of the game panel with a fixed 10px gap from the grid.
    */
-  private void drawPlayersHands(Graphics g) {
+  private void drawPlayersHands(Graphics2D g2d) {
     int totalRows = model.getGrid().getRows();
     int cellHeight = getHeight() / totalRows;
     int cardWidth = (getWidth() - 5) / (model.getGrid().getCols() + 2);
 
-    drawHand(g, model.getPlayers().get(0).getPlayerHand(), 0, cellHeight, cardWidth,
+    drawHand(g2d, model.getPlayers().get(0).getPlayerHand(), 0, cellHeight, cardWidth,
             new Color(194, 95, 95, 255));
 
     int blueXPos = getWidth() - cardWidth;
-    drawHand(g, model.getPlayers().get(1).getPlayerHand(), blueXPos + 5, cellHeight, cardWidth,
+    drawHand(g2d, model.getPlayers().get(1).getPlayerHand(), blueXPos + 5, cellHeight, cardWidth,
             new Color(115, 148, 234));
   }
 
@@ -171,6 +204,12 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+      try {
+        Point2D evtPt = e.getPoint();
+        System.err.println(evtPt);
+      } catch (Exception ex) {
+        throw new RuntimeException(ex);
+      }
 
     }
 

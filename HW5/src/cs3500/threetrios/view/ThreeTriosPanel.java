@@ -11,13 +11,6 @@ import javax.swing.*;
 public interface ThreeTriosPanel {
 
   /**
-   * Draws the Three-Trios Grid based on the current game state.
-   *
-   * @param g The Graphics object for drawing.
-   */
-  void drawGrid(Graphics g);
-
-  /**
    * Updates the grid given a specific row and col.
    *
    * @param row 0-indexed row value to place a card at.
