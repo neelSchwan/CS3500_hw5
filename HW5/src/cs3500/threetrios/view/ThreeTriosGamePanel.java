@@ -8,9 +8,7 @@ import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.CellType;
 import cs3500.threetrios.model.Direction;
 
-import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -21,8 +19,6 @@ import java.util.List;
 public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   ThreeTriosController features;
   private final ReadonlyThreeTriosModel model;
-  private static final int HAND_GAP = 5;
-  private static final double HAND_WIDTH_PROPORTION = 1.5;
 
   public ThreeTriosGamePanel(ReadonlyThreeTriosModel model) {
     this.model = model;
@@ -40,18 +36,15 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
     drawPlayersHands(g);
   }
 
-  /**
-   * Draws the game grid, centered with a 10px gap between the grid and each player's hand.
-   */
+
   public void drawGrid(Graphics g) {
     int totalRows = model.getGrid().getRows();
     int totalCols = model.getGrid().getCols();
 
-    int cellHeight = getHeight() / totalRows;
-    int cardWidth = (int) (cellHeight / HAND_WIDTH_PROPORTION);
+    int cardWidth = (getWidth() - 5) / (totalCols + 2);
 
-    int availableWidth = getWidth() - 2 * cardWidth;
-    int cellWidth = availableWidth / totalCols;
+    int cellWidth = (getWidth() - 2 * cardWidth - 5) / totalCols;
+    int cellHeight = getHeight() / totalRows;
 
     int gridStartX = cardWidth + 5;
 
@@ -92,13 +85,13 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   private void drawPlayersHands(Graphics g) {
     int totalRows = model.getGrid().getRows();
     int cellHeight = getHeight() / totalRows;
-    int cardWidth = (int) (cellHeight / HAND_WIDTH_PROPORTION);
+    int cardWidth = (getWidth() - 5) / (model.getGrid().getCols() + 2);
 
     drawHand(g, model.getPlayers().get(0).getPlayerHand(), 0, cellHeight, cardWidth,
             new Color(194, 95, 95, 255));
 
     int blueXPos = getWidth() - cardWidth;
-    drawHand(g, model.getPlayers().get(1).getPlayerHand(), blueXPos, cellHeight, cardWidth,
+    drawHand(g, model.getPlayers().get(1).getPlayerHand(), blueXPos + 5, cellHeight, cardWidth,
             new Color(115, 148, 234));
   }
 
@@ -128,6 +121,7 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
       int westAttack = card.getAttackValue(Direction.WEST);
       int southAttack = card.getAttackValue(Direction.SOUTH);
 
+      g.setFont(new Font("Courier", Font.BOLD, 15));
       g.drawString(formatAttackValue(northAttack), xStart + cardWidth / 2, yPos + 15);
       g.drawString(formatAttackValue(eastAttack), xStart + cardWidth - 15, yPos + cardHeight / 2);
       g.drawString(formatAttackValue(westAttack), xStart + 5, yPos + cardHeight / 2);
