@@ -7,24 +7,26 @@ import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.CellType;
 import cs3500.threetrios.model.Direction;
+import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.model.Player;
+import cs3500.threetrios.view.ReadonlyThreeTriosModel;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
  * GUI panel for the Three-Trios game, handling the grid and player hands.
  */
 public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
-  ThreeTriosController features;
+  private ThreeTriosController features;
   private final ReadonlyThreeTriosModel model;
 
   public ThreeTriosGamePanel(ReadonlyThreeTriosModel model) {
     this.model = model;
+    this.setBackground(Color.WHITE);
   }
 
   public void addClickListener(ThreeTriosController features) {
@@ -32,37 +34,33 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
     this.addMouseListener(new TTGClickListener());
   }
 
-//  private Dimension getLogicalSize() {
-//    return new Dimension(30, 30);
-//  }
+  private Dimension getLogicalSize() {
+    int totalRows = model.getGrid().getRows();
+    int totalCols = model.getGrid().getCols();
+    int handWidth = 2; // Logical units for each player's hand
+    int totalWidth = totalCols + 2 * handWidth;
+    int totalHeight = totalRows;
+    return new Dimension(totalWidth, totalHeight);
+  }
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+    System.out.println("paintComponent called");
     Graphics2D g2d = (Graphics2D) g.create();
-    //g2d.transform(getLogicalToPhysical());
+    AffineTransform at = getLogicalToPhysical();
+    System.out.println("AffineTransform: " + at);
+    g2d.transform(at);
     drawGrid(g2d);
     drawPlayersHands(g2d);
-    System.err.println(getWidth() + " " + getHeight());
-  }
-
-  private Dimension getLogicalSize() {
-    return new Dimension(30, 30);
-  }
-
-  private AffineTransform getModelToLogical() {
-    AffineTransform xform = new AffineTransform();
-    Dimension logicalDims = getLogicalSize();
-    xform.scale(logicalDims.getWidth() / 3, logicalDims.getHeight() / 3);
-    return xform;
   }
 
   private AffineTransform getLogicalToPhysical() {
-    AffineTransform xform = new AffineTransform();
     Dimension logicalDims = getLogicalSize();
-    xform.scale(this.getWidth() / logicalDims.getWidth(),
-            this.getHeight() / logicalDims.getHeight());
-    return xform;
+    double scaleX = (double) this.getWidth() / logicalDims.getWidth();
+    double scaleY = (double) this.getHeight() / logicalDims.getHeight();
+
+    return AffineTransform.getScaleInstance(scaleX, scaleY);
   }
 
   /**
@@ -73,26 +71,43 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   private void drawGrid(Graphics2D g2d) {
     int totalRows = model.getGrid().getRows();
     int totalCols = model.getGrid().getCols();
+    int handWidth = 2;
+    int totalHeight = getLogicalSize().height;
 
-    int cardWidth = (getWidth() - 5) / (totalCols + 2);
-
-    int cellWidth = (getWidth() - 2 * cardWidth - 5) / totalCols;
-    int cellHeight = getHeight() / totalRows;
-
-    int gridStartX = cardWidth + 5;
+    double gridYStart = (totalHeight - totalRows) / 2.0;
 
     for (int row = 0; row < totalRows; row++) {
       for (int col = 0; col < totalCols; col++) {
         Cell cell = model.getGrid().getCell(row, col);
+        int xPos = handWidth + col;
+        double yPos = gridYStart + row;
+
+        // Set cell color before filling
         setCellColor(g2d, cell.getCellType());
+        g2d.fillRect(xPos, (int) yPos, 1, 1);
 
-        int xPos = gridStartX + col * cellWidth;
-        int yPos = row * cellHeight;
-
-        g2d.fillRect(xPos, yPos, cellWidth, cellHeight);
+        // Draw border after filling
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(xPos, yPos, cellWidth, cellHeight);
+        g2d.drawRect(xPos, (int) yPos, 1, 1);
+
+        // If there is a card in the cell, draw it
+        if (cell.isOccupied()) {
+          Card card = cell.getCard();
+          drawCard(g2d, card, xPos, yPos, 1, 1, parseCardColor(cell.getOwner().getColor()));
+        }
       }
+    }
+  }
+
+
+  private Color parseCardColor(Player cardOwner) {
+    if (cardOwner == null) {
+      return null;
+    }
+    if (cardOwner == Player.RED) {
+      return Color.RED;
+    } else {
+      return Color.BLUE;
     }
   }
 
@@ -102,7 +117,7 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   private void setCellColor(Graphics g, CellType cellType) {
     switch (cellType) {
       case CARD_CELL:
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.WHITE);
         break;
       case HOLE_CELL:
         g.setColor(Color.LIGHT_GRAY);
@@ -113,54 +128,96 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
   }
 
   /**
-   * Draws both players' hands on either side of the game panel with a fixed 10px gap from the grid.
+   * Draws both players' hands on either side of the game panel.
    */
   private void drawPlayersHands(Graphics2D g2d) {
     int totalRows = model.getGrid().getRows();
-    int cellHeight = getHeight() / totalRows;
-    int cardWidth = (getWidth() - 5) / (model.getGrid().getCols() + 2);
+    int totalCols = model.getGrid().getCols();
+    int handWidth = 2;
 
-    drawHand(g2d, model.getPlayers().get(0).getPlayerHand(), 0, cellHeight, cardWidth,
-            new Color(194, 95, 95, 255));
+    // Left player's hand at x from 0 to handWidth
+    drawHand(g2d, model.getPlayers().get(0).getPlayerHand(), 0, handWidth, true);
 
-    int blueXPos = getWidth() - cardWidth;
-    drawHand(g2d, model.getPlayers().get(1).getPlayerHand(), blueXPos + 5, cellHeight, cardWidth,
-            new Color(115, 148, 234));
+    // Right player's hand at x from handWidth + totalCols to handWidth + totalCols + handWidth
+    int rightHandXStart = handWidth + totalCols;
+    drawHand(g2d, model.getPlayers().get(1).getPlayerHand(), rightHandXStart, handWidth, false);
   }
 
   /**
    * Draws a player's hand aligned with cell heights, at a fixed x-position.
    *
-   * @param g          Graphics object for drawing.
-   * @param hand       List of cards in the player's hand.
-   * @param xStart     Fixed x-position for the hand.
-   * @param cardHeight Height of each card (matching cell height).
-   * @param cardWidth  Width of each card.
-   * @param color      Color for the hand's background.
+   * @param g2d          Graphics object for drawing.
+   * @param hand         List of cards in the player's hand.
+   * @param xStart       Fixed x-position for the hand.
+   * @param handWidth    Width of the hand in logical units.
+   * @param isLeftPlayer Flag to indicate which player's hand is being drawn.
    */
-  private void drawHand(Graphics g, List<Card> hand, int xStart, int cardHeight, int cardWidth, Color color) {
+  private void drawHand(Graphics2D g2d, List<Card> hand, int xStart, int handWidth, boolean isLeftPlayer) {
+    int totalRows = model.getGrid().getRows();
+
     for (int i = 0; i < hand.size(); i++) {
-      int yPos = i * cardHeight; // Align cards with grid cell rows
+      int yPos = i % totalRows; // Adjust if hand has more cards than rows
 
-      g.setColor(color);
-      g.fillRect(xStart, yPos, cardWidth, cardHeight);
-
-      g.setColor(Color.BLACK);
-      g.drawRect(xStart, yPos, cardWidth, cardHeight);
+      g2d.setColor(isLeftPlayer ? new Color(194, 95, 95, 255) : new Color(115, 148, 234));
+      g2d.fillRect(xStart, yPos, handWidth, 1);
+      g2d.setColor(Color.BLACK);
+      g2d.drawRect(xStart, yPos, handWidth, 1);
 
       Card card = hand.get(i);
-      int northAttack = card.getAttackValue(Direction.NORTH);
-      int eastAttack = card.getAttackValue(Direction.EAST);
-      int westAttack = card.getAttackValue(Direction.WEST);
-      int southAttack = card.getAttackValue(Direction.SOUTH);
-
-      g.setFont(new Font("Courier", Font.BOLD, 15));
-      g.drawString(formatAttackValue(northAttack), xStart + cardWidth / 2, yPos + 15);
-      g.drawString(formatAttackValue(eastAttack), xStart + cardWidth - 15, yPos + cardHeight / 2);
-      g.drawString(formatAttackValue(westAttack), xStart + 5, yPos + cardHeight / 2);
-      g.drawString(formatAttackValue(southAttack), xStart + cardWidth / 2,
-              yPos + cardHeight - 5);
+      drawCard(g2d, card, xStart, yPos, handWidth, 1, Color.BLACK);
     }
+  }
+
+  /**
+   * Draws a card with attack values.
+   *
+   * @param g2d       Graphics object for drawing.
+   * @param card      Card to be drawn.
+   * @param xPos      X position in logical coordinates.
+   * @param yPos      Y position in logical coordinates.
+   * @param width     Width in logical units.
+   * @param height    Height in logical units.
+   * @param textColor Color for the attack values.
+   */
+  private void drawCard(Graphics2D g2d, Card card, double xPos, double yPos, double width, double height, Color textColor) {
+    // Use a fixed font size
+    float fontSize = 0.5f; // or any appropriate size
+
+    Font originalFont = g2d.getFont();
+    Font font = originalFont.deriveFont(fontSize);
+    g2d.setFont(font);
+    g2d.setColor(textColor);
+
+    String north = formatAttackValue(card.getAttackValue(Direction.NORTH));
+    String south = formatAttackValue(card.getAttackValue(Direction.SOUTH));
+    String east = formatAttackValue(card.getAttackValue(Direction.EAST));
+    String west = formatAttackValue(card.getAttackValue(Direction.WEST));
+
+    // Compute positions
+    float centerX = (float) (xPos + width / 2);
+    float centerY = (float) (yPos + height / 2);
+
+    FontMetrics metrics = g2d.getFontMetrics(font);
+    int textHeight = metrics.getAscent();
+    int textWidthN = metrics.stringWidth(north);
+    int textWidthS = metrics.stringWidth(south);
+    int textWidthE = metrics.stringWidth(east);
+    int textWidthW = metrics.stringWidth(west);
+
+    // North
+    g2d.drawString(north, centerX - textWidthN / 2f, (float) yPos + textHeight);
+
+    // South
+    g2d.drawString(south, centerX - textWidthS / 2f, (float) (yPos + height) - 2);
+
+    // East
+    g2d.drawString(east, (float) (xPos + width) - textWidthE - 2, centerY + textHeight / 2f);
+
+    // West
+    g2d.drawString(west, (float) xPos + 2, centerY + textHeight / 2f);
+
+    // Restore original font
+    g2d.setFont(originalFont);
   }
 
   /**
@@ -205,12 +262,11 @@ public class ThreeTriosGamePanel extends JPanel implements ThreeTriosPanel {
     @Override
     public void mouseClicked(MouseEvent e) {
       try {
-        Point2D evtPt = e.getPoint();
+        Point evtPt = e.getPoint();
         System.err.println(evtPt);
       } catch (Exception ex) {
         throw new RuntimeException(ex);
       }
-
     }
 
     @Override

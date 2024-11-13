@@ -29,7 +29,7 @@ public class ThreeTriosGameGUIView extends JFrame implements ThreeTriosView {
    */
   @Override
   public void addClickListener(ThreeTriosController listener) {
-    this.panel.addClickListener(listener);
+    //this.panel.addClickListener(listener);
   }
 
   /**

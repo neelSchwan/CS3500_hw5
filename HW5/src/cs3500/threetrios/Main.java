@@ -27,6 +27,7 @@ public class Main {
     PlayerFactory playerFactory = new HumanPlayerFactory();
 
     GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
+    model.startGame(0);
     ThreeTriosView view = new ThreeTriosGameGUIView(model);
     //ThreeTriosController controller = new ThreeTriosGUIController(view);
     //controller.playGame(model);
