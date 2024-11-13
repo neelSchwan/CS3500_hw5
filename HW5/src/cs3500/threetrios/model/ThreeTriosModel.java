@@ -180,12 +180,8 @@ public class ThreeTriosModel implements GameModel {
 
     if (attackerAttackValue > defenderAttackValue) {
       GamePlayer attacker = attackingCell.getOwner();
-      GamePlayer defender = defendingCell.getOwner();
 
-      defender.removeCardFromHand(defenderCard);
-      attacker.removeCardFromHand(attackerCard);
-
-      defendingCell.setOwner(attackingCell.getOwner());
+      defendingCell.setOwner(attacker);
       return true; //flipped
     }
     return false; // not flipped
@@ -281,18 +277,11 @@ public class ThreeTriosModel implements GameModel {
   /**
    * Creates a copy of the current game grid.
    *
-   * @return a Grid object representing a copy of the current game grid.
+   * @return a Grid object representing the current game grid.
    */
   @Override
-  public Grid getGrid() { //TODO: TEST THIS
-    Grid gridCopy = new Grid(grid.getRows(), grid.getCols());
-    for (int i = 0; i < grid.getRows(); i++) {
-      for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
-        gridCopy.setCell(i, j, cell);
-      }
-    }
-    return gridCopy;
+  public Grid getGrid() {
+    return grid;
   }
 
   /**
@@ -368,9 +357,9 @@ public class ThreeTriosModel implements GameModel {
     if (targetCell == null || targetCell.isHole() || targetCell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-    if (!currentPlayer.getPlayerHand().contains(card)) {
-      throw new IllegalArgumentException("Player does not have this card.");
-    }
+//    if (!currentPlayer.getPlayerHand().contains(card)) {
+//      throw new IllegalArgumentException("Player does not have this card.");
+//    }
 
     // Initialize the simulated game state
     Map<Cell, GamePlayer> simulatedOwners = new HashMap<>();
@@ -392,6 +381,7 @@ public class ThreeTriosModel implements GameModel {
     return simulateBattlePhase(targetCell, card, simulatedOwners, simulatedCards);
   }
 
+  // for each cell check adjacent and simualte battle
   private int simulateBattlePhase(Cell startingCell, Card placedCard,
                                   Map<Cell, GamePlayer> simulatedOwners, Map<Cell, Card> simulatedCards) {
     int flipCount = 0;

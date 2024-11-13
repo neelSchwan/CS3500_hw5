@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import cs3500.threetrios.view.ThreeTriosGameGUIView;
-import cs3500.threetrios.view.ThreeTriosGamePanel;
 import cs3500.threetrios.view.ThreeTriosGameView;
 import cs3500.threetrios.view.ThreeTriosView;
 
@@ -41,21 +39,6 @@ public class AdditionalThreeTriosModelTests {
 
     model = new ThreeTriosModel(grid, playerFactory, deck);
     model.startGame(0);
-  }
-
-  /**
-   * Test that getGrid returns a deep copy of the grid.
-   */
-  @Test
-  public void testGetGridReturnsDeepCopy() {
-    Grid originalGrid = model.getGrid();
-    Grid gridCopy = model.getGrid();
-
-    // Modify the copy
-    gridCopy.setCell(0, 0, new Cell(CellType.HOLE_CELL));
-
-    // Verify that the original grid is not affected
-    Assert.assertNotEquals(originalGrid.getCell(0, 0).isHole(), gridCopy.getCell(0, 0).isHole());
   }
 
   /**
@@ -148,23 +131,23 @@ public class AdditionalThreeTriosModelTests {
    */
   @Test
   public void testMaxCombo() {
-    GamePlayer currentPlayer = model.getCurrentPlayer();
-    Card cardToPlace = currentPlayer.getPlayerHand().get(0);
-    model.placeCard(0, 0, cardToPlace);
+    GamePlayer redPlayer = model.getPlayers().get(0);
+    GamePlayer bluePlayer = model.getPlayers().get(1);
 
-    // Switch to the next player
-    model.switchTurn();
-    currentPlayer = model.getCurrentPlayer();
-    Card opponentCard = currentPlayer.getPlayerHand().get(0);
+    Card redCard = redPlayer.getPlayerHand().get(0);
+    model.placeCard(0, 0, redCard);
 
-    int maxFlips = model.maxCombo(opponentCard, 0, 1);
-    Assert.assertTrue(maxFlips >= 0);
+    Card blueCard = bluePlayer.getPlayerHand().get(1);
+    int expectedFlips = 0;
+    int maxFlips = model.maxCombo(blueCard, 0, 1);
+    Assert.assertEquals(expectedFlips, maxFlips);
 
-    // Place the card and verify flips
-    model.placeCard(0, 1, opponentCard);
+    model.placeCard(0, 1, blueCard);
+
     GamePlayer owner = model.getCellOwner(0, 0);
-    Assert.assertEquals(currentPlayer, owner);
+    Assert.assertEquals(redPlayer, owner);
   }
+
 
   /**
    * Test getPlayerScore includes cards on the grid and in hand.
@@ -192,28 +175,30 @@ public class AdditionalThreeTriosModelTests {
    */
   @Test
   public void testSimulateFlipsViaMaxCombo() throws IOException {
-    ThreeTriosGameView view = new ThreeTriosGameView(model, System.out);
+    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
+
     GamePlayer redPlayer = model.getPlayers().get(0);
     GamePlayer bluePlayer = model.getPlayers().get(1);
+
+    Card redCard1 = redPlayer.getPlayerHand().get(0);
+    model.placeCard(0, 0, redCard1);
     view.display();
-    // Red places a card
-    model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
-    view.display();
-    // Switch to blue and test maxCombo
+    // Turn switches to BLUE
+
     Card blueCard = bluePlayer.getPlayerHand().get(0);
-    System.out.println(blueCard);
-    int expectedFlips = model.maxCombo(blueCard, 1, 0);
+    model.placeCard(1, 0, blueCard);
+    view.display();
+    Card redCard2 = redPlayer.getPlayerHand().get(0);
 
-    // Place the card and verify actual flips
-    model.placeCard(1, 1, blueCard);
+    int expectedFlips = model.maxCombo(redCard2, 2, 0);
 
-    // Since battlePhase has been executed, verify that the number of flips matches expectedFlips
-    GamePlayer owner = model.getCellOwner(0, 0);
-    if (expectedFlips > 0) {
-      Assert.assertEquals(bluePlayer, owner);
-    } else {
-      Assert.assertEquals(redPlayer, owner);
-    }
+    Assert.assertEquals(1, expectedFlips);
+
+    model.placeCard(2, 0, redCard2);
+    view.display();
+
+    GamePlayer owner = model.getCellOwner(1, 0);
+    Assert.assertEquals(redPlayer, owner);
   }
 
   /**
