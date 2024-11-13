@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import cs3500.threetrios.view.ThreeTriosGameView;
+import cs3500.threetrios.view.ThreeTriosView;
+
 
 /**
  * Test class for the ThreeTriosModel class.
@@ -172,12 +175,14 @@ public class TestThreeTriosModel {
   }
 
   @Test
-  public void testBattleSwitchesWhoOwnsCardAndCell() {
+  public void testBattleSwitchesWhoOwnsCardAndCell() throws IOException {
+    ThreeTriosView view = new ThreeTriosGameView(model, System.out);
     GamePlayer bluePlayer = model.getPlayers().get(1);
     GamePlayer redPlayer = model.getPlayers().get(0);
     model.startGame(0);
     model.placeCard(0, 0, redPlayer.getPlayerHand().get(1)); // 4 on east
     model.placeCard(0, 1, bluePlayer.getPlayerHand().get(0)); // 8 on west
+    view.display();
     Assert.assertEquals(bluePlayer, grid.getCell(0, 0).getOwner());
     Assert.assertEquals(bluePlayer, grid.getCell(0, 1).getOwner());
   }

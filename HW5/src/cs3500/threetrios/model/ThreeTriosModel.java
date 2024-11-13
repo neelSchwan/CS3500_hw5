@@ -341,9 +341,12 @@ public class ThreeTriosModel implements GameModel {
   @Override
   public boolean isValidMove(int row, int col) {
     if (row < 0 || row >= grid.getRows() || col < 0 || col >= grid.getCols()) {
-      return !grid.getCell(row, col).isOccupied();
+      return false;
     }
-    return true;
+
+    Cell cell = grid.getCell(row, col);
+
+    return cell != null && !cell.isOccupied() && !cell.isHole();
   }
 
   /**
@@ -406,9 +409,11 @@ public class ThreeTriosModel implements GameModel {
         Cell cell = grid.getCell(i, j);
         if (cell.getOwner() == player) {
           playerScore++;
+          System.out.println(playerScore);
         }
       }
     }
+    System.out.println(playerScore + player.getPlayerHand().size());
     return playerScore + player.getPlayerHand().size();
   }
 
