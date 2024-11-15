@@ -357,10 +357,6 @@ public class ThreeTriosModel implements GameModel {
     if (targetCell == null || targetCell.isHole() || targetCell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
-//    if (!currentPlayer.getPlayerHand().contains(card)) {
-//      throw new IllegalArgumentException("Player does not have this card.");
-//    }
-
     // Initialize the simulated game state
     Map<Cell, GamePlayer> simulatedOwners = new HashMap<>();
     Map<Cell, Card> simulatedCards = new HashMap<>();

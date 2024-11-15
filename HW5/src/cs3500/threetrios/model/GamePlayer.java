@@ -40,13 +40,21 @@ public interface GamePlayer {
 
   /**
    * Sets the color of the player (RED OR BLUE).
-   *
-   * @return
    */
   void setColor(Player color);
 
+  /**
+   * Adds a card to the specified players hand.
+   *
+   * @param card card to add to the hand.
+   */
   void addCardToHand(Card card);
 
+  /**
+   * removes a card from the players hand list.
+   *
+   * @param card card object to remove.
+   */
   void removeCardFromHand(Card card);
 
 }

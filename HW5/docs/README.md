@@ -22,41 +22,43 @@
 ***
 
 **Extensibility**
+
 * Our current scope primarily focuses on the core gameplay as described
   above,
 
 ***
 
 **Quick Start**
-  * Someone can use the startGame(long seed) 
-method to start the game.
-  * This method shuffles the deck based on a seed, and deals the cards to
-the players.
+
+* Someone can use the startGame(long seed)
+  method to start the game.
+* This method shuffles the deck based on a seed, and deals the cards to
+  the players.
 
 ***
 
 **Key Components**
 
 * Model (drives the control-flow of the game)
-  * starts game by receiving a seed number to shuffle deck
-    and deals cards to players
-  * place a card to a grid
-  * determine is game over
-  * determine which player won
+    * starts game by receiving a seed number to shuffle deck
+      and deals cards to players
+    * place a card to a grid
+    * determine is game over
+    * determine which player won
 * View (the view is driven)
-  * render a current status of the grid and display
+    * render a current status of the grid and display
 
 **Key Subcomponents**
 
 * Grid
-  * construct a grid according to given numbers of row and columns
-  * set type of cells
-  * set adjacent cells for each cell
-  * calculate number of CARD_CELL in grid
+    * construct a grid according to given numbers of row and columns
+    * set type of cells
+    * set adjacent cells for each cell
+    * calculate number of CARD_CELL in grid
 * Cell
-  * determine if the cell is occupied by another card
-  * place a card to a CARD_CELL
+    * determine if the cell is occupied by another card
+    * place a card to a CARD_CELL
 * Card Config Reader
-  * read config file and return as a list of cards.
+    * read config file and return as a list of cards.
 * Grid Config Reader
   * read config file and return as Grid object

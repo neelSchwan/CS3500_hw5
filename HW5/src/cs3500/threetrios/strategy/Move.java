@@ -1,4 +1,4 @@
-package cs3500.threetrios.model;
+package cs3500.threetrios.strategy;
 
 public class Move {
   private int row;

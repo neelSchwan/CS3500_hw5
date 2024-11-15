@@ -2,21 +2,13 @@ package cs3500.threetrios.view;
 
 import java.io.IOException;
 
-import cs3500.threetrios.controller.ThreeTriosController;
-import cs3500.threetrios.controller.ThreeTriosGUIController;
 
 
 /**
- * Interface for the view of three-trios game.
+ * The {@code ThreeTriosView} interface defines methods for rendering and displaying
+ * the state of the game.
  */
 public interface ThreeTriosView {
-
-  /**
-   * Set up the controller to handle click events in this view.
-   *
-   * @param listener the controller
-   */
-  void addClickListener(ThreeTriosController listener);
 
   /**
    * Refresh the view to reflect any changes in the game state.

@@ -3,7 +3,6 @@ package cs3500.threetrios.view;
 import java.io.IOException;
 import java.util.List;
 
-import cs3500.threetrios.controller.ThreeTriosController;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.GameModel;
@@ -81,18 +80,14 @@ public class ThreeTriosGameView implements ThreeTriosView {
     render();
   }
 
-  @Override
-  public void addClickListener(ThreeTriosController listener) {
-
-  }
 
   @Override
   public void refresh() {
-
+    //Not Used.
   }
 
   @Override
   public void makeVisible() {
-
+    //Not Used.
   }
 }

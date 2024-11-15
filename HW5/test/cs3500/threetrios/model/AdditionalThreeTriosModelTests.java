@@ -17,9 +17,7 @@ import cs3500.threetrios.view.ThreeTriosView;
 public class AdditionalThreeTriosModelTests {
 
   private GameModel model;
-  private List<Card> deck;
   private Grid grid;
-  private PlayerFactory playerFactory;
 
   /**
    * Initializes the test setup with a game model, deck of cards, grid, and player hands.
@@ -30,12 +28,12 @@ public class AdditionalThreeTriosModelTests {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    deck = cardConfigReader.readCards("src" + File.separator
+    List<Card> deck = cardConfigReader.readCards("src" + File.separator
             + "resources" + File.separator + "CardDb.txt");
     grid = gridConfigReader.readGridFromFile("src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
-    playerFactory = new HumanPlayerFactory();
+    PlayerFactory playerFactory = new HumanPlayerFactory();
 
     model = new ThreeTriosModel(grid, playerFactory, deck);
     model.startGame(0);
@@ -163,7 +161,7 @@ public class AdditionalThreeTriosModelTests {
 
     model.placeCard(0, 0, redPlayer.getPlayerHand().get(0));
     view.display();
-    // Update scores
+
     redScore = model.getPlayerScore(redPlayer);
     blueScore = model.getPlayerScore(bluePlayer);
     // Red's score should be equal (red hand changed, but still same cards owned).
@@ -209,7 +207,6 @@ public class AdditionalThreeTriosModelTests {
     GamePlayer currentPlayer = model.getCurrentPlayer();
     Card cardToPlace = currentPlayer.getPlayerHand().get(0);
 
-    // Assuming (1,1) is a hole in the grid
     Cell cell = grid.getCell(1, 1);
 
     model.placeCard(1, 1, cardToPlace);
@@ -301,7 +298,8 @@ public class AdditionalThreeTriosModelTests {
         if (!grid.getCell(row, col).isHole()) {
           if (model.getCurrentPlayer() == redPlayer && !redPlayer.getPlayerHand().isEmpty()) {
             model.placeCard(row, col, redPlayer.getPlayerHand().get(0));
-          } else if (model.getCurrentPlayer() == bluePlayer && !bluePlayer.getPlayerHand().isEmpty()) {
+          } else if (model.getCurrentPlayer()
+                  == bluePlayer && !bluePlayer.getPlayerHand().isEmpty()) {
             model.placeCard(row, col, bluePlayer.getPlayerHand().get(0));
           } else {
             model.switchTurn();

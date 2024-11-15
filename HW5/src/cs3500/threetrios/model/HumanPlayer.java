@@ -53,8 +53,6 @@ public class HumanPlayer implements GamePlayer {
 
   /**
    * Sets the color of the player (RED OR BLUE).
-   *
-   * @return
    */
   @Override
   public void setColor(Player color) {

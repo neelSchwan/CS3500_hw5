@@ -1,11 +1,6 @@
-package cs3500.threetrios.view;
+package cs3500.threetrios.model;
 
 import java.util.List;
-
-import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.GamePlayer;
-import cs3500.threetrios.model.Grid;
-import cs3500.threetrios.model.Player;
 
 /**
  * Interface representing a read-only view of the ThreeTrios game model.
@@ -25,7 +20,7 @@ public interface ReadonlyThreeTriosModel {
    *
    * @param row the row index of the cell (0-indexed).
    * @param col the column index of the cell (0-indexed).
-   * @return the {@link Card} in the specified cell, or {@code null} if the cell is empty.
+   * @return the Card in the specified cell, or null if the cell is empty.
    */
   Card cellContents(int row, int col);
 
@@ -34,7 +29,8 @@ public interface ReadonlyThreeTriosModel {
    *
    * @param row the row index of the cell (0-indexed).
    * @param col the column index of the cell (0-indexed).
-   * @return the {@link Player} who owns the specified cell, or {@code null} if the cell has no owner.
+   * @return the Player who owns the specified cell,
+   *        or null if the cell has no owner.
    */
   GamePlayer getCellOwner(int row, int col);
 
@@ -43,12 +39,13 @@ public interface ReadonlyThreeTriosModel {
    *
    * @param row the row index of the cell (0-indexed).
    * @param col the column index of the cell (0-indexed).
-   * @return {@code true} if the move to the specified cell is valid, {@code false} otherwise.
+   * @return true if the move to the specified cell is valid, {@code false} otherwise.
    */
   boolean isValidMove(int row, int col);
 
   /**
-   * Calculates the maximum combo score that can be achieved by placing a card at the specified location.
+   * Calculates the maximum combo score that can be achieved by placing a card
+   * at the specified location.
    *
    * @param card the {@link Card} to be placed.
    * @param row  the row index for placement (0-indexed).
@@ -87,11 +84,17 @@ public interface ReadonlyThreeTriosModel {
   GamePlayer getCurrentPlayer();
 
   /**
-   * Determines the winner of the game based on who owns more card-cells on the grid and in their hand.
+   * Determines the winner of the game based on who owns more
+   * card-cells on the grid and in their hand.
    *
    * @return the {@link Player} who has the most card-cells; null if there is no winner yet.
    */
   GamePlayer getWinner();
 
+  /**
+   * Gets a copy the list of players in the game.
+   *
+   * @return shallow copy of the list of players in the game.
+   */
   List<GamePlayer> getPlayers();
 }

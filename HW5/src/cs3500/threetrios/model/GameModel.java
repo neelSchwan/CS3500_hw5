@@ -1,7 +1,5 @@
 package cs3500.threetrios.model;
 
-import cs3500.threetrios.view.ReadonlyThreeTriosModel;
-
 /**
  * Interface defining a mutable game model for the ThreeTrios game.
  * Provides methods to modify the game state, such as placing cards, switching turns, and starting the game.
