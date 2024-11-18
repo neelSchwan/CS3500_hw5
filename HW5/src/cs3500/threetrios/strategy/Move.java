@@ -1,5 +1,7 @@
 package cs3500.threetrios.strategy;
 
+import cs3500.threetrios.model.Card;
+
 public class Move {
   private int row;
   private int col;

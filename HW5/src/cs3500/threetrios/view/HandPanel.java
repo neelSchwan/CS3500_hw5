@@ -52,7 +52,7 @@ public class HandPanel extends JPanel implements GameComponent {
   public void render(Graphics2D g2d) {
     int cardCount = player.getPlayerHand().size();
 
-    int cardHeight = getHeight() / cardCount; // each card will squish based on cardCount.
+    int cardHeight = getHeight() / cardCount;
     for (int i = 0; i < cardCount; i++) {
       Card card = player.getPlayerHand().get(i);
       int yPos = i * cardHeight;
@@ -75,6 +75,7 @@ public class HandPanel extends JPanel implements GameComponent {
   private class CardClickListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
+
       int clickedIndex = e.getY() / (getHeight() / player.getPlayerHand().size());
       if (clickedIndex == selectedCardIndex) {
         selectedCardIndex = -1;

@@ -22,7 +22,7 @@ public class ThreeTriosModel implements GameModel {
   private GamePlayer currentPlayer;
   private final List<Card> deck;
   private boolean isGameStarted;
-
+  private final List<GameModelListener> listeners = new ArrayList<>();
 
   /**
    * @param grid
@@ -70,6 +70,7 @@ public class ThreeTriosModel implements GameModel {
 
     this.currentPlayer = players.get(0);
     this.isGameStarted = true;
+    notifyTurnChanged();
   }
 
   /**
@@ -121,10 +122,10 @@ public class ThreeTriosModel implements GameModel {
     }
 
     currentPlayer.removeCardFromHand(card);
-
     cell.placeCard(card, currentPlayer);
-
     battlePhase(cell);
+
+    notifyGameStateUpdated();
 
     switchTurn();
   }
@@ -230,6 +231,7 @@ public class ThreeTriosModel implements GameModel {
         }
       }
     }
+    notifyGameOver();
     return true;
   }
 
@@ -487,6 +489,44 @@ public class ThreeTriosModel implements GameModel {
       currentPlayer = players.get(1);
     } else {
       currentPlayer = players.get(0);
+    }
+    notifyTurnChanged();
+  }
+
+  /**
+   * Adds a listener for model events.
+   *
+   * @param listener the listener to add
+   */
+  public void addGameModelListener(GameModelListener listener) {
+    listeners.add(listener);
+  }
+
+  /**
+   * Notifies listeners of a turn change.
+   */
+  private void notifyTurnChanged() {
+    for (GameModelListener listener : listeners) {
+      listener.onTurnChanged(currentPlayer);
+    }
+  }
+
+  /**
+   * Notifies listeners of a game state update.
+   */
+  private void notifyGameStateUpdated() {
+    for (GameModelListener listener : listeners) {
+      listener.onGameStateUpdated();
+    }
+  }
+
+  /**
+   * Notifies listeners of the end of the game.
+   */
+  private void notifyGameOver() {
+    GamePlayer winner = getWinner();
+    for (GameModelListener listener : listeners) {
+      listener.onGameOver(winner);
     }
   }
 }

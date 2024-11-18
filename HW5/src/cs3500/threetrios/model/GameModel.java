@@ -37,4 +37,11 @@ public interface GameModel extends ReadonlyThreeTriosModel {
    * @throws IllegalArgumentException if the configuration files are invalid or do not match expected formats.
    */
   void initializeGame(String gridFile, String cardFile);
+
+  /**
+   * Adds a listener for model events.
+   *
+   * @param listener the listener to add
+   */
+  void addGameModelListener(GameModelListener listener);
 }

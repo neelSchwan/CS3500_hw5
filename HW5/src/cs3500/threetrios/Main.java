@@ -33,8 +33,8 @@ public class Main {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
+    List<Card> deck = cardConfigReader.readCards("HW5/src/resources/CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("HW5/src/resources/EasyTestingGridDb.txt");
 
     PlayerFactory playerFactory = new HumanPlayerFactory();
     GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
