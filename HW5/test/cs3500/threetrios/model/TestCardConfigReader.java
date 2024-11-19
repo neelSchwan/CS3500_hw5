@@ -14,13 +14,13 @@ import static org.junit.Assert.assertTrue;
  * Tests for the Card Config Reader.
  */
 public class TestCardConfigReader {
-  private final String cardDb = "src" + File.separator
+  private final String cardDb = "HW5" + File.separator + "src" + File.separator
           + "resources" + File.separator + "CardDb.txt";
-  private final String cardDb2 = "src" + File.separator
+  private final String cardDb2 = "HW5" + File.separator + "src" + File.separator
           + "resources" + File.separator + "CardDb2.txt";
-  private final String emptyCardDb = "src" + File.separator
+  private final String emptyCardDb = "HW5" + File.separator + "src" + File.separator
           + "resources" + File.separator + "EmptyCardDb.txt";
-  private final String duplicateCardDb = "src" + File.separator
+  private final String duplicateCardDb = "HW5" + File.separator + "src" + File.separator
           + "resources" + File.separator + "DuplicateCard.txt";
   private CardConfigReader cardReader;
 

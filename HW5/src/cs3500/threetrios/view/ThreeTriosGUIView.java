@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 
 public class ThreeTriosGUIView extends JFrame implements GameView {
@@ -112,4 +113,9 @@ public class ThreeTriosGUIView extends JFrame implements GameView {
     gridPanel.setInteractive(enabled);
   }
 
+  @Override
+  public void updateActivePlayer(GamePlayer currentPlayer) {
+    redHandPanel.setActivePlayer(currentPlayer);
+    blueHandPanel.setActivePlayer(currentPlayer);
+  }
 }

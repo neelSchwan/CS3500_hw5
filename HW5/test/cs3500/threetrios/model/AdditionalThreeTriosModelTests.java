@@ -28,9 +28,9 @@ public class AdditionalThreeTriosModelTests {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> deck = cardConfigReader.readCards("src" + File.separator
-            + "resources" + File.separator + "CardDb.txt");
-    grid = gridConfigReader.readGridFromFile("src" + File.separator
+    List<Card> deck = cardConfigReader.readCards("HW5" + File.separator
+            + "src" + File.separator + "resources" + File.separator + "CardDb.txt");
+    grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
     PlayerFactory playerFactory = new HumanPlayerFactory();
@@ -266,10 +266,10 @@ public class AdditionalThreeTriosModelTests {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> newDeck = cardConfigReader.readCards("src" + File.separator
-            + "resources" + File.separator + "CardDb.txt");
-    Grid newGrid = gridConfigReader.readGridFromFile("src" + File.separator
-            + "resources" + File.separator + "GridDb.txt");
+    List<Card> newDeck = cardConfigReader.readCards("HW5" + File.separator + "src"
+            + File.separator + "resources" + File.separator + "CardDb.txt");
+    Grid newGrid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src"
+            + File.separator + "resources" + File.separator + "GridDb.txt");
 
     PlayerFactory newPlayerFactory = new HumanPlayerFactory();
 

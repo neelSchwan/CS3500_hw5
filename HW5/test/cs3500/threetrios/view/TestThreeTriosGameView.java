@@ -3,6 +3,7 @@ package cs3500.threetrios.view;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,6 @@ import static org.junit.Assert.assertEquals;
 public class TestThreeTriosGameView {
 
   private GameModel model;
-  private List<Card> deck;
-  private Grid grid;
-  private Map<Player, List<Card>> hands;
 
   /**
    * Initializes the test setup with a game reader, game model, deck, grid, and hands.
@@ -40,8 +38,10 @@ public class TestThreeTriosGameView {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> deck = cardConfigReader.readCards("src/resources/CardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("src/resources/GridDb.txt");
+    List<Card> deck = cardConfigReader.readCards("HW5" + File.separator + "src" + File.separator
+            + "resources" + File.separator + "CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
+            + "resources" + File.separator + "GridDb.txt");
 
     PlayerFactory playerFactory = new HumanPlayerFactory();
 

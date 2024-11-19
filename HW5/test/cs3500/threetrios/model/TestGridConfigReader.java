@@ -27,8 +27,8 @@ public class TestGridConfigReader {
 
   @Test
   public void testReadingGridFromFileWorks() {
-    Grid grid = gridConfigReader.readGridFromFile("src" + File.separator
-            + "resources" + File.separator + "GridDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("HW5" + File.separator
+            + "src" + File.separator + "resources" + File.separator + "GridDb.txt");
 
     assertEquals(grid.getRows(), 5);
     assertEquals(grid.getCols(), 7);
@@ -46,8 +46,8 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridWhenFileIsEmpty() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-        () -> gridConfigReader.readGridFromFile("src" + File.separator + "resources"
-                + File.separator + "EmptyGridDb.txt"));
+        () -> gridConfigReader.readGridFromFile("HW5" + File.separator +
+                "src" + File.separator + "resources" + File.separator + "EmptyGridDb.txt"));
     assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
 

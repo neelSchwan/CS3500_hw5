@@ -68,6 +68,11 @@ public class ThreeTriosController implements GameController, GameModelListener {
       return;
     }
 
+    if (!model.getCurrentPlayer().equals(selectingPlayer)) {
+      view.displayMessage("You cannot select cards from the opponent's hand.");
+      return; // Ignore the event
+    }
+
     if (!isPlayerTurn) {
       view.displayMessage("It's not your turn.");
       return;
@@ -161,6 +166,7 @@ public class ThreeTriosController implements GameController, GameModelListener {
   public void onTurnChanged(GamePlayer currentPlayer) {
     isPlayerTurn = currentPlayer.equals(player);
     view.setViewEnabled(isPlayerTurn);
+    view.updateActivePlayer(currentPlayer);
     updateView();
   }
 

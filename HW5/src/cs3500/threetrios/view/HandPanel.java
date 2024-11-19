@@ -21,6 +21,7 @@ public class HandPanel extends JPanel implements GameComponent {
   private GameEventListener eventListener;
   private int selectedCardIndex = -1;
   private boolean isInteractive = true;
+  private GamePlayer activePlayer;
 
   /**
    * Constructor for creating a HandPanel given a GamePlayer.
@@ -36,6 +37,10 @@ public class HandPanel extends JPanel implements GameComponent {
 
   public void setInteractive(boolean interactive) {
     this.isInteractive = interactive;
+  }
+
+  public void setActivePlayer(GamePlayer activePlayer) {
+    this.activePlayer = activePlayer;
   }
 
   @Override
@@ -99,6 +104,10 @@ public class HandPanel extends JPanel implements GameComponent {
     public void mouseClicked(MouseEvent e) {
       if (!isInteractive) {
         return; // Ignore clicks when interactivity is disabled
+      }
+
+      if (!player.equals(activePlayer)) {
+        return; // Do nothing if this hand doesn't belong to the active player
       }
 
       int clickedIndex = e.getY() / (getHeight() / player.getPlayerHand().size());

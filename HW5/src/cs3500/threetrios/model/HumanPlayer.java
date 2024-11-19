@@ -68,4 +68,21 @@ public class HumanPlayer implements GamePlayer {
   public void removeCardFromHand(Card card) {
     hand.remove(card);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    HumanPlayer other = (HumanPlayer) obj;
+    return this.color == other.color;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.color.hashCode();
+  }
 }

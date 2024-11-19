@@ -1,5 +1,7 @@
 package cs3500.threetrios.view;
 
+import cs3500.threetrios.model.GamePlayer;
+
 /**
  * Represents the main view class for the Three Trios game.
  * Provides methods to display, update, and reset the game view.
@@ -51,4 +53,6 @@ public interface GameView {
    * @param enabled true if enabled, false if not.
    */
   void setViewEnabled(boolean enabled);
+
+  void updateActivePlayer(GamePlayer currentPlayer);
 }

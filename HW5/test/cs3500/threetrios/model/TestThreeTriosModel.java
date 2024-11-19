@@ -33,9 +33,9 @@ public class TestThreeTriosModel {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    deck = cardConfigReader.readCards("src" + File.separator
+    deck = cardConfigReader.readCards("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "CardDb.txt");
-    grid = gridConfigReader.readGridFromFile("src" + File.separator
+    grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
     playerFactory = new HumanPlayerFactory();
@@ -104,10 +104,10 @@ public class TestThreeTriosModel {
   @Test
   public void testStartingGameWithTooFewCards() {
     List<Card> deck = new CardConfigReader()
-            .readCards("src" + File.separator + "resources"
+            .readCards("HW5" + File.separator + "src" + File.separator + "resources"
                     + File.separator + "TooFewCardDb.txt"); // 15 cards
     Grid grid = new GridConfigReader()
-            .readGridFromFile("src" + File.separator + "resources"
+            .readGridFromFile("HW5" + File.separator + "src" + File.separator + "resources"
                     + File.separator + "GridWithCellConnections.txt"); // 19 card cell
     PlayerFactory playerFactory = new HumanPlayerFactory();
     GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
@@ -120,10 +120,10 @@ public class TestThreeTriosModel {
   @Test
   public void testStartingGameWithEvenNumberOfCardCells() {
     List<Card> deck = new CardConfigReader()
-            .readCards("src" + File.separator + "resources"
+            .readCards("HW5" + File.separator + "src" + File.separator + "resources"
                     + File.separator + "CardDb.txt");
     Grid grid = new GridConfigReader()
-            .readGridFromFile("src" + File.separator + "resources"
+            .readGridFromFile("HW5" + File.separator + "src" + File.separator + "resources"
                     + File.separator + "GridWithEvenCellNum.txt");
     PlayerFactory playerFactory = new HumanPlayerFactory();
     GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
@@ -220,10 +220,10 @@ public class TestThreeTriosModel {
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
-    List<Card> deck = cardConfigReader.readCards("src" + File.separator + "resources"
-            + File.separator + "CardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("src" + File.separator + "resources"
-            + File.separator + "EasyTestingGridDb.txt");
+    List<Card> deck = cardConfigReader.readCards("HW5" + File.separator + "src"
+            + File.separator + "resources" + File.separator + "CardDb.txt");
+    Grid grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src"
+            + File.separator + "resources" + File.separator + "EasyTestingGridDb.txt");
 
     PlayerFactory playerFactory = new HumanPlayerFactory();
     return new ThreeTriosModel(grid, playerFactory, deck);
