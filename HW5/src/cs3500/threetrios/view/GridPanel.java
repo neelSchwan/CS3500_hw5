@@ -1,16 +1,14 @@
 package cs3500.threetrios.view;
 
-import java.awt.Point;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.Color;
-import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CellType;
+import cs3500.threetrios.model.Direction;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.Player;
 
@@ -19,6 +17,7 @@ public class GridPanel extends JPanel implements GameComponent {
   private final Grid grid;
   private GameEventListener eventListener;
   private Point selectedCell = null;
+  private boolean isInteractive = true;
 
   public GridPanel(Grid grid) {
     this.grid = grid;
@@ -27,6 +26,10 @@ public class GridPanel extends JPanel implements GameComponent {
 
   public void setGameEventListener(GameEventListener eventListener) {
     this.eventListener = eventListener;
+  }
+
+  public void setInteractive(boolean interactive) {
+    this.isInteractive = interactive;
   }
 
   @Override
@@ -79,11 +82,32 @@ public class GridPanel extends JPanel implements GameComponent {
     g2d.drawRect(x, y, cellWidth, cellHeight);
 
     if (grid.getCell(row, col).isOccupied()) {
+      Card card = grid.getCell(row, col).getCard();
       g2d.setColor(Color.WHITE);
-      g2d.drawString(grid.getCell(row, col).getCard().toString(), x + cellWidth / 2, y + cellHeight / 2);
+      int centerX = x + cellWidth / 2;
+      int centerY = y + cellHeight / 2;
+
+      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.NORTH)), centerX, y, 0, 10); // North
+      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.SOUTH)), centerX, y + cellHeight, 0, -10); // South
+      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.WEST)), x, centerY, 10, 0); // West
+      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.EAST)), x + cellWidth, centerY, -10, 0); // East
     }
   }
 
+
+  /**
+   * Helper method to draw directional text on the grid cell.
+   */
+  private void drawCellText(Graphics2D g2d, String text, int xCenter, int yCenter, int offsetX, int offsetY) {
+    FontMetrics metrics = g2d.getFontMetrics();
+    int textWidth = metrics.stringWidth(text);
+    int textHeight = metrics.getHeight();
+
+    int textX = xCenter + offsetX - textWidth / 2;
+    int textY = yCenter + offsetY + textHeight / 4;
+
+    g2d.drawString(text, textX, textY);
+  }
 
   private void highlightSelectedCell(Graphics2D g2d) {
     int cellWidth = getWidth() / grid.getCols();
@@ -111,6 +135,11 @@ public class GridPanel extends JPanel implements GameComponent {
   private class CellClickListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
+
+      if (!isInteractive) {
+        return; // Ignore clicks when interactivity is disabled
+      }
+
       int cellWidth = getWidth() / grid.getCols();
       int cellHeight = getHeight() / grid.getRows();
 

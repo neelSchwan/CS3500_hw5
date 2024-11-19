@@ -160,6 +160,7 @@ public class ThreeTriosController implements GameController, GameModelListener {
   @Override
   public void onTurnChanged(GamePlayer currentPlayer) {
     isPlayerTurn = currentPlayer.equals(player);
+    view.setViewEnabled(isPlayerTurn);
     updateView();
   }
 

@@ -44,4 +44,11 @@ public interface GameView {
    * @param message the message to display
    */
   void displayMessage(String message);
+
+  /**
+   * Method to set the view enabled if it is the current players turn.
+   *
+   * @param enabled true if enabled, false if not.
+   */
+  void setViewEnabled(boolean enabled);
 }

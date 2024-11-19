@@ -99,4 +99,17 @@ public class ThreeTriosGUIView extends JFrame implements GameView {
   public void displayMessage(String message) {
     messageLabel.setText(message);
   }
+
+  @Override
+  public void setViewEnabled(boolean enabled) {
+    redHandPanel.setEnabled(enabled);
+    blueHandPanel.setEnabled(enabled);
+    gridPanel.setEnabled(enabled);
+
+    // Forward to individual components
+    redHandPanel.setInteractive(enabled);
+    blueHandPanel.setInteractive(enabled);
+    gridPanel.setInteractive(enabled);
+  }
+
 }

@@ -1,8 +1,6 @@
 package cs3500.threetrios.view;
 
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,6 +20,7 @@ public class HandPanel extends JPanel implements GameComponent {
   private final GamePlayer player;
   private GameEventListener eventListener;
   private int selectedCardIndex = -1;
+  private boolean isInteractive = true;
 
   /**
    * Constructor for creating a HandPanel given a GamePlayer.
@@ -33,6 +32,10 @@ public class HandPanel extends JPanel implements GameComponent {
 
   public void setGameEventListener(GameEventListener eventListener) {
     this.eventListener = eventListener;
+  }
+
+  public void setInteractive(boolean interactive) {
+    this.isInteractive = interactive;
   }
 
   @Override
@@ -68,13 +71,35 @@ public class HandPanel extends JPanel implements GameComponent {
     g2d.fillRect(xPos, yPos, width, height);
     g2d.setColor(Color.BLACK);
     g2d.drawRect(xPos, yPos, width, height);
-    g2d.drawString(card.getAttackValue(Direction.NORTH) + "", xPos + width / 2, yPos + 15);  // Example
+
+    int centerX = xPos + width / 2;
+    int centerY = yPos + height / 2;
+
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.NORTH)), centerX, yPos, 0, 10); // North
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.SOUTH)), centerX, yPos + height, 0, -10); // South
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.WEST)), xPos, centerY, 10, 0); // West
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.EAST)), xPos + width, centerY, -10, 0); // East
   }
 
+  /**
+   * Helper method to draw directional text on the card.
+   */
+  private void drawCardText(Graphics2D g2d, String text, int xCenter, int yCenter, int offsetX, int offsetY) {
+    FontMetrics metrics = g2d.getFontMetrics();
+    int textWidth = metrics.stringWidth(text);
+    int textHeight = metrics.getHeight();
+
+    int textX = xCenter + offsetX - textWidth / 2;
+    int textY = yCenter + offsetY + textHeight / 4;
+    g2d.drawString(text, textX, textY);
+  }
 
   private class CardClickListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
+      if (!isInteractive) {
+        return; // Ignore clicks when interactivity is disabled
+      }
 
       int clickedIndex = e.getY() / (getHeight() / player.getPlayerHand().size());
       if (clickedIndex == selectedCardIndex) {
