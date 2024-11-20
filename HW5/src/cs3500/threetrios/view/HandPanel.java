@@ -1,6 +1,9 @@
 package cs3500.threetrios.view;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -28,7 +31,7 @@ public class HandPanel extends JPanel implements GameComponent {
    */
   public HandPanel(GamePlayer player) {
     this.player = player;
-    this.addMouseListener(new CardClickListener()); //TODO: IMPL CARD CLICK LISTENER TAKES IN GAMEEVENTLISTENER
+    this.addMouseListener(new CardClickListener());
   }
 
   public void setGameEventListener(GameEventListener eventListener) {
@@ -60,6 +63,12 @@ public class HandPanel extends JPanel implements GameComponent {
   public void render(Graphics2D g2d) {
     int cardCount = player.getPlayerHand().size();
 
+    if (cardCount == 0) {
+      g2d.setColor(Color.LIGHT_GRAY);
+      g2d.drawString("No cards to display", getWidth() / 2 - 50, getHeight() / 2);
+      return;
+    }
+
     int cardHeight = getHeight() / cardCount;
     for (int i = 0; i < cardCount; i++) {
       Card card = player.getPlayerHand().get(i);
@@ -68,7 +77,9 @@ public class HandPanel extends JPanel implements GameComponent {
     }
   }
 
-  private void drawCard(Graphics2D g2d, Card card, int xPos, int yPos, int width, int height, boolean isSelected) {
+
+  private void drawCard(Graphics2D g2d, Card card, int xPos, int yPos,
+                        int width, int height, boolean isSelected) {
     Color blueColor = new Color(123, 153, 220);
     Color redColor = new Color(239, 109, 109);
     Color color = player.getColor() == Player.RED ? redColor : blueColor;
@@ -80,16 +91,21 @@ public class HandPanel extends JPanel implements GameComponent {
     int centerX = xPos + width / 2;
     int centerY = yPos + height / 2;
 
-    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.NORTH)), centerX, yPos, 0, 10); // North
-    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.SOUTH)), centerX, yPos + height, 0, -10); // South
-    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.WEST)), xPos, centerY, 10, 0); // West
-    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.EAST)), xPos + width, centerY, -10, 0); // East
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.NORTH)),
+            centerX, yPos, 0, 10); // North
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.SOUTH)),
+            centerX, yPos + height, 0, -10); // South
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.WEST)),
+            xPos, centerY, 10, 0); // West
+    drawCardText(g2d, String.valueOf(card.getAttackValue(Direction.EAST)),
+            xPos + width, centerY, -10, 0); // East
   }
 
   /**
    * Helper method to draw directional text on the card.
    */
-  private void drawCardText(Graphics2D g2d, String text, int xCenter, int yCenter, int offsetX, int offsetY) {
+  private void drawCardText(Graphics2D g2d, String text,
+                            int xCenter, int yCenter, int offsetX, int offsetY) {
     FontMetrics metrics = g2d.getFontMetrics();
     int textWidth = metrics.stringWidth(text);
     int textHeight = metrics.getHeight();
@@ -101,30 +117,31 @@ public class HandPanel extends JPanel implements GameComponent {
 
   private class CardClickListener extends MouseAdapter {
     @Override
-    public void mouseClicked(MouseEvent e) {
-      if (!isInteractive) {
-        return; // Ignore clicks when interactivity is disabled
+    public void mouseReleased(MouseEvent e) {
+      if (!isInteractive || !player.equals(activePlayer)) {
+        return;
       }
 
-      if (!player.equals(activePlayer)) {
-        return; // Do nothing if this hand doesn't belong to the active player
-      }
+      int cardHeight = getHeight() / player.getPlayerHand().size();
+      int clickedIndex = e.getY() / cardHeight;
 
-      int clickedIndex = e.getY() / (getHeight() / player.getPlayerHand().size());
-      if (clickedIndex == selectedCardIndex) {
-        selectedCardIndex = -1;
-      } else {
-        selectedCardIndex = clickedIndex;
+      if (clickedIndex >= 0 && clickedIndex < player.getPlayerHand().size()) {
+        if (clickedIndex == selectedCardIndex) {
+          selectedCardIndex = -1;
+        } else {
+          selectedCardIndex = clickedIndex;
+        }
         if (eventListener != null) {
           eventListener.onCardSelected(selectedCardIndex, player);
         }
+        repaint();
       }
-      repaint();
     }
   }
 
+
   /**
-   * Refreshes the display of the component, forcing it to repaint itself based on the latest game state.
+   * Refreshes the display of the component based on the latest game state.
    */
   @Override
   public void refresh() {

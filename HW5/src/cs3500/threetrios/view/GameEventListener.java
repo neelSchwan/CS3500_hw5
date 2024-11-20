@@ -5,7 +5,7 @@ import cs3500.threetrios.model.GamePlayer;
 /**
  * Listener interface to handle events triggered in the view such as mouse clicks.
  * Enables the controller to respond to user actions like clicking on a card in the hand,
- * or on the grid.
+ * or on the grid. THIS IS THE PLAYER-ACTION LISTENER.
  */
 public interface GameEventListener {
   /**

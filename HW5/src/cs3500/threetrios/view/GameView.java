@@ -54,5 +54,12 @@ public interface GameView {
    */
   void setViewEnabled(boolean enabled);
 
+  /**
+   * Updates the active player to be set as the currentPlayer according to the gameModel.
+   * This is used to ensure that the current player is the ONLY one who can move while it is
+   * their turn.
+   *
+   * @param currentPlayer player to be set as the currentActivePlayer.
+   */
   void updateActivePlayer(GamePlayer currentPlayer);
 }

@@ -79,15 +79,4 @@ public class ThreeTriosGameView implements ThreeTriosView {
   public void display() throws IOException {
     render();
   }
-
-
-  @Override
-  public void refresh() {
-    //Not Used.
-  }
-
-  @Override
-  public void makeVisible() {
-    //Not Used.
-  }
 }

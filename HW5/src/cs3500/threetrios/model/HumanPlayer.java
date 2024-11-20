@@ -2,6 +2,10 @@ package cs3500.threetrios.model;
 
 import java.util.List;
 
+/**
+ * HumanPlayer class that represents a HumanPlayer.
+ * This player has a color and hand associated with it, and is used when declaring players
+ */
 public class HumanPlayer implements GamePlayer {
   private Player color;
   private List<Card> hand;

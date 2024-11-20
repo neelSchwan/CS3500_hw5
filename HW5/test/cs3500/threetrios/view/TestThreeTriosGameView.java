@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CardConfigReader;
@@ -14,7 +13,6 @@ import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.GridConfigReader;
 import cs3500.threetrios.model.HumanPlayerFactory;
-import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.PlayerFactory;
 import cs3500.threetrios.model.ThreeTriosModel;
 

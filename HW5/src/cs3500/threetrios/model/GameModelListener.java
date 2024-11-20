@@ -1,7 +1,8 @@
 package cs3500.threetrios.model;
 
 /**
- * Listener interface for model events such as turn changes.
+ * Listener interface for model events such as turn changes. THIS IS THE MODEL-STATUS INTERFACE.
+ * THIS IS USED BY THE CONTROLLER FOR LISTENING TO PLAYER ACTIONS.
  */
 public interface GameModelListener {
   /**

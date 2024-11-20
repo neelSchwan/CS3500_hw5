@@ -62,7 +62,6 @@ public class ThreeTriosController implements GameController, GameModelListener {
    * @param selectingPlayer the player selecting the card.
    */
   private void handleCardSelection(int cardIndex, GamePlayer selectingPlayer) {
-    // Prevent selecting cards from opponent's hand
     if (!player.equals(selectingPlayer)) {
       view.displayMessage("You cannot select cards from the opponent's hand.");
       return;
@@ -70,7 +69,7 @@ public class ThreeTriosController implements GameController, GameModelListener {
 
     if (!model.getCurrentPlayer().equals(selectingPlayer)) {
       view.displayMessage("You cannot select cards from the opponent's hand.");
-      return; // Ignore the event
+      return;
     }
 
     if (!isPlayerTurn) {
@@ -78,13 +77,11 @@ public class ThreeTriosController implements GameController, GameModelListener {
       return;
     }
 
-    // Validate the card index
     if (cardIndex < 0 || cardIndex >= player.getPlayerHand().size()) {
       view.displayMessage("Invalid card selection.");
       return;
     }
 
-    // Select the card
     selectedCard = player.getPlayerHand().get(cardIndex);
     view.displayMessage("Selected card: " + selectedCard);
   }
@@ -96,13 +93,12 @@ public class ThreeTriosController implements GameController, GameModelListener {
    * @param col the column index of the clicked cell.
    */
   private void handleCellClick(int row, int col) {
-    // Ensure the player has selected a card
     if (selectedCard == null) {
       view.displayMessage("Select a card before choosing a cell.");
       return;
     }
 
-    // Ensure it's the player's turn
+
     if (!isPlayerTurn) {
       view.displayMessage("It's not your turn.");
       return;

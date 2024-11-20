@@ -1,18 +1,33 @@
 package cs3500.threetrios.view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
 
 import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 
+/**
+ * The ThreeTriosGUIView class represents the main GUI component for the three-trios program.
+ * Essentially, this class combines all the panels (grid and hand) together and adds them into a
+ * "main" panel.
+ */
 public class ThreeTriosGUIView extends JFrame implements GameView {
   private final HandPanel redHandPanel;
   private final HandPanel blueHandPanel;
   private final GridPanel gridPanel;
   private final JLabel messageLabel;
 
+  /**
+   * Constructor for creating a GUI view given a model to determine the game state.
+   *
+   * @param model model for getting game state (grid, and players).
+   */
   public ThreeTriosGUIView(ReadonlyThreeTriosModel model) {
     setTitle("ThreeTrios Game");
     this.setSize(600, 400);

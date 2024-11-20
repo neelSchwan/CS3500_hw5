@@ -10,7 +10,7 @@ import java.util.List;
 public interface GamePlayer {
 
   /**
-   * Gets the next card the player wants to play
+   * Gets the next card the player wants to play.
    *
    * @param cardIndex index in the player's hand that they want to play.
    * @return the card the player has chosen to play.

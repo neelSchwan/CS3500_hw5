@@ -1,6 +1,11 @@
 package cs3500.threetrios.view;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.BasicStroke;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -12,6 +17,10 @@ import cs3500.threetrios.model.Direction;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.Player;
 
+/**
+ * Class representing the GridPanel. This class represents JUST the grid panel in the game-view.
+ * This allows for a separation of concerns between interacting with this, vs the hand-panel.
+ */
 public class GridPanel extends JPanel implements GameComponent {
 
   private final Grid grid;
@@ -19,6 +28,12 @@ public class GridPanel extends JPanel implements GameComponent {
   private Point selectedCell = null;
   private boolean isInteractive = true;
 
+  /**
+   * Constructor for creating a GridPanel given a grid object.
+   * This constructor also adds a mouse-listener to handle clicking on the grid.
+   *
+   * @param grid grid object to instantiate the panel on.
+   */
   public GridPanel(Grid grid) {
     this.grid = grid;
     this.addMouseListener(new CellClickListener());
@@ -63,12 +78,14 @@ public class GridPanel extends JPanel implements GameComponent {
     }
   }
 
-  private void drawCell(Graphics2D g2d, int row, int col, int cellWidth, int cellHeight, boolean isSelected) {
+  private void drawCell(Graphics2D g2d, int row, int col, int cellWidth,
+                        int cellHeight, boolean isSelected) {
     int x = col * cellWidth;
     int y = row * cellHeight;
 
     if (grid.getCell(row, col).isOccupied()) {
-      g2d.setColor(grid.getCell(row, col).getOwner().getColor() == Player.RED ? Color.RED : Color.BLUE);
+      g2d.setColor(grid.getCell(row, col).getOwner().getColor() == Player.RED
+              ? Color.RED : Color.BLUE);
       g2d.fillRect(x, y, cellWidth, cellHeight);
     } else if (grid.getCell(row, col).getCellType() == CellType.CARD_CELL) {
       g2d.setColor(Color.YELLOW);
@@ -87,10 +104,14 @@ public class GridPanel extends JPanel implements GameComponent {
       int centerX = x + cellWidth / 2;
       int centerY = y + cellHeight / 2;
 
-      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.NORTH)), centerX, y, 0, 10); // North
-      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.SOUTH)), centerX, y + cellHeight, 0, -10); // South
-      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.WEST)), x, centerY, 10, 0); // West
-      drawCellText(g2d, String.valueOf(card.getAttackValue(Direction.EAST)), x + cellWidth, centerY, -10, 0); // East
+      drawCellText(g2d, String.valueOf(
+              card.getAttackValue(Direction.NORTH)), centerX, y, 0, 10); // North
+      drawCellText(g2d, String.valueOf(
+              card.getAttackValue(Direction.SOUTH)), centerX, y + cellHeight, 0, -10); // South
+      drawCellText(g2d, String.valueOf(
+              card.getAttackValue(Direction.WEST)), x, centerY, 10, 0); // West
+      drawCellText(g2d, String.valueOf(
+              card.getAttackValue(Direction.EAST)), x + cellWidth, centerY, -10, 0); // East
     }
   }
 
@@ -98,7 +119,8 @@ public class GridPanel extends JPanel implements GameComponent {
   /**
    * Helper method to draw directional text on the grid cell.
    */
-  private void drawCellText(Graphics2D g2d, String text, int xCenter, int yCenter, int offsetX, int offsetY) {
+  private void drawCellText(Graphics2D g2d, String text,
+                            int xCenter, int yCenter, int offsetX, int offsetY) {
     FontMetrics metrics = g2d.getFontMetrics();
     int textWidth = metrics.stringWidth(text);
     int textHeight = metrics.getHeight();
@@ -134,10 +156,9 @@ public class GridPanel extends JPanel implements GameComponent {
 
   private class CellClickListener extends MouseAdapter {
     @Override
-    public void mouseClicked(MouseEvent e) {
-
+    public void mouseReleased(MouseEvent e) {
       if (!isInteractive) {
-        return; // Ignore clicks when interactivity is disabled
+        return;
       }
 
       int cellWidth = getWidth() / grid.getCols();
@@ -145,27 +166,28 @@ public class GridPanel extends JPanel implements GameComponent {
 
       int col = e.getX() / cellWidth;
       int row = e.getY() / cellHeight;
+
+      System.out.println("Clicked at row: " + row + ", col: " + col);
+
       if (row >= 0 && row < grid.getRows() && col >= 0 && col < grid.getCols()) {
         if (grid.getCell(row, col).getCellType() != CellType.HOLE_CELL) {
-          if (e.getClickCount() == 2) {
-            if (selectedCell != null && selectedCell.x == row && selectedCell.y == col) {
-              selectedCell = null;
-            }
+          if (selectedCell != null && selectedCell.x == row && selectedCell.y == col) {
+            selectedCell = null;
           } else {
             selectedCell = new Point(row, col);
-            if (eventListener != null) {
-              eventListener.onCellClicked(row, col);
-            }
           }
+          if (eventListener != null) {
+            eventListener.onCellClicked(row, col);
+          }
+          repaint();
         }
-        repaint();
       }
     }
   }
 
 
   /**
-   * Refreshes the display of the component, forcing it to repaint itself based on the latest game state.
+   * Refreshes the display of the component based on the latest game state.
    */
   @Override
   public void refresh() {

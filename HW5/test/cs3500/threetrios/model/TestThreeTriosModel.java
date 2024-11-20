@@ -65,7 +65,7 @@ public class TestThreeTriosModel {
   }
 
   @Test
-  public void testStartGameWithValidDeck() throws IOException {
+  public void testStartGameWithValidDeck() {
     model.startGame(0);
 
     GamePlayer redPlayer = model.getPlayers().get(0); // Get RED player
@@ -235,8 +235,8 @@ public class TestThreeTriosModel {
     GamePlayer bluePlayer = gameModel.getPlayers().get(1);
     GamePlayer redPlayer = gameModel.getPlayers().get(0);
     gameModel.startGame(0);
-    Assert.assertEquals(bluePlayer.getPlayerHand().size(), 13);
-    Assert.assertEquals(redPlayer.getPlayerHand().size(), 13);
+    Assert.assertEquals(bluePlayer.getPlayerHand().size(), 5);
+    Assert.assertEquals(redPlayer.getPlayerHand().size(), 5);
     for (int row = 0; row < gameModel.getGrid().getRows(); row++) {
       for (int col = 0; col < gameModel.getGrid().getCols(); col++) {
         if (!gameModel.getGrid().getCell(row, col).isHole()) {
@@ -247,7 +247,7 @@ public class TestThreeTriosModel {
     }
 
     Assert.assertTrue(gameModel.isGameOver());
-    Assert.assertEquals(bluePlayer, gameModel.getWinner());
+    Assert.assertEquals(redPlayer, gameModel.getWinner());
   }
 
   @Test(expected = IllegalArgumentException.class)

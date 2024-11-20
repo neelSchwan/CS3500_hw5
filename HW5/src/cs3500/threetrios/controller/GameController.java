@@ -1,8 +1,5 @@
 package cs3500.threetrios.controller;
 
-import cs3500.threetrios.model.GameModel;
-import cs3500.threetrios.model.GamePlayer;
-import cs3500.threetrios.view.GameView;
 
 /**
  * Interface for the game controller in Three Trios.

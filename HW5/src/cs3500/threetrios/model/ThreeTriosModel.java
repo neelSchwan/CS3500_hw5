@@ -25,9 +25,13 @@ public class ThreeTriosModel implements GameModel {
   private final List<GameModelListener> listeners = new ArrayList<>();
 
   /**
-   * @param grid
-   * @param playerFactory
-   * @param deck
+   * Constructor for creating a ThreeTriosModel. This constructor DOES NOT start the game.
+   * Instead, it creates, and initializes the grid, deck, and players.
+   *
+   * @param grid          grid object to initialize.
+   * @param playerFactory playerfactory for creating players
+   * @param deck          List of cards that has all possible cards that could be in the game.
+   *                      Generally, this is decided by a config file.
    */
   public ThreeTriosModel(Grid grid, PlayerFactory playerFactory, List<Card> deck) {
     if (grid == null || playerFactory == null || deck == null) {
@@ -78,7 +82,8 @@ public class ThreeTriosModel implements GameModel {
    *
    * @param gridFile the file containing the grid configuration.
    * @param cardFile the file containing the card configuration.
-   * @throws IllegalArgumentException if the configuration files are invalid or do not match expected formats.
+   * @throws IllegalArgumentException if the configuration files are
+   *                                  invalid or do not match expected formats.
    */
   @Override
   public void initializeGame(String gridFile, String cardFile) {
@@ -316,7 +321,7 @@ public class ThreeTriosModel implements GameModel {
    *
    * @param row the row index of the cell (0-indexed).
    * @param col the column index of the cell (0-indexed).
-   * @return the {@link Player} who owns the specified cell, or {@code null} if the cell has no owner.
+   * @return the GamePlayer who owns the specified cell.
    */
   @Override
   public GamePlayer getCellOwner(int row, int col) {
@@ -376,12 +381,12 @@ public class ThreeTriosModel implements GameModel {
     simulatedOwners.put(targetCell, currentPlayer);
     simulatedCards.put(targetCell, card);
 
-    return simulateBattlePhase(targetCell, card, simulatedOwners, simulatedCards);
+    return simulateBattlePhase(targetCell, simulatedOwners, simulatedCards);
   }
 
   // for each cell check adjacent and simualte battle
-  private int simulateBattlePhase(Cell startingCell, Card placedCard,
-                                  Map<Cell, GamePlayer> simulatedOwners, Map<Cell, Card> simulatedCards) {
+  private int simulateBattlePhase(Cell startingCell, Map<Cell, GamePlayer> simulatedOwners,
+                                  Map<Cell, Card> simulatedCards) {
     int flipCount = 0;
     Set<Cell> visitedCells = new HashSet<>();
     Queue<Cell> comboQueue = new LinkedList<>();

@@ -2,6 +2,10 @@ package cs3500.threetrios.strategy;
 
 import cs3500.threetrios.model.Card;
 
+/**
+ * Move class for containing a move.
+ * A move consists of a row, col, and Card to place. The row and col
+ */
 public class Move {
   private int row;
   private int col;

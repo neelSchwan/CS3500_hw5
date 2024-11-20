@@ -2,6 +2,10 @@ package cs3500.threetrios.model;
 
 import java.util.List;
 
+/**
+ * Class HumanPlayerFactory that is the concrete implementation of the PlayerFactory interface.
+ * This class allows for creation of players through
+ */
 public class HumanPlayerFactory implements PlayerFactory {
 
   /**
