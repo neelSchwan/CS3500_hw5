@@ -25,7 +25,8 @@ public class AIPlayer implements GamePlayer {
    * @param strategy the strategy the AI uses to play
    * @param model    the readonly game model for the AI to analyze
    */
-  public AIPlayer(Player color, List<Card> hand, ThreeTriosStrategy strategy, ReadonlyThreeTriosModel model) {
+  public AIPlayer(Player color, List<Card> hand, ThreeTriosStrategy strategy,
+                  ReadonlyThreeTriosModel model) {
     this.color = color;
     this.hand = new ArrayList<>(hand);
     this.strategy = strategy;

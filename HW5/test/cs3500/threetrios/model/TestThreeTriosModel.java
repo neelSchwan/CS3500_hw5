@@ -25,8 +25,6 @@ public class TestThreeTriosModel {
   private GameModel model;
   private List<Card> deck;
   private Grid grid;
-  private GamePlayer redPlayer;
-  private GamePlayer bluePlayer;
 
   /**
    * Initializes the test setup with a game model, deck of cards, grid, and player hands.
@@ -42,8 +40,8 @@ public class TestThreeTriosModel {
     grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
-    redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
-    bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
+    GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+    GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
     model = new ThreeTriosModel(grid, deck);
     model.addPlayer(redPlayer);

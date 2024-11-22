@@ -8,12 +8,6 @@ package cs3500.threetrios.controller;
 public interface GameController {
 
   /**
-   * Starts the game loop, initializing the controller and enabling player interaction.
-   */
-  void startGame();
-
-
-  /**
    * Updates the view to reflect the current game state.
    */
   void updateView();

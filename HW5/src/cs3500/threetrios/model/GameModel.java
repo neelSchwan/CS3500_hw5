@@ -14,6 +14,7 @@ public interface GameModel extends ReadonlyThreeTriosModel {
    * @param player player to add.
    */
   public void addPlayer(GamePlayer player);
+
   /**
    * Places a card in the grid at the specified row and column if the cell is a card-cell.
    *

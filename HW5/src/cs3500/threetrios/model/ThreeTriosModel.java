@@ -1,7 +1,6 @@
 package cs3500.threetrios.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,7 +64,6 @@ public class ThreeTriosModel implements GameModel {
    */
   @Override
   public void startGame(long seed) {
-
     validateGameStart();
     shuffleAndDealCards(seed);
     this.currentPlayer = players.get(0);
@@ -106,7 +104,7 @@ public class ThreeTriosModel implements GameModel {
    */
   @Override
   public void initializeGame(String gridFile, String cardFile) {
-
+    //TO DO
   }
 
   /**
@@ -290,8 +288,8 @@ public class ThreeTriosModel implements GameModel {
     int redScore = calculateScore(players.get(0));
     int blueScore = calculateScore(players.get(1));
 
-    if (redScore > blueScore) return players.get(0);
-    if (blueScore > redScore) return players.get(1);
+    if (redScore > blueScore) {return players.get(0);}
+    if (blueScore > redScore) {return players.get(1);}
     return null; // Tie
   }
 

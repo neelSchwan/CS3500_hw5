@@ -52,16 +52,16 @@ public class TestGameGrid {
   @Test
   public void testGetCellForOutOfBounds() {
     IllegalArgumentException exception1 = assertThrows(IllegalArgumentException.class,
-         () -> grid.getCell(-1, 0));
+        () -> grid.getCell(-1, 0));
     assertTrue(exception1.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception2 = assertThrows(IllegalArgumentException.class,
-         () -> grid.getCell(0, -1));
+        () -> grid.getCell(0, -1));
     assertTrue(exception2.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception3 = assertThrows(IllegalArgumentException.class,
-         () -> grid.getCell(10, 0));
+        () -> grid.getCell(10, 0));
     assertTrue(exception3.getMessage().contains("Invalid row or column"));
     IllegalArgumentException exception4 = assertThrows(IllegalArgumentException.class,
-         () -> grid.getCell(0, 10));
+        () -> grid.getCell(0, 10));
     assertTrue(exception4.getMessage().contains("Invalid row or column"));
   }
 

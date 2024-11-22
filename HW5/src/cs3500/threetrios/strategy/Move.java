@@ -12,6 +12,13 @@ public class Move {
   private Card card;
   private int score;
 
+  /**
+   * Constructs a move with the specified row, column, and card.
+   *
+   * @param row the row index where the card is to be placed
+   * @param col the column index where the card is to be placed
+   * @param card the card to place on the grid
+   */
   public Move(int row, int col, Card card) {
     this.row = row;
     this.col = col;
@@ -19,7 +26,14 @@ public class Move {
     this.score = 0;
   }
 
-  // Constructor with score
+  /**
+   * Constructs a move with the specified row, column, card, and score.
+   *
+   * @param row the row index where the card is to be placed
+   * @param col the column index where the card is to be placed
+   * @param card the card to place on the grid
+   * @param score the score associated with this move
+   */
   public Move(int row, int col, Card card, int score) {
     this.row = row;
     this.col = col;
@@ -48,6 +62,15 @@ public class Move {
     this.score = score;
   }
 
+  /**
+   * Determines if this move is better than another move.
+   * A move is considered better if it has a higher score. If the scores are equal, the move with
+   * the smaller row index is better. If both scores and row indices are equal, the move with the
+   * smaller column index is better.
+   *
+   * @param otherMove the other move to compare with
+   * @return {@code true} if this move is better than the other move; {@code false} otherwise
+   */
   public boolean isBetterThan(Move otherMove) {
     if (this.score > otherMove.score) {
       return true;

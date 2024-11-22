@@ -128,7 +128,7 @@ public class GridPanel extends JPanel implements GameComponent {
     int textX = xCenter + offsetX - textWidth / 2;
     int textY = yCenter + offsetY + textHeight / 4;
 
-    if(text.equals("10")) {
+    if (text.equals("10")) {
       g2d.drawString("A", textX, textY);
     } else {
       g2d.drawString(text, textX, textY);

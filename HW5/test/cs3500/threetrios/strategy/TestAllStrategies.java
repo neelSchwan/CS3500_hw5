@@ -1,18 +1,24 @@
 package cs3500.threetrios.strategy;
 
-import cs3500.threetrios.model.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.threetrios.model.Card;
+import cs3500.threetrios.model.GameCard;
+import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.model.Grid;
+import cs3500.threetrios.model.HumanPlayer;
+import cs3500.threetrios.model.MockThreeTriosGameModel;
+import cs3500.threetrios.model.Player;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class TestAllStrategies {
   private StringBuilder log;
-  private List<Card> playerHand;
   private GamePlayer mockPlayer;
   private Grid testGrid;
   private MockThreeTriosGameModel mockModel;
@@ -21,7 +27,7 @@ public class TestAllStrategies {
   public void setup() {
     log = new StringBuilder();
 
-    playerHand = new ArrayList<>();
+    List<Card> playerHand = new ArrayList<>();
     playerHand.add(new GameCard("StrongCard", 9, 9, 9, 9));
     playerHand.add(new GameCard("WeakCard", 1, 1, 1, 1));
 

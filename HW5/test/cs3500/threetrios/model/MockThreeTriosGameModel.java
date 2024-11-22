@@ -149,5 +149,4 @@ public class MockThreeTriosGameModel implements GameModel {
   public void addGameModelListener(GameModelListener listener) {
     log.append("Adding game model listener\n");
   }
-
 }

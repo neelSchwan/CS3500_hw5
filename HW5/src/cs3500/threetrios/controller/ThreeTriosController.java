@@ -63,15 +63,6 @@ public class ThreeTriosController implements GameController, GameModelListener {
   }
 
   /**
-   * Starts the game loop for this controller.
-   * Makes the view visible and updates the initial game state.
-   */
-  @Override
-  public void startGame() {
-
-  }
-
-  /**
    * Handles card selection from the player's hand.
    *
    * @param cardIndex       the index of the selected card.

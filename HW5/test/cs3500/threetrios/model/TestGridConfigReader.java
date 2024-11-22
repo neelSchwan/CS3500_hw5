@@ -38,7 +38,7 @@ public class TestGridConfigReader {
   @Test
   public void testReadingCardDbWhenFileDoesntExist() {
     RuntimeException exception = assertThrows(RuntimeException.class,
-         () -> gridConfigReader.readGridFromFile("src" + File.separator
+        () -> gridConfigReader.readGridFromFile("src" + File.separator
                     + "resources" + File.separator + "GridDb2.txt"));
     assertTrue(exception.getMessage().contains("Issue when reading file: "));
   }
@@ -46,7 +46,7 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridWhenFileIsEmpty() {
     IllegalStateException exception = assertThrows(IllegalStateException.class,
-         () -> gridConfigReader.readGridFromFile("HW5" + File.separator
+        () -> gridConfigReader.readGridFromFile("HW5" + File.separator
                     + "src" + File.separator + "resources" + File.separator + "EmptyGridDb.txt"));
     assertTrue(exception.getMessage().contains("File must have some valid data."));
   }
@@ -54,21 +54,21 @@ public class TestGridConfigReader {
   @Test
   public void testReadingGridWhenFilenameIsEmpty() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-         () -> gridConfigReader.readGridFromFile(""));
+        () -> gridConfigReader.readGridFromFile(""));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty"));
   }
 
   @Test
   public void testReadingGridFromFileWhenFilenameIsNull() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-         () -> gridConfigReader.readGridFromFile(null));
+        () -> gridConfigReader.readGridFromFile(null));
     assertTrue(exception.getMessage().contains("File name cannot be null or empty"));
   }
 
   @Test
   public void testReadingGridWhenFilenameIsBlank() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-         () -> gridConfigReader.readGridFromFile("  "));
+        () -> gridConfigReader.readGridFromFile("  "));
     assertTrue(exception.getMessage().contains("File name cannot be blank"));
   }
 

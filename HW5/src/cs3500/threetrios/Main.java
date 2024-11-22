@@ -20,8 +20,21 @@ import cs3500.threetrios.strategy.ThreeTriosStrategy;
 import cs3500.threetrios.view.GameView;
 import cs3500.threetrios.view.ThreeTriosGUIView;
 
+/**
+ * Run a Three Trios game interactively.
+ * Initializes the game by reading configurations, creating players, and setting up
+ * the game model, view, and controller. It then starts the game.
+ * Players are instantiated as either human or AI-controlled, and are added to the game model.
+ * The game uses a graphical user interface implemented in {@link ThreeTriosGUIView} to interact
+ * with players, and AI-controlled players follow a specified strategy.
+ */
 public class Main {
 
+  /**
+   * The main method initializes and starts the Three Trios game.
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
     CardConfigReader cardReader = new CardConfigReader();
     GridConfigReader gridReader = new GridConfigReader();
