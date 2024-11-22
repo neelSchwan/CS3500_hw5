@@ -10,7 +10,7 @@ public class HumanPlayer implements GamePlayer {
   private Player color;
   private List<Card> hand;
 
-  HumanPlayer(Player color, List<Card> hand) {
+  public HumanPlayer(Player color, List<Card> hand) {
     this.color = color;
     this.hand = hand;
   }

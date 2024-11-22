@@ -41,43 +41,41 @@ public class CornerStrategy implements ThreeTriosStrategy {
     int rows = model.getGrid().getRows();
     int cols = model.getGrid().getCols();
 
-    // Define corners
     List<int[]> corners = new ArrayList<>();
     corners.add(new int[]{0, 0});
     corners.add(new int[]{0, cols - 1});
     corners.add(new int[]{rows - 1, 0});
     corners.add(new int[]{rows - 1, cols - 1});
 
-    // Try each corner if valid
+    Move bestMove = null;
+    int bestScore = -1;
+
     for (int[] corner : corners) {
       int cornerRow = corner[0];
       int cornerCol = corner[1];
       if (model.isValidMove(cornerRow, cornerCol)) {
-
-        Move bestCardMove = null;
-        int bestCardScore = -1;
-
         for (Card card : currentPlayer.getPlayerHand()) {
           int measure = measureCornerCard(card, cornerRow, cornerCol, rows, cols);
-          if (measure > bestCardScore) {
-            bestCardScore = measure;
-            bestCardMove = new Move(cornerRow, cornerCol, card, measure);
-          } else if (measure == bestCardScore && bestCardMove != null) {
+          if (measure > bestScore) {
+            bestScore = measure;
+            bestMove = new Move(cornerRow, cornerCol, card, measure);
+          } else if (measure == bestScore && bestMove != null) {
             Move currentMove = new Move(cornerRow, cornerCol, card, measure);
-            if (currentMove.isBetterThan(bestCardMove)) {
-              bestCardMove = currentMove;
+            if (currentMove.isBetterThan(bestMove)) {
+              bestMove = currentMove;
             }
           }
-        }
-
-        if (bestCardMove != null) {
-          return bestCardMove;
         }
       }
     }
 
+    if (bestMove != null) {
+      return bestMove;
+    }
+
     return fallbackStrategy.chooseMove(model);
   }
+
 
   /**
    * Measures how stable a card is if placed in a corner cell by summing

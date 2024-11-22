@@ -1,19 +1,23 @@
 package cs3500.threetrios;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cs3500.threetrios.controller.GameController;
 import cs3500.threetrios.controller.ThreeTriosController;
+import cs3500.threetrios.model.AIPlayer;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CardConfigReader;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.GridConfigReader;
-import cs3500.threetrios.model.HumanPlayerFactory;
-import cs3500.threetrios.model.PlayerFactory;
+import cs3500.threetrios.model.HumanPlayer;
+import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
+import cs3500.threetrios.strategy.FlipMostStrategy;
+import cs3500.threetrios.strategy.ThreeTriosStrategy;
 import cs3500.threetrios.view.GameView;
 import cs3500.threetrios.view.ThreeTriosGUIView;
 
@@ -29,57 +33,32 @@ public class Main {
    * @throws IOException if there is an error reading from the configuration files.
    */
   public static void main(String[] args) throws IOException {
-    // Load configuration files
-    CardConfigReader cardConfigReader = new CardConfigReader();
-    GridConfigReader gridConfigReader = new GridConfigReader();
+    CardConfigReader cardReader = new CardConfigReader();
+    GridConfigReader gridReader = new GridConfigReader();
+    List<Card> deck = cardReader.readCards("HW5/src/resources/CardDb.txt");
+    Grid grid = gridReader.readGridFromFile("HW5/src/resources/EasyTestingGridDb.txt");
 
-    List<Card> deck = cardConfigReader.readCards("HW5/src/resources/CardDb.txt");
-    Grid grid = gridConfigReader.readGridFromFile("HW5/src/resources/EasyTestingGridDb.txt");
+    // Create players
+    GamePlayer humanPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+    ThreeTriosStrategy aiStrategy = new FlipMostStrategy();
+    GamePlayer humanPlayer2 = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    PlayerFactory playerFactory = new HumanPlayerFactory();
-    GameModel model = new ThreeTriosModel(grid, playerFactory, deck);
+    // Create model
+    GameModel model = new ThreeTriosModel(grid, humanPlayer, humanPlayer2, deck);
 
-    GamePlayer redPlayer = model.getPlayers().get(0);
-    GamePlayer bluePlayer = model.getPlayers().get(1);
+    // Create views
+    GameView humanView = new ThreeTriosGUIView(model);
+    GameView aiView = new ThreeTriosGUIView(model);
 
-    // Initialize views for each player
-    GameView redView = new ThreeTriosGUIView(model);
-    GameView blueView = new ThreeTriosGUIView(model);
+    // Create controllers
+    GameController humanController = new ThreeTriosController(model, humanView, humanPlayer);
+    GameController aiController = new ThreeTriosController(model, aiView, humanPlayer2);
 
-    // Initialize controllers for each player
-    GameController redController = new ThreeTriosController(model, redView, redPlayer);
-    GameController blueController = new ThreeTriosController(model, blueView, bluePlayer);
-
+    // Start the game
     model.startGame(0);
-
-    redController.startGame();
-    blueController.startGame();
-    redView.makeVisible();
-    blueView.makeVisible();
+    humanController.startGame();
+    aiController.startGame();
+    humanView.makeVisible();
+    aiView.makeVisible();
   }
 }
-//  /**
-//   * Set up the game board by placing initial cards on the grid.
-//   *
-//   * @param model the game model to manage the game state.
-//   * @param controller the game controller to handle game logic and view interactions.
-//   */
-//  private static void setupGame(GameModel model, GameController controller) {
-//    int totalRows = model.getGrid().getRows();
-//    int totalCols = model.getGrid().getCols();
-//
-//    for (int row = 0; row < totalRows; row++) {
-//      for (int col = 0; col < totalCols; col++) {
-//        if (model.getPlayers().get(0).getPlayerHand().size() == 3
-//                && model.getPlayers().get(1).getPlayerHand().size() == 3) {
-//          return;
-//        }
-//
-//        if (!model.getGrid().getCell(row, col).isHole()
-//                && !model.getCurrentPlayer().getPlayerHand().isEmpty()) {
-//          controller.handlePlaceCard(row, col, model.getCurrentPlayer().getPlayerHand().get(0));
-//        }
-//      }
-//    }
-//  }
-//}

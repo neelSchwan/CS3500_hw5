@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cs3500.threetrios.view.ThreeTriosGameView;
@@ -33,9 +34,10 @@ public class AdditionalThreeTriosModelTests {
     grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
-    PlayerFactory playerFactory = new HumanPlayerFactory();
+    GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+    GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    model = new ThreeTriosModel(grid, playerFactory, deck);
+    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
     model.startGame(0);
   }
 
@@ -271,11 +273,12 @@ public class AdditionalThreeTriosModelTests {
     Grid newGrid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src"
             + File.separator + "resources" + File.separator + "GridDb.txt");
 
-    PlayerFactory newPlayerFactory = new HumanPlayerFactory();
+    GamePlayer newRedPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+    GamePlayer newBluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    GameModel newModel = new ThreeTriosModel(newGrid, newPlayerFactory, newDeck);
+    GameModel newModel = new ThreeTriosModel(newGrid, newRedPlayer,
+            newBluePlayer, newDeck);
 
-    // Attempt to place a card without starting the game
     GamePlayer currentPlayer = newModel.getCurrentPlayer();
     Card cardToPlace = new GameCard("232", 1, 2, 3, 4); // Any card
     newModel.placeCard(0, 0, cardToPlace);

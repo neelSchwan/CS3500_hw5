@@ -5,15 +5,17 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CardConfigReader;
 import cs3500.threetrios.model.GameModel;
+import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.GridConfigReader;
-import cs3500.threetrios.model.HumanPlayerFactory;
-import cs3500.threetrios.model.PlayerFactory;
+import cs3500.threetrios.model.HumanPlayer;
+import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
 
 import static org.junit.Assert.assertEquals;
@@ -41,9 +43,10 @@ public class TestThreeTriosGameView {
     Grid grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
             + "resources" + File.separator + "GridDb.txt");
 
-    PlayerFactory playerFactory = new HumanPlayerFactory();
+    GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+    GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    model = new ThreeTriosModel(grid, playerFactory, deck);
+    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
   }
 
   @Test
