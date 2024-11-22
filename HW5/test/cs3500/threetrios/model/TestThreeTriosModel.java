@@ -12,6 +12,8 @@ import java.util.List;
 import cs3500.threetrios.view.ThreeTriosGameView;
 import cs3500.threetrios.view.ThreeTriosView;
 
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * Test class for the ThreeTriosModel class.
@@ -105,6 +107,7 @@ public class TestThreeTriosModel {
   @Test(expected = IllegalStateException.class)
   public void testStartGameWithInvalidDeck() {
     deck.clear(); // invalid deck.
+    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
     model.startGame(0); // throws exception
   }
 
@@ -122,7 +125,7 @@ public class TestThreeTriosModel {
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
-    Assert.assertTrue(exception.toString().contains("Not enough cards to start the game."));
+    assertTrue(exception.toString().contains("Not enough cards to start the game."));
   }
 
   @Test
@@ -139,7 +142,7 @@ public class TestThreeTriosModel {
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
-    Assert.assertTrue(exception.toString().contains("Grid must have an odd number of card cells."));
+    assertTrue(exception.toString().contains("Grid must have an odd number of card cells."));
   }
 
   @Test
@@ -180,7 +183,7 @@ public class TestThreeTriosModel {
         }
       }
     }
-    Assert.assertTrue(model.isGameOver());
+    assertTrue(model.isGameOver());
   }
 
   @Test
@@ -221,7 +224,7 @@ public class TestThreeTriosModel {
         }
       }
     }
-    Assert.assertTrue(model.isGameOver());
+    assertTrue(model.isGameOver());
     Assert.assertNull(model.getWinner()); // since we said that tie = null.
   }
 
@@ -258,7 +261,7 @@ public class TestThreeTriosModel {
       }
     }
 
-    Assert.assertTrue(gameModel.isGameOver());
+    assertTrue(gameModel.isGameOver());
     Assert.assertEquals(bluePlayer, gameModel.getWinner());
   }
 
