@@ -46,7 +46,9 @@ public class TestThreeTriosGameView {
     GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    model = new ThreeTriosModel(grid, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
   }
 
   @Test

@@ -37,7 +37,10 @@ public class AdditionalThreeTriosModelTests {
     GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    model = new ThreeTriosModel(grid, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
+
     model.startGame(0);
   }
 
@@ -276,8 +279,9 @@ public class AdditionalThreeTriosModelTests {
     GamePlayer newRedPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer newBluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    GameModel newModel = new ThreeTriosModel(newGrid, newRedPlayer,
-            newBluePlayer, newDeck);
+    GameModel newModel = new ThreeTriosModel(newGrid, newDeck);
+    newModel.addPlayer(newRedPlayer);
+    newModel.addPlayer(newBluePlayer);
 
     GamePlayer currentPlayer = newModel.getCurrentPlayer();
     Card cardToPlace = new GameCard("232", 1, 2, 3, 4); // Any card

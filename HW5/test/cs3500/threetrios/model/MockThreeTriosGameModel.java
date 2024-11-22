@@ -87,6 +87,16 @@ public class MockThreeTriosGameModel implements GameModel {
   }
 
   /**
+   * Adds a player to the final list of players, the first player will be the RED, and second BLUE.
+   *
+   * @param player player to add.
+   */
+  @Override
+  public void addPlayer(GamePlayer player) {
+    log.append(String.format("Adding player %s%n", player.getColor()));
+  }
+
+  /**
    * Places a card in the grid at the specified row and column if the cell is a card-cell.
    *
    * @param row  the row index of the cell (0-indexed).

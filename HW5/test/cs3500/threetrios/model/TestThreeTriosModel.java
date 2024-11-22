@@ -45,33 +45,25 @@ public class TestThreeTriosModel {
     redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
-    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    model = new ThreeTriosModel(grid, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
   }
 
   @Test
   public void testValidConstructor() {
-    GameModel model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    GameModel model = new ThreeTriosModel(grid, deck);
     Assert.assertNotNull("Model should not be null", model);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullGrid() {
-    new ThreeTriosModel(null, redPlayer, bluePlayer, deck);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidConstructorNullRedPlayer() {
-    new ThreeTriosModel(grid, null, bluePlayer, deck);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidConstructorNullBluePlayer() {
-    new ThreeTriosModel(grid, redPlayer, null, deck);
+    new ThreeTriosModel(null, deck);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidConstructorNullDeck() {
-    new ThreeTriosModel(grid, redPlayer, bluePlayer, null);
+    new ThreeTriosModel(grid, null);
   }
 
   @Test
@@ -107,7 +99,7 @@ public class TestThreeTriosModel {
   @Test(expected = IllegalStateException.class)
   public void testStartGameWithInvalidDeck() {
     deck.clear(); // invalid deck.
-    model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    model = new ThreeTriosModel(grid, deck);
     model.startGame(0); // throws exception
   }
 
@@ -121,7 +113,9 @@ public class TestThreeTriosModel {
                     + File.separator + "GridWithCellConnections.txt"); // 19 card cell
     GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    GameModel model = new ThreeTriosModel(grid, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
@@ -138,7 +132,9 @@ public class TestThreeTriosModel {
                     + File.separator + "GridWithEvenCellNum.txt");
     GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
-    GameModel model = new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    GameModel model = new ThreeTriosModel(grid, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
     IllegalStateException exception = Assert.assertThrows(IllegalStateException.class, () -> {
       model.startGame(0);
     });
@@ -229,6 +225,7 @@ public class TestThreeTriosModel {
   }
 
   private GameModel createModelForEasyTesting() {
+
     CardConfigReader cardConfigReader = new CardConfigReader();
     GridConfigReader gridConfigReader = new GridConfigReader();
 
@@ -237,10 +234,16 @@ public class TestThreeTriosModel {
     Grid grid = gridConfigReader.readGridFromFile("HW5" + File.separator + "src"
             + File.separator + "resources" + File.separator + "GridWithCellConnections.txt");
 
+    ThreeTriosModel model = new ThreeTriosModel(grid, deck);
+
     GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
     GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
-    return new ThreeTriosModel(grid, redPlayer, bluePlayer, deck);
+    model.addPlayer(redPlayer);
+    model.addPlayer(bluePlayer);
+
+    return model;
   }
+
 
   @Test
   public void testWinningLogicWorks() { //TODO: FIX THIS, CURRENTLY OUTPUTS A TIE, WHICH IS TRUE

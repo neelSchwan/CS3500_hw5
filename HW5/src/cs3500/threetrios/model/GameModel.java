@@ -7,6 +7,13 @@ package cs3500.threetrios.model;
  */
 public interface GameModel extends ReadonlyThreeTriosModel {
 
+
+  /**
+   * Adds a player to the final list of players, the first player will be the RED, and second BLUE.
+   *
+   * @param player player to add.
+   */
+  public void addPlayer(GamePlayer player);
   /**
    * Places a card in the grid at the specified row and column if the cell is a card-cell.
    *

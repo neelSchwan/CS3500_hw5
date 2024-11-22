@@ -1,56 +1,75 @@
 package cs3500.threetrios.model;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cs3500.threetrios.strategy.Move;
 import cs3500.threetrios.strategy.ThreeTriosStrategy;
 import cs3500.threetrios.view.GameEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Represents an AI player that emits events based on its strategy.
+ */
 public class AIPlayer implements GamePlayer {
   private final Player color;
   private final List<Card> hand;
   private final ThreeTriosStrategy strategy;
-  private final GameModel gameModel;
+  private final ReadonlyThreeTriosModel model;
   private GameEventListener eventListener;
-  private Move currentMove;
 
-  public AIPlayer(Player color, List<Card> hand, ThreeTriosStrategy strategy, GameModel gameModel) {
+  /**
+   * Constructs an AIPlayer with a color, initial hand, strategy, and model.
+   *
+   * @param color    the player's color
+   * @param hand     the initial hand of cards
+   * @param strategy the strategy the AI uses to play
+   * @param model    the readonly game model for the AI to analyze
+   */
+  public AIPlayer(Player color, List<Card> hand, ThreeTriosStrategy strategy, ReadonlyThreeTriosModel model) {
     this.color = color;
     this.hand = new ArrayList<>(hand);
     this.strategy = strategy;
-    this.gameModel = gameModel;
+    this.model = model;
   }
 
+  /**
+   * Sets the event listener to emit player actions.
+   *
+   * @param listener the listener to set
+   */
   public void setEventListener(GameEventListener listener) {
     this.eventListener = listener;
   }
 
-  private void makeMove() {
+  /**
+   * Makes a move using the strategy and emits the corresponding events.
+   */
+  public void playTurn() {
     if (eventListener == null) {
-      return;
+      throw new IllegalStateException("Event listener is not set for AIPlayer.");
     }
-    currentMove = strategy.chooseMove(gameModel);
-    int cardIndex = hand.indexOf(currentMove.getCard());
+
+    // Use the strategy to compute the next move
+    Move move = strategy.chooseMove((GameModel) model);
+
+    // Emit events for card selection and cell placement
+    int cardIndex = hand.indexOf(move.getCard());
+    if (cardIndex == -1) {
+      throw new IllegalStateException("Card chosen by strategy is not in the AI's hand.");
+    }
+
     eventListener.onCardSelected(cardIndex, this);
-    eventListener.onCellClicked(currentMove.getRow(), currentMove.getCol());
+    eventListener.onCellClicked(move.getRow(), move.getCol());
   }
 
   @Override
   public Card chooseCard(int cardIndex) {
-    if (currentMove == null) {
-      makeMove();
-    }
-    return currentMove.getCard();
+    return hand.get(cardIndex);
   }
 
   @Override
   public int[] choosePosition(int row, int col) {
-    if (currentMove == null) {
-      makeMove();
-    }
-    return new int[]{currentMove.getRow(), currentMove.getCol()};
+    return new int[]{row, col};
   }
 
   @Override
@@ -65,7 +84,7 @@ public class AIPlayer implements GamePlayer {
 
   @Override
   public void setColor(Player color) {
-    throw new UnsupportedOperationException("Cannot change AI player color");
+    throw new UnsupportedOperationException("AIPlayer color cannot be changed.");
   }
 
   @Override
@@ -76,6 +95,5 @@ public class AIPlayer implements GamePlayer {
   @Override
   public void removeCardFromHand(Card card) {
     hand.remove(card);
-    currentMove = null;
   }
 }

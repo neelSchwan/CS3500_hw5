@@ -18,8 +18,7 @@ import java.util.Set;
  */
 public class ThreeTriosModel implements GameModel {
   private final Grid grid;
-  private final GamePlayer redPlayer;
-  private final GamePlayer bluePlayer;
+  private final List<GamePlayer> players;
   private GamePlayer currentPlayer;
   private final List<Card> deck;
   private boolean isGameStarted;
@@ -29,24 +28,33 @@ public class ThreeTriosModel implements GameModel {
    * Constructor for creating a ThreeTriosModel. This constructor DOES NOT start the game.
    * Instead, it creates, and initializes the grid, deck, and players.
    *
-   * @param grid       grid object to initialize.
-   * @param redPlayer  redPlayer that represents the red player.
-   * @param bluePlayer bluePlayer that represents the blue player.
-   * @param deck       List of cards that has all possible cards that could be in the game.
-   *                   Generally, this is decided by a config file.
+   * @param grid grid object to initialize.
+   * @param deck List of cards that has all possible cards that could be in the game.
+   *             Generally, this is decided by a config file.
    */
-  public ThreeTriosModel(Grid grid, GamePlayer redPlayer, GamePlayer bluePlayer, List<Card> deck) {
-    if (grid == null || redPlayer == null || bluePlayer == null || deck == null) {
+  public ThreeTriosModel(Grid grid, List<Card> deck) {
+    if (grid == null || deck == null) {
       throw new IllegalArgumentException("Arguments cannot be null");
     }
 
     this.grid = grid;
     this.deck = new ArrayList<>(deck);
-    this.redPlayer = redPlayer;
-    this.bluePlayer = bluePlayer;
     this.listeners = new ArrayList<>();
     this.isGameStarted = false;
+    this.players = new ArrayList<>();
     grid.setupAdjacentCells();
+  }
+
+  /**
+   * Adds a player to the final list of players, the first player will be the RED, and second BLUE.
+   *
+   * @param player player to add.
+   */
+  public void addPlayer(GamePlayer player) {
+    if (players.size() >= 2) {
+      throw new IllegalStateException("Only two players are allowed.");
+    }
+    players.add(player);
   }
 
   /**
@@ -60,12 +68,16 @@ public class ThreeTriosModel implements GameModel {
 
     validateGameStart();
     shuffleAndDealCards(seed);
-    this.currentPlayer = redPlayer;
+    this.currentPlayer = players.get(0);
     this.isGameStarted = true;
     notifyTurnChanged();
   }
 
   private void validateGameStart() {
+    if (players.size() != 2) {
+      throw new IllegalStateException("The game requires exactly two players.");
+    }
+
     int cardCells = grid.calculateCardCells();
     if (cardCells % 2 == 0) {
       throw new IllegalStateException("Grid must have an odd number of card cells.");
@@ -104,8 +116,8 @@ public class ThreeTriosModel implements GameModel {
    */
   private void dealCards(int cardsPerPlayer) {
     for (int i = 0; i < cardsPerPlayer; i++) {
-      redPlayer.addCardToHand(deck.remove(0));
-      bluePlayer.addCardToHand(deck.remove(0));
+      players.get(0).addCardToHand(deck.remove(0));
+      players.get(1).addCardToHand(deck.remove(0));
     }
   }
 
@@ -135,10 +147,10 @@ public class ThreeTriosModel implements GameModel {
     if (currentPlayer == null) {
       throw new IllegalArgumentException("Current player cannot be null");
     }
-    if (currentPlayer == redPlayer) {
-      currentPlayer = bluePlayer;
+    if (currentPlayer == players.get(0)) {
+      currentPlayer = players.get(1);
     } else {
-      currentPlayer = redPlayer;
+      currentPlayer = players.get(0);
     }
     notifyTurnChanged();
   }
@@ -275,11 +287,11 @@ public class ThreeTriosModel implements GameModel {
    */
   @Override
   public GamePlayer getWinner() {
-    int redScore = calculateScore(redPlayer);
-    int blueScore = calculateScore(bluePlayer);
+    int redScore = calculateScore(players.get(0));
+    int blueScore = calculateScore(players.get(1));
 
-    if (redScore > blueScore) return redPlayer;
-    if (blueScore > redScore) return bluePlayer;
+    if (redScore > blueScore) return players.get(0);
+    if (blueScore > redScore) return players.get(1);
     return null; // Tie
   }
 
@@ -298,7 +310,7 @@ public class ThreeTriosModel implements GameModel {
 
   @Override
   public List<GamePlayer> getPlayers() {
-    return Arrays.asList(redPlayer, bluePlayer);
+    return new ArrayList<>(players);
   }
 
   /**

@@ -1,5 +1,6 @@
 package cs3500.threetrios.controller;
 
+import cs3500.threetrios.model.AIPlayer;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GameModelListener;
 import cs3500.threetrios.model.GamePlayer;
@@ -164,6 +165,11 @@ public class ThreeTriosController implements GameController, GameModelListener {
     view.setViewEnabled(isPlayerTurn);
     view.updateActivePlayer(currentPlayer);
     updateView();
+
+    if (isPlayerTurn && player != null) {
+      ((AIPlayer) player).playTurn(); // Trigger AI move
+    }
+
   }
 
   /**

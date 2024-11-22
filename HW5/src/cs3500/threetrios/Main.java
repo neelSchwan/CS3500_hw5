@@ -44,8 +44,10 @@ public class Main {
     GamePlayer humanPlayer2 = new HumanPlayer(Player.BLUE, new ArrayList<>());
 
     // Create model
-    GameModel model = new ThreeTriosModel(grid, humanPlayer, humanPlayer2, deck);
+    GameModel model = new ThreeTriosModel(grid, deck);
 
+    model.addPlayer(humanPlayer);
+    model.addPlayer(humanPlayer2);
     // Create views
     GameView humanView = new ThreeTriosGUIView(model);
     GameView aiView = new ThreeTriosGUIView(model);
