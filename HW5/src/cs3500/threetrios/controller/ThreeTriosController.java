@@ -44,6 +44,22 @@ public class ThreeTriosController implements GameController, GameModelListener {
         handleCellClick(row, col);
       }
     });
+
+    if (player instanceof AIPlayer) {
+      ((AIPlayer) player).setEventListener(new GameEventListener() {
+        @Override
+        public void onCardSelected(int cardIndex, GamePlayer selectingPlayer) {
+          handleCardSelection(cardIndex, selectingPlayer);
+        }
+
+        @Override
+        public void onCellClicked(int row, int col) {
+          handleCellClick(row, col);
+        }
+      });
+    }
+    view.makeVisible();
+    updateView();
   }
 
   /**
@@ -52,8 +68,7 @@ public class ThreeTriosController implements GameController, GameModelListener {
    */
   @Override
   public void startGame() {
-    view.makeVisible();
-    updateView();
+
   }
 
   /**
@@ -166,10 +181,9 @@ public class ThreeTriosController implements GameController, GameModelListener {
     view.updateActivePlayer(currentPlayer);
     updateView();
 
-    if (isPlayerTurn && player != null) {
-      ((AIPlayer) player).playTurn(); // Trigger AI move
+    if (isPlayerTurn && player instanceof AIPlayer) {
+      ((AIPlayer) player).playTurn();
     }
-
   }
 
   /**

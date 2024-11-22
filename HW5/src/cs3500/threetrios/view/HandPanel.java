@@ -112,7 +112,11 @@ public class HandPanel extends JPanel implements GameComponent {
 
     int textX = xCenter + offsetX - textWidth / 2;
     int textY = yCenter + offsetY + textHeight / 4;
-    g2d.drawString(text, textX, textY);
+    if (text.equals("10")) {
+      g2d.drawString("A", textX, textY);
+    } else {
+      g2d.drawString(text, textX, textY);
+    }
   }
 
   private class CardClickListener extends MouseAdapter {
