@@ -61,4 +61,33 @@
 * Card Config Reader
     * read config file and return as a list of cards.
 * Grid Config Reader
-  * read config file and return as Grid object
+    * read config file and return as Grid object
+
+## Changes for Part 3
+
+### **Major Design Changes**
+* We removed the PlayerFactory class, as it was completely redundant.
+* Now players are added to the model through the 'addPlayer' method,
+after being instantiated by their respective constructors.
+
+* We changed some things in the ThreeTriosModel such that the model
+validates that only two players can be in the model.
+* The addGameModelListener method was also added so the controller can
+'listen' to the changes of the game state.
+
+* We added our AI Player implementation, which uses the strategies and the
+state of the game provided by the 'readOnlyThreeTriosModel' to make moves.
+
+* We added mocks for both the view and the model for better testing.
+- Mock classes (MockThreeTriosGameModel and MockGameView) enable
+  testing even if our model maybe had some bugs.
+- Comprehensive tests were added for:
+    - Strategies (e.g., CornerStrategy, FlipMostStrategy).
+    - Controllers using mocks to simulate model and view interactions.
+
+## RUNNING THE MAIN
+* Command Line usage:
+  * <player1> <player2>
+  * example1: human human (HUMAN VS HUMAN)
+  * human ai:corner (HUMAN VS AI) WITH CORNER STRATEGY
+  * ai:corner ai:flipmost (Ai VS Ai)

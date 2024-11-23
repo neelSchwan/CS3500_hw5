@@ -13,20 +13,6 @@ public class Move {
   private int score;
 
   /**
-   * Constructs a move with the specified row, column, and card.
-   *
-   * @param row the row index where the card is to be placed
-   * @param col the column index where the card is to be placed
-   * @param card the card to place on the grid
-   */
-  public Move(int row, int col, Card card) {
-    this.row = row;
-    this.col = col;
-    this.card = card;
-    this.score = 0;
-  }
-
-  /**
    * Constructs a move with the specified row, column, card, and score.
    *
    * @param row the row index where the card is to be placed
@@ -41,7 +27,6 @@ public class Move {
     this.score = score;
   }
 
-  // Getters
   public int getRow() {
     return row;
   }

@@ -3,13 +3,20 @@ package cs3500.threetrios.model;
 import java.util.List;
 
 /**
- * HumanPlayer class that represents a HumanPlayer.
+ * HumanPlayer class that represents a human who's playing the three-trios game.
  * This player has a color and hand associated with it, and is used when declaring players
  */
 public class HumanPlayer implements GamePlayer {
   private Player color;
-  private List<Card> hand;
+  private final List<Card> hand;
 
+  /**
+   * Constructor for creating a human player.
+   * This player allows for humans to interact with the GUI when passed into the controller.
+   *
+   * @param color which player this color is, (RED OR BLUE).
+   * @param hand  the initial hand this player starts with.
+   */
   public HumanPlayer(Player color, List<Card> hand) {
     this.color = color;
     this.hand = hand;

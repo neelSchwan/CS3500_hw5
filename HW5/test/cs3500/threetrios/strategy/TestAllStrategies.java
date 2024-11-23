@@ -17,12 +17,18 @@ import cs3500.threetrios.model.Player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Test for testing all strategies (CORNER AND MAX FLIPPED).
+ */
 public class TestAllStrategies {
   private StringBuilder log;
   private GamePlayer mockPlayer;
   private Grid testGrid;
   private MockThreeTriosGameModel mockModel;
 
+  /**
+   * Sets up the log for the mockmodel and the players' hand's before each test.
+   */
   @Before
   public void setup() {
     log = new StringBuilder();

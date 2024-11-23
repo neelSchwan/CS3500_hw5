@@ -3,6 +3,9 @@ package cs3500.threetrios.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mock for the three trios model, this is used for testing the strategies and the controller.
+ */
 public class MockThreeTriosGameModel implements GameModel {
   private final StringBuilder log;
   private final GamePlayer currentPlayer;
@@ -10,7 +13,16 @@ public class MockThreeTriosGameModel implements GameModel {
   private final int maxComboReturn;
   private final List<GamePlayer> players;
 
-  public MockThreeTriosGameModel(StringBuilder log, GamePlayer currentPlayer, Grid grid, int maxComboReturn) {
+  /**
+   * Constructs a mock implementation of the ThreeTrios game model for testing.
+   *
+   * @param log            log to record method calls and actions for testing.
+   * @param currentPlayer  GamePlayer representing the current player in the mock game.
+   * @param grid           Grid representing the game board for the mock model.
+   * @param maxComboReturn the predefined value to return when the maxCombo method is called.
+   */
+  public MockThreeTriosGameModel(StringBuilder log,
+                                 GamePlayer currentPlayer, Grid grid, int maxComboReturn) {
     this.log = log;
     this.currentPlayer = currentPlayer;
     this.grid = grid;

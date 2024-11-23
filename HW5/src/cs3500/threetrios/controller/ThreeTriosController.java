@@ -28,10 +28,13 @@ public class ThreeTriosController implements GameController, GameModelListener {
    * @param player the player this controller represents.
    */
   public ThreeTriosController(GameModel model, GameView view, GamePlayer player) {
+    if (model == null || view == null || player == null) {
+      throw new IllegalArgumentException("Args cannot be null");
+    }
+
     this.model = model;
     this.view = view;
     this.player = player;
-
     model.addGameModelListener(this);
     view.addGameEventListener(new GameEventListener() {
       @Override
@@ -62,13 +65,8 @@ public class ThreeTriosController implements GameController, GameModelListener {
     updateView();
   }
 
-  /**
-   * Handles card selection from the player's hand.
-   *
-   * @param cardIndex       the index of the selected card.
-   * @param selectingPlayer the player selecting the card.
-   */
-  private void handleCardSelection(int cardIndex, GamePlayer selectingPlayer) {
+  @Override
+  public void handleCardSelection(int cardIndex, GamePlayer selectingPlayer) {
     if (!player.equals(selectingPlayer)) {
       view.displayMessage("You cannot select cards from the opponent's hand.");
       return;
@@ -93,13 +91,8 @@ public class ThreeTriosController implements GameController, GameModelListener {
     view.displayMessage("Selected card: " + selectedCard);
   }
 
-  /**
-   * Handles grid cell clicks for card placement.
-   *
-   * @param row the row index of the clicked cell.
-   * @param col the column index of the clicked cell.
-   */
-  private void handleCellClick(int row, int col) {
+  @Override
+  public void handleCellClick(int row, int col) {
     if (selectedCard == null) {
       view.displayMessage("Select a card before choosing a cell.");
       return;
@@ -130,9 +123,6 @@ public class ThreeTriosController implements GameController, GameModelListener {
     }
   }
 
-  /**
-   * Updates the view with the current game state and turn information.
-   */
   @Override
   public void updateView() {
     view.updateView();
@@ -144,9 +134,6 @@ public class ThreeTriosController implements GameController, GameModelListener {
     }
   }
 
-  /**
-   * Ends the game and announces the winner.
-   */
   @Override
   public void endGame() {
     GamePlayer winner = model.getWinner();
@@ -199,4 +186,5 @@ public class ThreeTriosController implements GameController, GameModelListener {
     }
     view.displayMessage("Game Over!");
   }
+
 }

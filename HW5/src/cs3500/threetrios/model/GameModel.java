@@ -7,13 +7,12 @@ package cs3500.threetrios.model;
  */
 public interface GameModel extends ReadonlyThreeTriosModel {
 
-
   /**
    * Adds a player to the final list of players, the first player will be the RED, and second BLUE.
    *
    * @param player player to add.
    */
-  public void addPlayer(GamePlayer player);
+  void addPlayer(GamePlayer player);
 
   /**
    * Places a card in the grid at the specified row and column if the cell is a card-cell.
@@ -37,15 +36,6 @@ public interface GameModel extends ReadonlyThreeTriosModel {
    * @throws IllegalStateException if there are not enough cards in the deck to start the game.
    */
   void startGame(long seed);
-
-  /**
-   * Initializes the game grid and player hands based on a configuration file.
-   *
-   * @param gridFile the file containing the grid configuration.
-   * @param cardFile the file containing the card configuration.
-   * @throws IllegalArgumentException if the configuration files are invalid.
-   */
-  void initializeGame(String gridFile, String cardFile);
 
   /**
    * Adds a listener for model events.

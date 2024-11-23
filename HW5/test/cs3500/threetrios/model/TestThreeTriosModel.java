@@ -278,4 +278,14 @@ public class TestThreeTriosModel {
     model.placeCard(0, 0, card1);
     model.placeCard(0, 0, card2);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidPlayerOrder() {
+    GameModel model = new ThreeTriosModel(grid, deck);
+    GamePlayer bluePlayer = new HumanPlayer(Player.BLUE, new ArrayList<>());
+    GamePlayer redPlayer = new HumanPlayer(Player.RED, new ArrayList<>());
+
+    model.addPlayer(bluePlayer); // Should throw an exception
+    model.addPlayer(redPlayer);
+  }
 }

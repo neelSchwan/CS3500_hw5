@@ -34,7 +34,7 @@ public class AIPlayer implements GamePlayer {
   }
 
   /**
-   * Sets the event listener to emit player actions.
+   * Sets the event listener to produce player actions.
    *
    * @param listener the listener to set
    */
@@ -50,11 +50,10 @@ public class AIPlayer implements GamePlayer {
       throw new IllegalStateException("Event listener is not set for AIPlayer.");
     }
 
-    // Use the strategy to compute the next move
     Move move = strategy.chooseMove((GameModel) model);
 
-    // Emit events for card selection and cell placement
     int cardIndex = hand.indexOf(move.getCard());
+
     if (cardIndex == -1) {
       throw new IllegalStateException("Card chosen by strategy is not in the AI's hand.");
     }

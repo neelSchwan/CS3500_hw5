@@ -53,6 +53,13 @@ public class ThreeTriosModel implements GameModel {
     if (players.size() >= 2) {
       throw new IllegalStateException("Only two players are allowed.");
     }
+    if (players.isEmpty() && player.getColor() != Player.RED) {
+      throw new IllegalArgumentException("The first player must be RED.");
+    }
+
+    if (players.size() == 1 && player.getColor() != Player.BLUE) {
+      throw new IllegalArgumentException("The second player must be BLUE.");
+    }
     players.add(player);
   }
 
@@ -92,19 +99,6 @@ public class ThreeTriosModel implements GameModel {
     Collections.shuffle(deck, new Random(seed));
     int cardsPerPlayer = ((grid.calculateCardCells() + 1) / 2);
     dealCards(cardsPerPlayer);
-  }
-
-  /**
-   * Initializes the game grid and player hands based on a configuration file.
-   *
-   * @param gridFile the file containing the grid configuration.
-   * @param cardFile the file containing the card configuration.
-   * @throws IllegalArgumentException if the configuration files are
-   *                                  invalid or do not match expected formats.
-   */
-  @Override
-  public void initializeGame(String gridFile, String cardFile) {
-    //TO DO
   }
 
   /**
@@ -288,8 +282,12 @@ public class ThreeTriosModel implements GameModel {
     int redScore = calculateScore(players.get(0));
     int blueScore = calculateScore(players.get(1));
 
-    if (redScore > blueScore) {return players.get(0);}
-    if (blueScore > redScore) {return players.get(1);}
+    if (redScore > blueScore) {
+      return players.get(0);
+    }
+    if (blueScore > redScore) {
+      return players.get(1);
+    }
     return null; // Tie
   }
 
