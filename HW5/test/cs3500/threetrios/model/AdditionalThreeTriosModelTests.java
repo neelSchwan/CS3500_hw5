@@ -212,7 +212,7 @@ public class AdditionalThreeTriosModelTests {
     GamePlayer currentPlayer = model.getCurrentPlayer();
     Card cardToPlace = currentPlayer.getPlayerHand().get(0);
 
-    Cell cell = grid.getCell(1, 1);
+    GameCell cell = grid.getCell(1, 1);
 
     model.placeCard(1, 1, cardToPlace);
   }

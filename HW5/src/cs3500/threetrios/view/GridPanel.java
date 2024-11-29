@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CellType;
 import cs3500.threetrios.model.Direction;
+import cs3500.threetrios.model.GameGrid;
 import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.Player;
 
@@ -23,7 +24,7 @@ import cs3500.threetrios.model.Player;
  */
 public class GridPanel extends JPanel implements GameComponent {
 
-  private final Grid grid;
+  private final GameGrid grid;
   private GameEventListener eventListener;
   private Point selectedCell = null;
   private boolean isInteractive = true;
@@ -34,7 +35,7 @@ public class GridPanel extends JPanel implements GameComponent {
    *
    * @param grid grid object to instantiate the panel on.
    */
-  public GridPanel(Grid grid) {
+  public GridPanel(GameGrid grid) {
     this.grid = grid;
     this.addMouseListener(new CellClickListener());
   }

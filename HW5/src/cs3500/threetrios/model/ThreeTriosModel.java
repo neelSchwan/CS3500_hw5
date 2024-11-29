@@ -117,7 +117,7 @@ public class ThreeTriosModel implements GameModel {
     if (!isGameStarted) {
       throw new IllegalStateException("Game has not started yet.");
     }
-    Cell cell = grid.getCell(row, col);
+    GameCell cell = grid.getCell(row, col);
     if (cell == null || cell.isHole() || cell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
@@ -158,7 +158,7 @@ public class ThreeTriosModel implements GameModel {
   public void placeCard(int row, int col, Card card) {
     validatePlacement(row, col, card);
 
-    Cell cell = grid.getCell(row, col);
+    GameCell cell = grid.getCell(row, col);
     currentPlayer.removeCardFromHand(card);
     cell.placeCard(card, currentPlayer);
     battlePhase(cell);
@@ -167,35 +167,35 @@ public class ThreeTriosModel implements GameModel {
     switchTurn();
   }
 
-  private void battlePhase(Cell startingCell) {
+  private void battlePhase(GameCell startingCell) {
     if (!isGameStarted) {
       throw new IllegalStateException("Game has not started yet.");
     }
 
-    Set<Cell> visitedCells = new HashSet<>();
+    Set<GameCell> visitedCells = new HashSet<>();
 
-    List<Cell> flippedCells = battleAdjacentCells(startingCell);
-    Queue<Cell> comboQueue = new LinkedList<>(flippedCells);
+    List<GameCell> flippedCells = battleAdjacentCells(startingCell);
+    Queue<GameCell> comboQueue = new LinkedList<>(flippedCells);
 
     while (!comboQueue.isEmpty()) {
-      Cell currentCell = comboQueue.poll();
+      GameCell currentCell = comboQueue.poll();
       if (visitedCells.contains(currentCell)) {
         continue;
       }
       visitedCells.add(currentCell);
 
-      List<Cell> newFlippedCells = battleAdjacentCells(currentCell);
+      List<GameCell> newFlippedCells = battleAdjacentCells(currentCell);
       comboQueue.addAll(newFlippedCells);
     }
   }
 
-  private List<Cell> battleAdjacentCells(Cell cell) {
-    List<Cell> flippedCells = new ArrayList<>();
-    Map<Direction, Cell> adjacentCells = cell.getAdjacentCells();
+  private List<GameCell> battleAdjacentCells(GameCell cell) {
+    List<GameCell> flippedCells = new ArrayList<>();
+    Map<Direction, GameCell> adjacentCells = cell.getAdjacentCells();
 
-    for (Map.Entry<Direction, Cell> entry : adjacentCells.entrySet()) {
+    for (Map.Entry<Direction, GameCell> entry : adjacentCells.entrySet()) {
       Direction direction = entry.getKey();
-      Cell adjacentCell = entry.getValue();
+      GameCell adjacentCell = entry.getValue();
       if (adjacentCell != null && adjacentCell.isOccupied()
               && adjacentCell.getOwner() != currentPlayer) {
         boolean flipped = battleCells(cell, adjacentCell, direction);
@@ -207,7 +207,7 @@ public class ThreeTriosModel implements GameModel {
     return flippedCells;
   }
 
-  private boolean battleCells(Cell attackingCell, Cell defendingCell, Direction direction) {
+  private boolean battleCells(GameCell attackingCell, GameCell defendingCell, Direction direction) {
     Card attackerCard = attackingCell.getCard();
     Card defenderCard = defendingCell.getCard();
 
@@ -260,7 +260,7 @@ public class ThreeTriosModel implements GameModel {
   public boolean isGameOver() {
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
+        GameCell cell = grid.getCell(i, j);
         if (cell != null && !cell.isHole()) {
           if (!cell.isOccupied()) {
             return false;
@@ -295,7 +295,7 @@ public class ThreeTriosModel implements GameModel {
     int score = player.getPlayerHand().size();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
+        GameCell cell = grid.getCell(i, j);
         if (cell != null && cell.isOccupied() && cell.getOwner() == player) {
           score++;
         }
@@ -369,7 +369,7 @@ public class ThreeTriosModel implements GameModel {
       return false;
     }
 
-    Cell cell = grid.getCell(row, col);
+    GameCell cell = grid.getCell(row, col);
 
     return cell != null && !cell.isOccupied() && !cell.isHole();
   }
@@ -388,17 +388,17 @@ public class ThreeTriosModel implements GameModel {
       throw new IllegalStateException("Game has not started yet.");
     }
 
-    Cell targetCell = grid.getCell(row, col);
+    GameCell targetCell = grid.getCell(row, col);
     if (targetCell == null || targetCell.isHole() || targetCell.isOccupied()) {
       throw new IllegalArgumentException("Invalid cell for placing a card.");
     }
     // Initialize the simulated game state
-    Map<Cell, GamePlayer> simulatedOwners = new HashMap<>();
-    Map<Cell, Card> simulatedCards = new HashMap<>();
+    Map<GameCell, GamePlayer> simulatedOwners = new HashMap<>();
+    Map<GameCell, Card> simulatedCards = new HashMap<>();
 
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
+        GameCell cell = grid.getCell(i, j);
         if (cell != null && cell.isOccupied()) {
           simulatedOwners.put(cell, cell.getOwner());
           simulatedCards.put(cell, cell.getCard());
@@ -413,15 +413,15 @@ public class ThreeTriosModel implements GameModel {
   }
 
   // for each cell check adjacent and simualte battle
-  private int simulateBattlePhase(Cell startingCell, Map<Cell, GamePlayer> simulatedOwners,
-                                  Map<Cell, Card> simulatedCards) {
+  private int simulateBattlePhase(GameCell startingCell, Map<GameCell, GamePlayer> simulatedOwners,
+                                  Map<GameCell, Card> simulatedCards) {
     int flipCount = 0;
-    Set<Cell> visitedCells = new HashSet<>();
-    Queue<Cell> comboQueue = new LinkedList<>();
+    Set<GameCell> visitedCells = new HashSet<>();
+    Queue<GameCell> comboQueue = new LinkedList<>();
     comboQueue.add(startingCell);
 
     while (!comboQueue.isEmpty()) {
-      Cell currentCell = comboQueue.poll();
+      GameCell currentCell = comboQueue.poll();
       if (visitedCells.contains(currentCell)) {
         continue;
       }
@@ -430,7 +430,7 @@ public class ThreeTriosModel implements GameModel {
       Card currentCard = simulatedCards.get(currentCell);
       GamePlayer currentOwner = simulatedOwners.get(currentCell);
 
-      List<Cell> flippedCells = simulateBattleAdjacentCells(currentCell, currentCard, currentOwner,
+      List<GameCell> flippedCells = simulateBattleAdjacentCells(currentCell, currentCard, currentOwner,
               simulatedOwners, simulatedCards);
 
       flipCount += flippedCells.size();
@@ -441,15 +441,15 @@ public class ThreeTriosModel implements GameModel {
     return flipCount;
   }
 
-  private List<Cell> simulateBattleAdjacentCells(Cell cell, Card card, GamePlayer owner,
-                                                 Map<Cell, GamePlayer> simulatedOwners,
-                                                 Map<Cell, Card> simulatedCards) {
-    List<Cell> flippedCells = new ArrayList<>();
-    Map<Direction, Cell> adjacentCells = cell.getAdjacentCells();
+  private List<GameCell> simulateBattleAdjacentCells(GameCell cell, Card card, GamePlayer owner,
+                                                 Map<GameCell, GamePlayer> simulatedOwners,
+                                                 Map<GameCell, Card> simulatedCards) {
+    List<GameCell> flippedCells = new ArrayList<>();
+    Map<Direction, GameCell> adjacentCells = cell.getAdjacentCells();
 
-    for (Map.Entry<Direction, Cell> entry : adjacentCells.entrySet()) {
+    for (Map.Entry<Direction, GameCell> entry : adjacentCells.entrySet()) {
       Direction direction = entry.getKey();
-      Cell adjacentCell = entry.getValue();
+      GameCell adjacentCell = entry.getValue();
       if (adjacentCell != null && simulatedCards.containsKey(adjacentCell)) {
         GamePlayer adjacentOwner = simulatedOwners.get(adjacentCell);
         if (adjacentOwner != owner) {
@@ -464,10 +464,10 @@ public class ThreeTriosModel implements GameModel {
     return flippedCells;
   }
 
-  private boolean simulateBattleBetweenCells(Cell attackingCell, Card attackingCard,
-                                             Cell defendingCell, Direction direction,
-                                             Map<Cell, GamePlayer> simulatedOwners,
-                                             Map<Cell, Card> simulatedCards) {
+  private boolean simulateBattleBetweenCells(GameCell attackingCell, Card attackingCard,
+                                             GameCell defendingCell, Direction direction,
+                                             Map<GameCell, GamePlayer> simulatedOwners,
+                                             Map<GameCell, Card> simulatedCards) {
     Card defenderCard = simulatedCards.get(defendingCell);
 
     Direction oppositeDirection = getOppositeDirection(direction);
@@ -494,7 +494,7 @@ public class ThreeTriosModel implements GameModel {
     int playerScore = 0;
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
+        GameCell cell = grid.getCell(i, j);
         if (cell.getOwner() == player) {
           playerScore++;
           System.out.println(playerScore);

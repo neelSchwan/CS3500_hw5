@@ -7,12 +7,12 @@ import java.util.Map;
  * Represents a cell on the Three Trios game grid.
  * A cell can either hold a card or be a hole where no card can be placed.
  */
-public class Cell {
+public class Cell implements GameCell{
 
   private Card card;
   private GamePlayer owner;
   private final CellType cellType;
-  private final Map<Direction, Cell> adjacentCells = new EnumMap<>(Direction.class);
+  private final Map<Direction, GameCell> adjacentCells = new EnumMap<>(Direction.class);
 
   /**
    * Constructs a Cell with the specified cell type.
@@ -102,7 +102,7 @@ public class Cell {
    * @param direction the direction of the adjacent cell.
    * @param cell      the cell adjacent to this one.
    */
-  public void setAdjacentCell(Direction direction, Cell cell) {
+  public void setAdjacentCell(Direction direction, GameCell cell) {
     adjacentCells.put(direction, cell);
   }
 
@@ -111,7 +111,7 @@ public class Cell {
    *
    * @return a map of adjacent cells by direction.
    */
-  public Map<Direction, Cell> getAdjacentCells() {
+  public Map<Direction, GameCell> getAdjacentCells() {
     return adjacentCells;
   }
 }

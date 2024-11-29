@@ -7,12 +7,12 @@ import java.util.Map;
  * Class to hold the logic for a Grid.
  * A grid in the three-trios game is represented as 2d array of card cells or hole cells.
  */
-public class Grid {
+public class Grid implements GameGrid{
 
-  private final Cell[][] grid;
+  private final GameCell[][] grid;
   private final int rows;
   private final int cols;
-  private final Map<Cell, int[]> cellPositions;
+  private final Map<GameCell, int[]> cellPositions;
 
   /**
    * Constructor for creating a grid with a specified row x col size.
@@ -37,7 +37,7 @@ public class Grid {
    * @param col specified column of a Cell.
    * @return Cell at the current row and column position in the grid.
    */
-  public Cell getCell(int row, int col) {
+  public GameCell getCell(int row, int col) {
     if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
       return this.grid[row][col];
     } else {
@@ -52,7 +52,7 @@ public class Grid {
    * @param col  specified col to set as a cell.
    * @param cell Cell object to assign to the specified row and columns.
    */
-  public void setCell(int row, int col, Cell cell) {
+  public void setCell(int row, int col, GameCell cell) {
     if (row < 0 || col < 0 || row > this.rows || col > this.cols) {
       throw new IllegalArgumentException("Invalid row or column");
     }
@@ -68,7 +68,7 @@ public class Grid {
   public void setupAdjacentCells() {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
-        Cell cell = grid[row][col];
+        GameCell cell = grid[row][col];
         if (cell != null) {
           if (row > 0) {
             cell.setAdjacentCell(Direction.NORTH, grid[row - 1][col]);
@@ -119,7 +119,7 @@ public class Grid {
     int count = 0;
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
-        Cell cell = grid[row][col];
+        GameCell cell = grid[row][col];
         if (cell != null && !cell.isHole()) {
           count++;
         }
@@ -134,7 +134,7 @@ public class Grid {
    * @param cell specified cell to look for.
    * @return Position object of where the cell is in the grid.
    */
-  public int[] findCellPosition(Cell cell) {
+  public int[] findCellPosition(GameCell cell) {
     return cellPositions.get(cell);
   }
 }

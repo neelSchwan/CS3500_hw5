@@ -74,7 +74,7 @@ public interface ReadonlyThreeTriosModel {
    *
    * @return a {@link Grid} object representing a copy of the current game grid.
    */
-  Grid getGrid();
+  GameGrid getGrid();
 
   /**
    * Gets the current player's turn.
