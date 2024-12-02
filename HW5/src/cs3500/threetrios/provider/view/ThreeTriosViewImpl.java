@@ -60,7 +60,7 @@ public class ThreeTriosViewImpl extends JFrame implements ThreeTriosView {
     });
 
     // Set up listener for board panel
-    boardPanel.setBoardPanelListener(new cs3500.view.BoardPanelListener() {
+    boardPanel.setBoardPanelListener(new BoardPanelListener() {
       @Override
       public void positionSelected(int row, int col) {
         notifyPositionSelected(row, col);

@@ -1,4 +1,4 @@
-package cs3500.view;
+package cs3500.threetrios.provider.view;
 
 /**
  * The listener for the board panel so it knows how to respond to

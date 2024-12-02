@@ -1,9 +1,5 @@
 package cs3500.threetrios.provider.view;
 
-import cs3500.threetrios.provider.model.Cell;
-import cs3500.threetrios.provider.model.Direction;
-import cs3500.threetrios.provider.model.ReadOnlyThreeTrios;
-
 import javax.swing.JPanel;
 
 import java.awt.Color;
@@ -15,6 +11,10 @@ import java.awt.FontMetrics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import cs3500.threetrios.provider.model.Cell;
+import cs3500.threetrios.provider.model.Direction;
+import cs3500.threetrios.provider.model.ReadOnlyThreeTrios;
+
 /**
  * The BoardPanel displays the board in the middle of the window.
  */
@@ -22,7 +22,7 @@ public class BoardPanel extends JPanel {
   private final ReadOnlyThreeTrios model;
   private int cellWidth;
   private int cellHeight;
-  private cs3500.view.BoardPanelListener listener;
+  private BoardPanelListener listener;
 
   /**
    * The constructor for the BoardPanel.
@@ -35,7 +35,7 @@ public class BoardPanel extends JPanel {
     this.setBackground(Color.BLACK);
   }
 
-  public void setBoardPanelListener(cs3500.view.BoardPanelListener listener) {
+  public void setBoardPanelListener(BoardPanelListener listener) {
     this.listener = listener;
   }
 
@@ -159,8 +159,7 @@ public class BoardPanel extends JPanel {
         if (listener != null) {
           listener.positionSelected(row, col);
         }
-        GridPos2d pos = new GridPos2d(row, col);
-        System.out.println("Grid cell clicked at: " + pos);
+        System.out.println("Grid cell clicked at: (" + row + ", " + col + ")");
       } else {
         System.out.println("Click outside the grid.");
       }
