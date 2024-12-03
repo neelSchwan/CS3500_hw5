@@ -5,6 +5,8 @@ import java.util.List;
 
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
+import cs3500.threetrios.model.GameCell;
+import cs3500.threetrios.model.GameGrid;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.Grid;
 
@@ -45,10 +47,10 @@ public class ThreeTriosGameView implements ThreeTriosView {
    * Renders the grid to the StringBuilder.
    */
   private void renderGrid(StringBuilder sb) {
-    Grid grid = model.getGrid();
+    GameGrid grid = model.getGrid();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
-        Cell cell = grid.getCell(i, j);
+        GameCell cell = grid.getCell(i, j);
         if (cell.isHole()) {
           sb.append(' ');
         } else if (!cell.isOccupied()) {

@@ -73,7 +73,7 @@ public class MockThreeTriosGameModel implements GameModel {
   }
 
   @Override
-  public Grid getGrid() {
+  public GameGrid getGrid() {
     return grid;
   }
 
@@ -138,18 +138,6 @@ public class MockThreeTriosGameModel implements GameModel {
   @Override
   public void startGame(long seed) {
     log.append("Starting game with seed: " + seed + "\n");
-  }
-
-  /**
-   * Initializes the game grid and player hands based on a configuration file.
-   *
-   * @param gridFile the file containing the grid configuration.
-   * @param cardFile the file containing the card configuration.
-   * @throws IllegalArgumentException if the configuration files are invalid.
-   */
-  @Override
-  public void initializeGame(String gridFile, String cardFile) {
-    log.append(String.format("Initializing game with files: %s, %s%n", gridFile, cardFile));
   }
 
   /**
