@@ -1,14 +1,24 @@
 package cs3500.threetrios.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cs3500.threetrios.model.GameCell;
 import cs3500.threetrios.model.GameModel;
-import cs3500.threetrios.provider.model.*;
+import cs3500.threetrios.model.GameModelListener;
+import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.provider.model.Card;
+import cs3500.threetrios.provider.model.Cell;
+import cs3500.threetrios.provider.model.GridPos;
+import cs3500.threetrios.provider.model.ModelListener;
+import cs3500.threetrios.provider.model.Player;
+import cs3500.threetrios.provider.model.ThreeTrios;
 
 
 public class ModelAdapter implements ThreeTrios {
   private final GameModel model;
+  private final List<ModelListener> listeners = new ArrayList<>();
+  private final List<GameModelListener> adaptedListeners = new ArrayList<>();
 
   public ModelAdapter(GameModel model) {
     this.model = model;
@@ -40,7 +50,37 @@ public class ModelAdapter implements ThreeTrios {
    */
   @Override
   public void addModelListener(ModelListener listener) {
+    listeners.add(listener);
 
+    GameModelListener adaptedListener = new GameModelListener() {
+      @Override
+      public void onTurnChanged(GamePlayer currentPlayer) {
+        listener.onTurnChanged(toProviderPlayer(currentPlayer));
+      }
+
+      @Override
+      public void onGameStateUpdated() {
+        // N/A WE DON'T HAVE THIS
+      }
+
+      @Override
+      public void onGameOver(GamePlayer winner) {
+        int winningScore;
+        if (winner != null) {
+          winningScore = model.getPlayerScore(winner);
+        } else {
+          winningScore = 0;
+        }
+
+        listener.onGameOver(
+                winner == null ? null : toProviderPlayer(winner),
+                winningScore
+        );
+      }
+    };
+
+    adaptedListeners.add(adaptedListener);
+    model.addGameModelListener(adaptedListener);
   }
 
   /**
@@ -50,7 +90,11 @@ public class ModelAdapter implements ThreeTrios {
    */
   @Override
   public void removeModelListener(ModelListener listener) {
-
+    int index = listeners.indexOf(listener);
+    if (index != -1) {
+      listeners.remove(index);
+      adaptedListeners.remove(index);
+    }
   }
 
   /**
@@ -63,16 +107,17 @@ public class ModelAdapter implements ThreeTrios {
     cs3500.threetrios.model.GameGrid myGrid = model.getGrid();
     Cell[][] providerGrid = new Cell[myGrid.getRows()][myGrid.getCols()];
 
-    for(int i = 0; i < myGrid.getRows(); i++) {
-      for(int j = 0; j < myGrid.getCols(); j++) {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getCols(); j++) {
         GameCell myCell = myGrid.getCell(i, j);
-        if(myCell == null || myCell.isHole()) {
+        if (myCell == null || myCell.isHole()) {
           providerGrid[i][j] = null;
         } else {
-          providerGrid[i][j] = new
+          providerGrid[i][j] = new CellAdapter(myCell);
         }
       }
     }
+    return providerGrid;
   }
 
   /**
@@ -82,7 +127,15 @@ public class ModelAdapter implements ThreeTrios {
    */
   @Override
   public Player getTurn() {
-    return null;
+    return toProviderPlayer(model.getCurrentPlayer());
+  }
+
+  // Helper method to convert to a provider player given my GamePlayer.
+  private Player toProviderPlayer(GamePlayer gamePlayer) {
+    if (gamePlayer.getColor() == cs3500.threetrios.model.Player.RED) {
+      return Player.RED;
+    }
+    return Player.BLUE;
   }
 
   /**
@@ -93,7 +146,26 @@ public class ModelAdapter implements ThreeTrios {
    */
   @Override
   public List<Card> getHand(Player player) {
-    return List.of();
+
+    GamePlayer matchingPlayer = null;
+    for (GamePlayer gamePlayer : model.getPlayers()) {
+      if (toProviderPlayer(gamePlayer) == player) {
+        matchingPlayer = gamePlayer;
+        break;
+      }
+    }
+
+    if (matchingPlayer == null) {
+      throw new IllegalArgumentException("Player not found");
+    }
+
+    // Convert the cards
+    List<Card> convertedHand = new ArrayList<>();
+    for (cs3500.threetrios.model.Card card : matchingPlayer.getPlayerHand()) {
+      convertedHand.add(new CardAdapter(card));
+    }
+
+    return convertedHand;
   }
 
   /**
@@ -104,6 +176,11 @@ public class ModelAdapter implements ThreeTrios {
    */
   @Override
   public Player getWinner() {
-    return null;
+    if (!model.isGameOver()) {
+      throw new IllegalStateException("Game is not over yet");
+    }
+
+    GamePlayer winner = model.getWinner();
+    return winner == null ? null : toProviderPlayer(winner);
   }
 }

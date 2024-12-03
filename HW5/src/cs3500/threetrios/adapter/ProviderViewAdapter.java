@@ -1,113 +1,93 @@
 package cs3500.threetrios.adapter;
 
-import cs3500.threetrios.model.ReadonlyThreeTriosModel;
+import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.provider.model.Player;
+import cs3500.threetrios.provider.model.ReadOnlyThreeTrios;
 import cs3500.threetrios.provider.view.ThreeTriosView;
 import cs3500.threetrios.provider.view.ViewListener;
+import cs3500.threetrios.view.GameEventListener;
+import cs3500.threetrios.view.GameView;
 
-public class ProviderViewAdapter implements ThreeTriosView {
-  private final ReadonlyThreeTriosModel model;
+public class ProviderViewAdapter implements GameView {
+
   private final ThreeTriosView providerView;
+  private GameEventListener gameEventListener;
 
-  public ProviderViewAdapter(ReadonlyThreeTriosModel model, ThreeTriosView providerView) {
-    this.model = model;
+  public ProviderViewAdapter(ThreeTriosView providerView) {
     this.providerView = providerView;
+
+    this.providerView.addViewListener(new ViewListener() {
+      @Override
+      public void onCardSelected(int cardIndex) {
+        if (gameEventListener != null) {
+          gameEventListener.onCardSelected(cardIndex, null);
+        }
+      }
+
+      @Override
+      public void onPosSelected(int row, int col) {
+        if (gameEventListener != null) {
+          // Notify the GameEventListener
+          gameEventListener.onCellClicked(row, col);
+        }
+      }
+    });
   }
 
-  /**
-   * Makes the view visible.
-   */
+  @Override
+  public void updateView() {
+    providerView.refresh();
+  }
+
+  @Override
+  public void resetView() {
+    throw new UnsupportedOperationException("Reset is not supported by the provider view.");
+  }
+
+  @Override
+  public void showWinner(String winner) {
+    providerView.showGameOver(winner);
+  }
+
+  @Override
+  public void addGameEventListener(GameEventListener listener) {
+    this.gameEventListener = listener;
+  }
+
   @Override
   public void makeVisible() {
     providerView.makeVisible();
   }
 
-  /**
-   * Refreshes the view to reflect any changes in the model.
-   */
   @Override
-  public void refresh() {
-    providerView.refresh();
+  public void displayMessage(String message) {
+    providerView.showError(message);
   }
 
-  /**
-   * Highlights the selected card in the view.
-   *
-   * @param cardIndex index of the card selected
-   * @param player    player color
-   */
   @Override
-  public void highlightSelectedCard(int cardIndex, Player player) {
-
+  public void setViewEnabled(boolean enabled) {
+    providerView.setInputEnabled(enabled);
   }
 
-  /**
-   * Handles showing an error whenever the view encounters an error.
-   *
-   * @param message error message
-   */
   @Override
-  public void showError(String message) {
+  public void updateActivePlayer(GamePlayer currentPlayer) {
+    // Convert GamePlayer to the provider's Player enum
+    Player providerPlayer;
+    if (currentPlayer.getColor() == cs3500.threetrios.model.Player.RED) {
+      providerPlayer = Player.RED;
+    } else {
+      providerPlayer = Player.BLUE;
+    }
 
+    providerView.updateStatus("Current turn: " + providerPlayer);
   }
 
-  /**
-   * Updates the status of the game which will be shown in the window panel.
-   *
-   * @param status game status
-   */
-  @Override
-  public void updateStatus(String status) {
-
-  }
-
-  /**
-   * Enables the input of a view.  This makes sure the player cannot make
-   * a move while it is the other players turn.
-   *
-   * @param enabled enabled or not
-   */
-  @Override
-  public void setInputEnabled(boolean enabled) {
-
-  }
-
-  /**
-   * Displays a dialog box to inform the player that the game is over, showing the winner and the
-   * score.
-   *
-   * @param message The message to display to the user.
-   */
-  @Override
-  public void showGameOver(String message) {
-
-  }
-
-  /**
-   * Used to bring the current players window to the front.
-   */
-  @Override
-  public void bringToFront() {
-
-  }
-
-  /**
-   * Adds a view listener.
-   *
-   * @param listener listener
-   */
-  @Override
-  public void addViewListener(ViewListener listener) {
-
-  }
-
-  /**
-   * Removes a view listener.
-   *
-   * @param listener listener
-   */
-  @Override
-  public void removeViewListener(ViewListener listener) {
-
-  }
+//  @Override
+//  public void highlightCard(int cardIndex, cs3500.threetrios.model.Player player) {
+//    Player providerPlayer = (player == cs3500.threetrios.model.Player.RED)
+//            ? Player.RED
+//            : Player.BLUE;
+//
+//    providerView.highlightSelectedCard(cardIndex, providerPlayer);
+//  }
 }
