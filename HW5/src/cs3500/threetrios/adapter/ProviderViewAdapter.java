@@ -2,7 +2,6 @@ package cs3500.threetrios.adapter;
 
 import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.provider.model.Player;
-import cs3500.threetrios.provider.model.ReadOnlyThreeTrios;
 import cs3500.threetrios.provider.view.ThreeTriosView;
 import cs3500.threetrios.provider.view.ViewListener;
 import cs3500.threetrios.view.GameEventListener;
