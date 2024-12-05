@@ -52,6 +52,11 @@ public class HandPanel extends JPanel {
     this.listener = listener;
   }
 
+  /**
+   * Dummy documentation for this, which highlights a card.
+   *
+   * @param index index in the hand of the card to highlight.
+   */
   public void highlightCard(int index) {
     this.selectedCardIndex = index;
     repaint();

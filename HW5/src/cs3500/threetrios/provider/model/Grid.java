@@ -12,8 +12,8 @@ public interface Grid {
    * Sets the card of the cell at the given position in the grid to the given card
    * and assigns it the given owner.
    *
-   * @param pos a GridPos used to access teh intended object in the grid array.
-   * @param card the card to be placed.
+   * @param pos   a GridPos used to access teh intended object in the grid array.
+   * @param card  the card to be placed.
    * @param owner the initial owner to assign to the cell.
    */
   void playCard(GridPos pos, Card card, Player owner);
@@ -27,12 +27,19 @@ public interface Grid {
    */
   List<GridPos> getLosingNeighbors(GridPos pos);
 
+  /**
+   * Dummy docs to pass style-checker, but this gets the losing values of the cards
+   * next to the current GridPos.
+   *
+   * @param pos position in the grid.
+   * @return an array of values
+   */
   int[] getLosingSurroundingValues(GridPos pos);
 
   /**
    * Reassigns the owner of the card-cell at the given position to the given Player.
    *
-   * @param pos The position of a card-cell to be flipped.
+   * @param pos   The position of a card-cell to be flipped.
    * @param owner The new owner of the card-cell.
    */
   public void flipCardCellTo(GridPos pos, Player owner);

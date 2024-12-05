@@ -17,8 +17,9 @@ public interface Controller extends ViewListener, ModelListener {
    * view and the model.  If the machine chooses an invalid coordinate,
    * the view will show an error. This method is called by the machine player itself when
    * it performs its action.
+   *
    * @param machinePlayer current machine player
-   * @param move move used
+   * @param move          move used
    */
   void handleMachinePlayerMove(PlayerType machinePlayer, Move move);
 }

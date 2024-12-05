@@ -7,7 +7,7 @@ import java.util.Map;
  * Class to hold the logic for a Grid.
  * A grid in the three-trios game is represented as 2d array of card cells or hole cells.
  */
-public class Grid implements GameGrid{
+public class Grid implements GameGrid {
 
   private final GameCell[][] grid;
   private final int rows;

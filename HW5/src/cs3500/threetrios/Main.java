@@ -1,9 +1,11 @@
 package cs3500.threetrios;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.threetrios.adapter.ModelAdapter;
+import cs3500.threetrios.adapter.ViewAdapter;
 import cs3500.threetrios.controller.GameController;
 import cs3500.threetrios.controller.ThreeTriosController;
 import cs3500.threetrios.model.AIPlayer;
@@ -16,6 +18,8 @@ import cs3500.threetrios.model.GridConfigReader;
 import cs3500.threetrios.model.HumanPlayer;
 import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
+import cs3500.threetrios.provider.model.ThreeTrios;
+import cs3500.threetrios.provider.view.ThreeTriosViewImpl;
 import cs3500.threetrios.strategy.CornerStrategy;
 import cs3500.threetrios.strategy.FlipMostStrategy;
 import cs3500.threetrios.strategy.ThreeTriosStrategy;
@@ -34,7 +38,7 @@ public class Main {
    *
    * @param args command-line arguments
    */
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     if (args.length != 2) {
       System.err.println("Usage: java ThreeTrios <player1> <player2>");
       System.err.println("Player types: 'human' or 'ai:<strategy>'");
@@ -44,8 +48,10 @@ public class Main {
 
     CardConfigReader cardReader = new CardConfigReader();
     GridConfigReader gridReader = new GridConfigReader();
-    List<Card> deck = cardReader.readCards("HW5/src/resources/CardDb.txt");
-    Grid grid = gridReader.readGridFromFile("HW5/src/resources/EasyTestingGridDb.txt");
+    List<Card> deck = cardReader.readCards("HW5" + File.separator
+            + "src" + File.separator + "resources" + File.separator + "CardDb.txt");
+    Grid grid = gridReader.readGridFromFile("HW5" + File.separator + "src" + File.separator
+            + "resources" + File.separator + "GridDb.txt");
 
     GameModel model = new ThreeTriosModel(grid, deck);
 
@@ -56,13 +62,20 @@ public class Main {
     model.addPlayer(player2);
 
     GameView view1 = new ThreeTriosGUIView(model);
-    GameView view2 = new ThreeTriosGUIView(model);
+
+    ThreeTrios modelAdapter = new ModelAdapter(model);
+    ThreeTriosViewImpl providerView = new ThreeTriosViewImpl(modelAdapter);
+
+    GameView view2 = new ViewAdapter(providerView, player2);
+
     GameController controller1 = new ThreeTriosController(model, view1, player1);
     GameController controller2 = new ThreeTriosController(model, view2, player2);
 
     model.startGame(0);
+
     view1.makeVisible();
     view2.makeVisible();
+
   }
 
   /**
