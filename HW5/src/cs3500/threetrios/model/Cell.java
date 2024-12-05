@@ -7,8 +7,7 @@ import java.util.Map;
  * Represents a cell on the Three Trios game grid.
  * A cell can either hold a card or be a hole where no card can be placed.
  */
-public class Cell implements GameCell{
-
+public class Cell implements GameCell {
   private Card card;
   private GamePlayer owner;
   private final CellType cellType;

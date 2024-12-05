@@ -1,7 +1,6 @@
 package cs3500.threetrios.strategy;
 
 import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GamePlayer;
 import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 

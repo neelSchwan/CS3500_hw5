@@ -15,7 +15,6 @@ import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.CellType;
 import cs3500.threetrios.model.Direction;
 import cs3500.threetrios.model.GameGrid;
-import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.Player;
 
 /**

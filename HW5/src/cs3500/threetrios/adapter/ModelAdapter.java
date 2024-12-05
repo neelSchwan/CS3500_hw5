@@ -2,7 +2,6 @@ package cs3500.threetrios.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GameModelListener;
@@ -15,17 +14,21 @@ import cs3500.threetrios.provider.model.Player;
 import cs3500.threetrios.provider.model.ThreeTrios;
 
 /**
- * Adapter to convert / bridge the provided 'ThreeTrios' model interface with our existing
- * 'GameModel' interface by converting _______ between the two.
+ * Adapter to convert/bridge the provided 'ThreeTrios' model interface with our existing
+ * 'GameModel' interface by converting the game state and interactions between the two systems.
+ * This allows the provider's view and logic to work with the existing model
+ * implementation.
  */
 public class ModelAdapter implements ThreeTrios {
   private final GameModel modelAdaptee;
   private ModelListener modelListener;
 
   /**
-   * Constructor for a ModelAdapter that wraps the existing with ____
+   * Constructor for a ModelAdapter that wraps the existing GameModel instance.
+   * This adapter translates method calls and data structures between the GameModel
+   * and the provider's ThreeTrios model interface.
    *
-   * @param modelAdaptee the original model from our system.
+   * @param modelAdaptee the original GameModel instance from our implementation.
    */
   public ModelAdapter(GameModel modelAdaptee) {
     this.modelAdaptee = modelAdaptee;
@@ -41,7 +44,7 @@ public class ModelAdapter implements ThreeTrios {
   @Override
   public void placeCard(GridPos pos, int cardIdx) {
     if (modelAdaptee.isGameOver()) {
-      throw new IllegalStateException("Game over");
+      throw new IllegalStateException("Cannot place card when game isn't started");
     }
 
     int row = pos.getRow();
@@ -134,10 +137,8 @@ public class ModelAdapter implements ThreeTrios {
   public Player getTurn() {
     GamePlayer currentPlayer = modelAdaptee.getCurrentPlayer();
     if (currentPlayer == null) {
-      System.out.println("Current player is not set. Defaulting to RED.");
-      return Player.RED;
+      return Player.RED; // default red, doesn't work without this for some reason.
     }
-    System.out.println("Current player is: " + currentPlayer.getColor());
     return currentPlayer.getColor() == cs3500.threetrios.model.Player.RED
             ? Player.RED : Player.BLUE;
   }

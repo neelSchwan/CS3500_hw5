@@ -4,12 +4,18 @@ import cs3500.threetrios.provider.model.Card;
 import cs3500.threetrios.provider.model.Direction;
 
 /**
- * CardAdapter class that converts the provider card into the
+ * CardAdapter class that converts a card from the ThreeTrios model
+ * into the provider's `Card` interface.
  */
 public class CardAdapter implements Card {
 
   private final cs3500.threetrios.model.Card card;
 
+  /**
+   * Constructs a CardAdapter to wrap a card from the ThreeTrios model.
+   *
+   * @param card the card from the model to be adapted
+   */
   public CardAdapter(cs3500.threetrios.model.Card card) {
     this.card = card;
   }
