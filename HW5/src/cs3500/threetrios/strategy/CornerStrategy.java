@@ -4,6 +4,7 @@ import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Direction;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class CornerStrategy implements ThreeTriosStrategy {
   }
 
   @Override
-  public Move chooseMove(GameModel model) {
+  public Move chooseMove(ReadonlyThreeTriosModel model) {
     GamePlayer currentPlayer = model.getCurrentPlayer();
     if (model.isGameOver()) {
       throw new IllegalStateException("Game has not started yet.");

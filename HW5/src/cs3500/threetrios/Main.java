@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.threetrios.adapter.ModelAdapter;
+import cs3500.threetrios.adapter.ViewAdapter;
 import cs3500.threetrios.controller.GameController;
 import cs3500.threetrios.controller.ThreeTriosController;
 import cs3500.threetrios.model.AIPlayer;
@@ -16,6 +18,7 @@ import cs3500.threetrios.model.GridConfigReader;
 import cs3500.threetrios.model.HumanPlayer;
 import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
+import cs3500.threetrios.provider.view.ThreeTriosViewImpl;
 import cs3500.threetrios.strategy.CornerStrategy;
 import cs3500.threetrios.strategy.FlipMostStrategy;
 import cs3500.threetrios.strategy.ThreeTriosStrategy;
@@ -42,27 +45,48 @@ public class Main {
       return;
     }
 
+    // Step 1: Read configurations
     CardConfigReader cardReader = new CardConfigReader();
     GridConfigReader gridReader = new GridConfigReader();
     List<Card> deck = cardReader.readCards("HW5/src/resources/CardDb.txt");
     Grid grid = gridReader.readGridFromFile("HW5/src/resources/EasyTestingGridDb.txt");
 
+    // Step 2: Initialize the model
+    System.out.println("Initializing model...");
     GameModel model = new ThreeTriosModel(grid, deck);
 
+    // Step 3: Create players and add to the model
+    System.out.println("Creating players...");
     GamePlayer player1 = createPlayer(args[0], Player.RED, model);
+    System.out.println("RED PLAYER: " + player1);
     GamePlayer player2 = createPlayer(args[1], Player.BLUE, model);
+    System.out.println("BLUE PLAYER: " + player2);
 
     model.addPlayer(player1);
     model.addPlayer(player2);
 
+    // Step 4: Initialize views and controllers
+    System.out.println("Initializing view and controller...");
     GameView view1 = new ThreeTriosGUIView(model);
-    GameView view2 = new ThreeTriosGUIView(model);
+
+    // Create the model adapter for the provider's view
+    ModelAdapter modelAdapter = new ModelAdapter(model);
+    ThreeTriosViewImpl providerView = new ThreeTriosViewImpl(modelAdapter);
+
+    // Create the adapter view for player 2
+    GameView view2 = new ViewAdapter(providerView, player2);
+
+    // Create controllers for both players
     GameController controller1 = new ThreeTriosController(model, view1, player1);
     GameController controller2 = new ThreeTriosController(model, view2, player2);
 
-    model.startGame(0);
+    // Step 5: Make views visible
     view1.makeVisible();
     view2.makeVisible();
+
+    // Step 6: Start the game
+    System.out.println("Starting the game...");
+    model.startGame(0);
   }
 
   /**

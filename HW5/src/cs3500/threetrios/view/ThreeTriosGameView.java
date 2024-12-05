@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.GameCell;
 import cs3500.threetrios.model.GameGrid;
 import cs3500.threetrios.model.GameModel;
-import cs3500.threetrios.model.Grid;
 
 /**
  * Class for creating a textual representation of the game's current state.

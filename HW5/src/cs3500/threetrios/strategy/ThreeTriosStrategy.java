@@ -1,6 +1,6 @@
 package cs3500.threetrios.strategy;
 
-import cs3500.threetrios.model.GameModel;
+import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 
 /**
  * A strategy interface for selecting a move in the ThreeTrios game.
@@ -13,5 +13,5 @@ public interface ThreeTriosStrategy {
    * @return the chosen move.
    * @throws IllegalStateException if no valid move can be found.
    */
-  Move chooseMove(GameModel model);
+  Move chooseMove(ReadonlyThreeTriosModel model);
 }

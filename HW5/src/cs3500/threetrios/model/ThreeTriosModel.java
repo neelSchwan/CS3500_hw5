@@ -430,8 +430,8 @@ public class ThreeTriosModel implements GameModel {
       Card currentCard = simulatedCards.get(currentCell);
       GamePlayer currentOwner = simulatedOwners.get(currentCell);
 
-      List<GameCell> flippedCells = simulateBattleAdjacentCells(currentCell, currentCard, currentOwner,
-              simulatedOwners, simulatedCards);
+      List<GameCell> flippedCells = simulateBattleAdjacentCells(
+              currentCell, currentCard, currentOwner, simulatedOwners, simulatedCards);
 
       flipCount += flippedCells.size();
 

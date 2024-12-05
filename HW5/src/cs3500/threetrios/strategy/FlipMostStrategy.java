@@ -3,6 +3,7 @@ package cs3500.threetrios.strategy;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.GameModel;
 import cs3500.threetrios.model.GamePlayer;
+import cs3500.threetrios.model.ReadonlyThreeTriosModel;
 
 /**
  * Strategy that selects the card and position that will flip the most opponent cards.
@@ -16,7 +17,7 @@ public class FlipMostStrategy implements ThreeTriosStrategy {
    * @throws IllegalStateException if no valid move can be found.
    */
   @Override
-  public Move chooseMove(GameModel model) {
+  public Move chooseMove(ReadonlyThreeTriosModel model) {
     GamePlayer currentPlayer = model.getCurrentPlayer();
     if (model.isGameOver()) {
       throw new IllegalStateException("Game has not started yet.");
