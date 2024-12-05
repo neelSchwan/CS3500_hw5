@@ -18,6 +18,7 @@ import cs3500.threetrios.model.GridConfigReader;
 import cs3500.threetrios.model.HumanPlayer;
 import cs3500.threetrios.model.Player;
 import cs3500.threetrios.model.ThreeTriosModel;
+import cs3500.threetrios.provider.model.ThreeTrios;
 import cs3500.threetrios.provider.view.ThreeTriosViewImpl;
 import cs3500.threetrios.strategy.CornerStrategy;
 import cs3500.threetrios.strategy.FlipMostStrategy;
@@ -70,7 +71,7 @@ public class Main {
     GameView view1 = new ThreeTriosGUIView(model);
 
     // Create the model adapter for the provider's view
-    ModelAdapter modelAdapter = new ModelAdapter(model);
+    ThreeTrios modelAdapter = new ModelAdapter(model);
     ThreeTriosViewImpl providerView = new ThreeTriosViewImpl(modelAdapter);
 
     // Create the adapter view for player 2
@@ -80,13 +81,11 @@ public class Main {
     GameController controller1 = new ThreeTriosController(model, view1, player1);
     GameController controller2 = new ThreeTriosController(model, view2, player2);
 
+    model.startGame(0);
     // Step 5: Make views visible
     view1.makeVisible();
     view2.makeVisible();
 
-    // Step 6: Start the game
-    System.out.println("Starting the game...");
-    model.startGame(0);
   }
 
   /**

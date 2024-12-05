@@ -2,6 +2,9 @@
   <artifact type="jar" build-on-make="true" name="CS3500_hw5:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/CS3500_hw5_jar</output-path>
     <root id="archive" name="CS3500_hw5.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/HW5/docs/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="CS3500_hw5" />
     </root>
   </artifact>
